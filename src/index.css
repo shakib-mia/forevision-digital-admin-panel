@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-grey-light;
+}
+
+.container {
+  @apply max-w-[1200px] mx-auto;
+}
+
+h1 {
+  @apply text-heading-1-bold;
+}
+
+h2 {
+  @apply text-heading-2-bold;
+}
+
+h3 {
+  @apply text-heading-3-bold;
+}
+
+h4 {
+  @apply text-heading-4-bold;
+}
+
+h5 {
+  @apply text-heading-5-bold;
+}
+
+h6 {
+  @apply text-heading-6-bold;
+}
