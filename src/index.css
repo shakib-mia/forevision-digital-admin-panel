@@ -11,25 +11,30 @@ body {
 }
 
 h1 {
-  @apply text-heading-1-bold;
+  @apply text-heading-1;
 }
 
 h2 {
-  @apply text-heading-2-bold;
+  @apply text-heading-2;
 }
 
 h3 {
-  @apply text-heading-3-bold;
+  @apply text-heading-3;
 }
 
 h4 {
-  @apply text-heading-4-bold;
+  @apply text-heading-4;
 }
 
 h5 {
-  @apply text-heading-5-bold;
+  @apply text-heading-5;
 }
 
 h6 {
-  @apply text-heading-6-bold;
+  @apply text-heading-6;
+}
+
+.custom-shadow {
+  box-shadow: 0px 10px 15px 0px rgba(0, 0, 0, 0.1),
+    0px 4px 6px 0px rgba(0, 0, 0, 0.05);
 }

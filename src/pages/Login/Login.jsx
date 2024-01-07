@@ -2,36 +2,52 @@
 import { useState } from "react";
 import formImage from "./../../assets/images/form-image.webp"
 import Form from "../../components/Form/Form";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 
 const Login = () => {
+    const navigate = useNavigate();
     const [method, setMethod] = useState("Admin");
 
     const fields = method === 'Admin' ? [
         {
             placeholder: "Enter E-mail",
-            name: 'email'
+            name: 'email',
+            type: 'email'
         },
         {
             placeholder: "Enter Password",
-            name: 'admin-password'
+            name: 'admin-password',
+            type: 'password'
         }
 
     ] : [
         {
             placeholder: "Enter Employee Code",
-            name: 'employee-code'
+            name: 'employee-code',
+            type: 'text'
         },
         {
             placeholder: "Enter Password",
-            name: 'employee-password'
+            name: 'employee-password',
+            type: 'password'
         }
 
     ];
 
     const handleSubmit = e => {
         e.preventDefault();
-        console.log(fields);
+
+        axios.post('https://api.forevisiondigital.in/login', {
+            email: e.target.email.value,
+            password: e.target['admin-password'].value
+        }).then(({ data }) => {
+            if (data.token) {
+                navigate("/")
+                localStorage.setItem('token', data.token);
+            }
+        })
     }
 
     return (
