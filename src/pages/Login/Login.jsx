@@ -52,14 +52,16 @@ const Login = () => {
 
     return (
         <div className='container h-screen flex items-center justify-center'>
-            <div className="grid grid-cols-2 gap-[12rem]">
-                <aside>
-                    <h3 className="text-grey">WELCOME BACK !</h3>
-                    <h6 className="text-interactive-dark-active mt-1 pb-1 border-b-[3px] inline-block border-white mb-4">Please verify your identity to proceed !</h6>
-                    <img src={formImage} alt="" />
+            <div className="grid grid-cols-2 items-center gap-[12rem]">
+                <aside className="flex flex-col items-center">
+                    <div>
+                        <h3 className="text-grey">WELCOME BACK !</h3>
+                        <h6 className="text-interactive-dark-active mt-1 pb-1 border-b-[3px] inline-block border-white mb-4">Please verify your identity to proceed !</h6>
+                    </div>
+                    <img src={formImage} alt="" className="-ml-20" />
                 </aside>
 
-                <div className="bg-white rounded-2xl p-6 text-center" style={{ boxShadow: '0px 10px 15px 0px rgba(0, 0, 0, 0.10), 0px 4px 6px 0px rgba(0, 0, 0, 0.05)' }}>
+                <div className="bg-white rounded-2xl p-10 text-center h-full" style={{ boxShadow: '0px 10px 15px 0px rgba(0, 0, 0, 0.10), 0px 4px 6px 0px rgba(0, 0, 0, 0.05)' }}>
                     <h5 className="text-heading-5-bold text-grey">
                         I am an ForeVision Digital
                     </h5>

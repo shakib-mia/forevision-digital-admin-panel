@@ -8,7 +8,7 @@ const HeaderData = ({ icon, heading, count, progress, increased }) => {
             <img src={icon} className='w-[56px] h-[56px]' alt="total songs" />
             <aside>
                 <p className='text-subtitle-1'>{heading}</p>
-                <h5>{count}</h5>
+                <h5 className='font-semibold'>{count}</h5>
                 <div className="flex items-center relative -left-3 mt-[4px]">
                     {/* <img src={progressIcon} alt="green-arrow" className='w-3' /> */}
                     <Arrow increased={increased} />
