@@ -46,7 +46,7 @@ const Header = () => {
             increased: true
         },
         {
-            count: '2,85,256',
+            count: 0,
             heading: "Due revenue",
             icon: dueRevenue,
             progress: '-37580 this month ',
