@@ -294,6 +294,24 @@ export default {
           fontWeight: "700",
         },
       ],
+
+      caption: [
+        "12px",
+        {
+          lineHeight: "16px",
+          letterSpacing: "0.4px",
+          fontWeight: "400",
+        },
+      ],
+
+      overline: [
+        "12px",
+        {
+          lineHeight: "16px",
+          letterSpacing: "1.5px",
+          fontWeight: "600",
+        },
+      ],
     },
 
     extend: {

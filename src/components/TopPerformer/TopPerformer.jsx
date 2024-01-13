@@ -3,8 +3,19 @@
 import Arrow from "../Arrow/Arrow";
 import rupees from "../../assets/icons/rupees.svg"
 import Button from "../Button/Button";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { backendUrl } from "../../constants";
 
 const TopPerformer = () => {
+    const [topPerformer, setTopPerformer] = useState({})
+    useEffect(() => {
+        axios.get(backendUrl + 'top-performer').then(({ data }) => setTopPerformer(data))
+    }, []);
+    const paid = topPerformer.amount || 0
+
+    // console.log(topPerformer.amount);
+
     return (
         <div className='w-5/12 h-[467px] bg-white rounded-[20px] custom-shadow text-interactive-dark-hover flex flex-col justify-between'>
             {/* header */}
@@ -14,15 +25,15 @@ const TopPerformer = () => {
                 <Arrow increased={true} />
             </div>
             <div className="px-20 mt-5">
-                <h5>Artist Name And Surname</h5>
-                <h6 className="my-2">E-mail ID@email.com</h6>
+                <h5>{topPerformer.partner_name}</h5>
+                <h6 className="my-2">{topPerformer.emailId}</h6>
                 <h6>Phone number</h6>
                 <div className="mt-8 flex flex-col gap-4">
                     <div className="flex justify-between">
                         <h5 className="text-interactive-dark-confirmation">Revenue</h5>
                         <div className="flex gap-2 items-center">
                             <img src={rupees} alt="rupees" className="h-6 w-auto" />
-                            <h5 className="font-bold">20,25,589</h5>
+                            <h5 className="font-bold">{topPerformer?.lifetimeRevenue?.toFixed(2)}</h5>
                         </div>
                     </div>
 
@@ -30,7 +41,7 @@ const TopPerformer = () => {
                         <h5 className="text-interactive-dark-active">Paid</h5>
                         <div className="flex gap-2 items-center">
                             <img src={rupees} alt="rupees" className="h-6 w-auto" />
-                            <h5 className="font-bold">20,25,589</h5>
+                            <h5 className="font-bold">{paid}</h5>
                         </div>
                     </div>
 
@@ -38,7 +49,7 @@ const TopPerformer = () => {
                         <h5 className="text-interactive-light-destructive-focus">Due</h5>
                         <div className="flex gap-2 items-center">
                             <img src={rupees} alt="rupees" className="h-6 w-auto" />
-                            <h5 className="font-bold">20,25,589</h5>
+                            <h5 className="font-bold">{topPerformer?.lifetimeRevenue?.toFixed(2) - paid}</h5>
                         </div>
                     </div>
                 </div>

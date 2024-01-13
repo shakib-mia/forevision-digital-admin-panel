@@ -22,7 +22,7 @@ const HeaderData = ({ icon, heading, count, progress, increased }) => {
 HeaderData.propTypes = {
     increased: PropTypes.bool.isRequired,
     progress: PropTypes.string.isRequired,
-    count: PropTypes.number.isRequired,
+    count: PropTypes.string.isRequired,
     heading: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired
 }

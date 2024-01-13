@@ -5,25 +5,41 @@ import totalUsers from "../../assets/icons/total-users.jpg"
 import totalRevenue from "../../assets/icons/total-revenue.png"
 import dueRevenue from "../../assets/icons/due-revenue.jpg";
 import HeaderData from '../HeaderData/HeaderData';
+import { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
+import { backendUrl } from '../../constants';
+import { AppContext } from '../../contexts/AppContext';
 
 const Header = () => {
+    const { store } = useContext(AppContext);
+    const [data, setData] = useState({})
+    const config = {
+        headers: {
+            token: store.token
+        }
+    }
+
+    useEffect(() => {
+        axios.get(backendUrl + 'dashboard', config).then(({ data }) => setData(data))
+    }, [])
+
     const headerData = [
         {
             heading: "Total Songs",
             icon: totalSongs,
-            count: 202546,
+            count: data.isrcCount || 0,
             progress: '+300 this month',
             increased: true,
         },
         {
             heading: "Total Users",
             icon: totalUsers,
-            count: 20256,
+            count: data.usersCount || 0,
             progress: '-30 this month ',
             increased: false
         },
         {
-            count: '24,85,256',
+            count: data.finalRevenue?.toFixed(2) || 0,
             heading: "Total Revenue",
             icon: totalRevenue,
             progress: '+30,1245 this month ',

@@ -1,14 +1,18 @@
 // import React from 'react';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import formImage from "./../../assets/images/form-image.webp"
 import Form from "../../components/Form/Form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../../contexts/AppContext";
+import { toast } from "react-toastify";
+import { backendUrl } from "../../constants";
 
 
 const Login = () => {
     const navigate = useNavigate();
     const [method, setMethod] = useState("Admin");
+    const { store, setStore } = useContext(AppContext)
 
     const fields = method === 'Admin' ? [
         {
@@ -39,15 +43,17 @@ const Login = () => {
     const handleSubmit = e => {
         e.preventDefault();
 
-        axios.post('https://api.forevisiondigital.in/login', {
+        axios.post(backendUrl + 'login', {
             email: e.target.email.value,
             password: e.target['admin-password'].value
         }).then(({ data }) => {
+            console.log(data);
             if (data.token) {
                 navigate("/")
                 localStorage.setItem('token', data.token);
+                setStore({ ...store, token: data.token })
             }
-        })
+        }).catch(error => toast.error(error.response.data.message))
     }
 
     return (

@@ -1,12 +1,17 @@
 import PropTypes from 'prop-types'
 
 const InputField = (props) => {
-    return <input {...props} className='w-full px-2 py-[12px] bg-surface-white-surface-1 border border-surface-white-line focus:outline-none' />;
+    return <>
+        {props.label && <label className='font-medium' htmlFor={props.id}>{props.label}</label>}
+        <input {...props} className='w-full px-2 py-[12px] bg-white border border-interactive-light-focus rounded-[0.25rem] focus:outline-none' />
+    </>;
 };
 
 InputField.propTypes = {
     type: PropTypes.string.isRequired,
-    placeholder: PropTypes.string
+    label: PropTypes.string,
+    placeholder: PropTypes.string,
+    id: PropTypes.string,
 }
 
 export default InputField;

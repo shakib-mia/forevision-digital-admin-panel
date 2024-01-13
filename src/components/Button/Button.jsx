@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from "prop-types"
 
-const Button = ({ type, action, children, outlined }) => {
+const Button = ({ type, action, children, outlined, centered, containerClassName, onClick }) => {
     const [focused, setFocused] = useState(false);
     // const action = action || "";
     // console.log(action.length);
@@ -21,10 +21,11 @@ const Button = ({ type, action, children, outlined }) => {
 
 
     return (
-        <div className={`p-[4px] w-fit rounded-full border-[2px] ${dynamicBorderColor}`}>
+        <div className={`p-[4px] w-fit rounded-full border-[2px] ${dynamicBorderColor} ${containerClassName} ${centered ? 'mx-auto' : ''}`}>
             <button
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}
+                onClick={onClick}
                 type={type}
                 className={`px-[20px] py-[12px] rounded-full ${dynamicButtonClasses} text-button uppercase`}
             >
@@ -41,5 +42,8 @@ Button.propTypes = {
     text: PropTypes.string,
     action: PropTypes.string,
     children: PropTypes.node,
-    outlined: PropTypes.bool
+    outlined: PropTypes.bool,
+    centered: PropTypes.bool,
+    containerClassName: PropTypes.string,
+    onClick: PropTypes.func
 }

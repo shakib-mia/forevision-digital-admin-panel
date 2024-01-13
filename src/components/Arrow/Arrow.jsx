@@ -10,7 +10,7 @@ const Arrow = ({ increased }) => {
 };
 
 Arrow.propTypes = {
-    increased: PropTypes.string
+    increased: PropTypes.bool
 }
 
 export default Arrow;
