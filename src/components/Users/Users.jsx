@@ -4,9 +4,11 @@ import PropTypes from "prop-types"
 
 const Users = ({ users, loading }) => {
 
+    const [detailedId, setDetailedId] = useState("")
+    const [filteredList, setFilteredList] = useState(users);
+    const selectedItem = filteredList.find(({ _id }) => _id === detailedId);
 
-    const [filteredList, setFilteredList] = useState(users)
-
+    // selectedItem && console.log(selectedItem['isrc']);
     // console.log(users);
     useEffect(() => {
         setFilteredList(users)
@@ -45,12 +47,27 @@ const Users = ({ users, loading }) => {
             <ul className='flex flex-col gap-1 mt-2 bg-surface-white-line h-[20rem] overflow-y-auto p-1 rounded-lg'>
                 {!loading
                     ? filteredList.map(({ first_name, last_name, partner_name, _id }) => (
-                        <li className='py-2 px-3 capitalize cursor-pointer hover:bg-grey rounded' key={_id}>
+                        <li className='py-2 px-3 capitalize cursor-pointer hover:bg-grey rounded' onClick={() => setDetailedId(_id)} key={_id}>
                             {first_name && last_name ? first_name + ' ' + last_name : partner_name}
                         </li>
                     ))
                     : 'loading...'}
             </ul>
+
+            {detailedId.length ? <div className='absolute top-0 left-0 h-screen w-screen bg-black bg-opacity-45 flex items-center justify-center'>
+                <div className='bg-white w-1/2 shadow-lg rounded relative'>
+                    <button className='absolute -top-6 -right-6 text-heading-5 text-white' onClick={() => setDetailedId("")}>&times;</button>
+                    <div className="overflow-auto  max-h-[50vh]">
+                        {Object.keys(selectedItem).map(item => <div className='flex py-3 w-1/2 mx-auto' key={item}>
+                            <aside className='w-1/2'>{item}</aside>
+                            <aside className='w-1/2 text-wrap'>
+                                {item === 'isrc' ? selectedItem[item].split(",").map((ite, key) => <li key={key}>{ite}</li>) : selectedItem[item]}
+                            </aside>
+                        </div>)}
+                    </div>
+                </div>
+
+            </div> : <></>}
 
         </>
     );
