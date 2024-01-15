@@ -1,7 +1,7 @@
 // import React from 'react';
 
 import Arrow from "../Arrow/Arrow";
-import rupees from "../../assets/icons/rupees.svg"
+// import rupees from "../../assets/icons/rupees.svg"
 import Button from "../Button/Button";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -32,24 +32,24 @@ const TopPerformer = () => {
                     <div className="flex justify-between">
                         <h5 className="text-interactive-dark-confirmation">Revenue</h5>
                         <div className="flex gap-2 items-center">
-                            <img src={rupees} alt="rupees" className="h-6 w-auto" />
-                            <h5 className="font-bold">{topPerformer?.lifetimeRevenue?.toFixed(2)}</h5>
+
+                            <h5 className="font-bold">&#8377; {topPerformer?.lifetimeRevenue?.toFixed(2)}</h5>
                         </div>
                     </div>
 
                     <div className="flex justify-between">
                         <h5 className="text-interactive-dark-active">Paid</h5>
                         <div className="flex gap-2 items-center">
-                            <img src={rupees} alt="rupees" className="h-6 w-auto" />
-                            <h5 className="font-bold">{paid}</h5>
+
+                            <h5 className="font-bold">&#8377; {paid}</h5>
                         </div>
                     </div>
 
                     <div className="flex justify-between">
                         <h5 className="text-interactive-light-destructive-focus">Due</h5>
                         <div className="flex gap-2 items-center">
-                            <img src={rupees} alt="rupees" className="h-6 w-auto" />
-                            <h5 className="font-bold">{topPerformer?.lifetimeRevenue?.toFixed(2) - paid}</h5>
+
+                            <h5 className="font-bold">&#8377; {topPerformer?.lifetimeRevenue?.toFixed(2) - paid}</h5>
                         </div>
                     </div>
                 </div>

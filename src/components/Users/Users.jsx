@@ -43,7 +43,7 @@ const Users = ({ users, loading }) => {
     // console.log(store);
     return (
         <>
-            <InputField onChange={handleSearch} id='search-users' label="Search Users" placeholder="Search a User Here" />
+            <InputField onChange={handleSearch} id='search-users' type='text' label="Search Users" placeholder="Search a User Here" />
             <ul className='flex flex-col gap-1 mt-2 bg-surface-white-line h-[20rem] overflow-y-auto p-1 rounded-lg'>
                 {!loading
                     ? filteredList.map(({ first_name, last_name, partner_name, _id }) => (

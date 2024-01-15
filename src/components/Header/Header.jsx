@@ -46,7 +46,7 @@ const Header = () => {
             increased: true
         },
         {
-            count: 0,
+            count: data.due?.toFixed(2) || 0,
             heading: "Due revenue",
             icon: dueRevenue,
             progress: '-37580 this month ',

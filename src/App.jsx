@@ -25,15 +25,39 @@ const App = () => {
     ]);
 
     const [store, setStore] = useState({ token: localStorage.getItem("token") });
+    const [isrcs, setIsrcs] = useState([])
 
     useEffect(() => {
-        // axios.get("http://localhost:4000/all-users").then(({ data }) => {
-        //     for (const { _id } of data) {
-        //         // console.log(_id);
-        //         // axios.get(`http://localhost:4000/lifetime-revenue/${_id}`).then(({ data }) => console.log(data))
-        //     }
-        // })
+        axios.get("https://api.forevisiondigital.in/getAllIsrcs").then(({ data }) => {
+            setIsrcs(data);
+        })
     }, [])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (isrcs.length > 0 && store.token) {
+                let count = 0;
+                try {
+                    const requests = isrcs.map(async ({ isrc }) => {
+                        const { data } = await axios.get(`https://api.forevisiondigital.in/admin-royalty/${isrc}`);
+                        for (const { royality } of data.royalties) {
+                            count = count + royality;
+                            // console.log(count);
+                        }
+                    });
+
+                    await Promise.all(requests);
+
+                    // Here, 'count' will have the total sum after all requests have completed
+                    console.log('Total Count:', count);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        };
+
+        fetchData();
+    }, [isrcs.length, store.token]);
 
     return (
         <AppContext.Provider value={{ store, setStore }}>
