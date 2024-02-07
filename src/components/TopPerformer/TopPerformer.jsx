@@ -6,9 +6,14 @@ import Button from "../Button/Button";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { backendUrl } from "../../constants";
+// import { AppContext } from "../../contexts/AppContext";
 
 const TopPerformer = () => {
-    const [topPerformer, setTopPerformer] = useState({})
+    const [topPerformer, setTopPerformer] = useState({});
+    // const { store } = useContext(AppContext);
+
+    // console.log(store);
+
     useEffect(() => {
         axios.get(backendUrl + 'top-performer').then(({ data }) => setTopPerformer(data))
     }, []);
@@ -17,7 +22,7 @@ const TopPerformer = () => {
     // console.log(topPerformer.amount);
 
     return (
-        <div className='w-5/12 h-[467px] bg-white rounded-[20px] custom-shadow text-interactive-dark-hover flex flex-col justify-between'>
+        <div className='w-5/12 bg-white rounded-[20px] custom-shadow text-interactive-dark-hover flex flex-col justify-between'>
             {/* header */}
 
             <div className="py-2 px-3 flex gap-[0.69rem] items-center justify-end border-b border-grey-light">

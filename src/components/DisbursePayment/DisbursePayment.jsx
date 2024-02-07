@@ -26,6 +26,7 @@ const DisbursePayment = () => {
         // axios.post(backendUrl + 'disburse-payment', body, config).then(({ data }) => console.log(data))
     }
 
+
     return (
         <form className="flex flex-col gap-4" onSubmit={handleDisburse}>
             <h6 className="font-semibold text-grey">Disburse Payment</h6>

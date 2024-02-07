@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from "prop-types"
 
-const Button = ({ type, action, children, outlined, centered, containerClassName, onClick }) => {
+const Button = ({ type, action, children, outlined, centered, containerClassName, onClick, loading, disabled }) => {
     const [focused, setFocused] = useState(false);
     // const action = action || "";
     // console.log(action.length);
@@ -20,13 +20,20 @@ const Button = ({ type, action, children, outlined, centered, containerClassName
                 : "bg-interactive-light hover:bg-interactive-light-hover focus:bg-interactive-light-focus text-white";
 
 
+    const handleClick = (e) => {
+        onClick();
+
+        e.target.blur()
+    }
+
     return (
-        <div className={`p-[4px] w-fit rounded-full border-[2px] ${dynamicBorderColor} ${containerClassName} ${centered ? 'mx-auto' : ''}`}>
+        <div className={`p-[4px] w-fit rounded-full border-[2px] ${dynamicBorderColor} ${containerClassName} ${loading ? 'opacity-60' : ''} ${centered ? 'mx-auto' : ''}`}>
             <button
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}
-                onClick={onClick}
+                onClick={handleClick}
                 type={type}
+                disabled={disabled}
                 className={`px-[20px] py-[12px] rounded-full ${dynamicButtonClasses} text-button uppercase`}
             >
                 {children}
@@ -45,5 +52,7 @@ Button.propTypes = {
     outlined: PropTypes.bool,
     centered: PropTypes.bool,
     containerClassName: PropTypes.string,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
+    loading: PropTypes.bool,
+    disabled: PropTypes.bool
 }

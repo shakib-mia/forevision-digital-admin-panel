@@ -18,7 +18,8 @@ const Users = ({ users, loading }) => {
 
     const handleSearch = e => {
         // console.log(users);
-        const foundUser = users.filter(({ first_name, last_name, partner_name }) => {
+        const foundUser = users.filter(({ first_name, last_name, partner_name, emailId }) => {
+            // console.log(emailId.includes(e.target.value.toLowerCase()));
             if (first_name && first_name.length) {
                 const fullName = first_name + ' ' + last_name;
                 // return fullName.toLowerCase().includes(e.target.value.toLowerCase().length > 0 ? e.target.value.toLowerCase() : '');
@@ -27,6 +28,8 @@ const Users = ({ users, loading }) => {
                 } else {
                     return users
                 }
+            } else if (emailId) {
+                return emailId.includes(e.target.value.toLowerCase())
             } else {
                 // return fullName.toLowerCase().includes(e.target.value.toLowerCase().length > 0 ? e.target.value.toLowerCase() : '');
                 if (e.target.value.toLowerCase().length > 0) {
@@ -36,6 +39,8 @@ const Users = ({ users, loading }) => {
                 }
             }
         })
+
+        console.log(foundUser);
 
         setFilteredList(foundUser);
     }
