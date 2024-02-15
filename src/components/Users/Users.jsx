@@ -51,9 +51,10 @@ const Users = ({ users, loading }) => {
             <InputField onChange={handleSearch} id='search-users' type='text' label="Search Users" placeholder="Search a User Here" />
             <ul className='flex flex-col gap-1 mt-2 bg-surface-white-line h-[20rem] overflow-y-auto p-1 rounded-lg'>
                 {!loading
-                    ? filteredList.map(({ first_name, last_name, partner_name, _id }) => (
-                        <li className='py-2 px-3 capitalize cursor-pointer hover:bg-grey rounded' onClick={() => setDetailedId(_id)} key={_id}>
-                            {first_name && last_name ? first_name + ' ' + last_name : partner_name}
+                    ? filteredList.map(({ first_name, last_name, partner_name, _id, lifetimeRevenue }) => (
+                        <li className='py-2 px-3 capitalize cursor-pointer hover:bg-grey rounded flex justify-between' onClick={() => setDetailedId(_id)} key={_id}>
+                            <p>{first_name && last_name ? first_name + ' ' + last_name : partner_name}</p>
+                            <p className='text-interactive-light-confirmation' title='Lifetime Revenue'>&#8377; {lifetimeRevenue.toFixed(2)}</p>
                         </li>
                     ))
                     : 'loading...'}
