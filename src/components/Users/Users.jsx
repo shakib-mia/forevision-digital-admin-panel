@@ -45,7 +45,6 @@ const Users = ({ users, loading }) => {
         setFilteredList(foundUser);
     }
 
-    // console.log(store);
     return (
         <>
             <InputField onChange={handleSearch} id='search-users' type='text' label="Search Users" placeholder="Search a User Here" />

@@ -19,6 +19,7 @@ const UploadAndActivity = () => {
     const [users, setUsers] = useState([])
     const [loading, setLoading] = useState(true);
     const [updateLoading, setUpdateLoading] = useState(false);
+    const [updateSongLoading, setUpdateSongLoading] = useState(false);
 
     useEffect(() => {
         axios.get(backendUrl + 'all-users').then(({ data }) => {
@@ -61,6 +62,13 @@ const UploadAndActivity = () => {
     }
 
 
+    const updateSong = () => {
+        setUpdateSongLoading(true);
+
+        axios.get(backendUrl + 'calculate-lifetime-revenue/songs').then(({ data }) => console.log(data))
+    }
+
+
 
 
     return (
@@ -78,8 +86,9 @@ const UploadAndActivity = () => {
                     </aside>
                 </div>
 
-                <div className="py-3 flex justify-center border-t border-grey-light">
+                <div className="py-3 flex justify-center border-t border-grey-light gap-4">
                     <Button onClick={updateAccount} disabled={updateLoading} loading={updateLoading}>Update User Account</Button>
+                    <Button onClick={updateSong} disabled={updateSongLoading} loading={updateSongLoading}>Update Song Data</Button>
                 </div>
             </div>
         </>
