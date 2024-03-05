@@ -25,6 +25,8 @@ import { AppContext } from "../../contexts/AppContext";
 import EmployeeList from "../../components/EmployeeList/EmployeeList";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Agreements from "../../components/Agreements/Agreements";
+import RecordLabelFiles from "../../components/RecordLabelFiles/RecordLabelFiles";
 // import { useContext } from "react";
 // import { AppContext } from "../../contexts/AppContext";
 
@@ -117,6 +119,11 @@ const Home = () => {
         <RefundRequests />
       </div>
       {/* )} */}
+
+      <div className="mt-4 grid grid-cols-2 gap-4">
+        <Agreements />
+        <RecordLabelFiles />
+      </div>
 
       {/* {role === "admin" && ( */}
       <div className="mb-24 mt-4 grid grid-cols-2 gap-4">
