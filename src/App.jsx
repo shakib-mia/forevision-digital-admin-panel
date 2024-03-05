@@ -69,7 +69,7 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5100/admin/check-role", {
+      .get(backendUrl + "admin/check-role", {
         headers: {
           token: store.token,
         },
