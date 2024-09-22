@@ -12,6 +12,7 @@ const Button = ({
   loading,
   disabled,
 }) => {
+  // console.log(disabled);
   const [focused, setFocused] = useState(false);
   // const action = action || "";
   // console.log(action.length);
@@ -25,15 +26,15 @@ const Button = ({
     ? "bg-interactive-light-confirmation-disabled"
     : outlined
     ? action === "confirmation"
-      ? "border border-interactive-light-confirmation text-interactive-light-confirmation hover:bg-interactive-light-confirmation-disabled focus:bg-interactive-light-confirmation-disabled"
+      ? "border border-interactive-light-confirmation text-interactive-light-confirmation hover:bg-interactive-light-confirmation-hover focus:bg-interactive-light-confirmation-disabled ring-interactive-light-confirmation"
       : action === "destructive"
-      ? "border border-interactive-light-destructive text-interactive-light-destructive hover:bg-interactive-light-destructive-disabled focus:bg-interactive-light-destructive-disabled"
-      : "border border-interactive-light text-interactive-light hover:bg-interactive-light-disabled focus:bg-interactive-light-disabled"
+      ? "border border-interactive-light-destructive text-interactive-light-destructive hover:bg-interactive-light-destructive-disabled focus:bg-interactive-light-destructive-disabled ring-interactive-light-destructive"
+      : "border border-interactive-light text-interactive-light hover:bg-interactive-light-disabled focus:bg-interactive-light-disabled ring-interactive-light-focus"
     : action === "confirmation"
-    ? "bg-interactive-light-confirmation hover:bg-interactive-light-confirmation-hover focus:bg-interactive-light-confirmation-focus text-white"
+    ? "bg-interactive-light-confirmation hover:bg-interactive-light-confirmation-hover focus:bg-interactive-light-confirmation-focus text-white ring-interactive-light-confirmation"
     : action === "destructive"
-    ? "bg-interactive-light-destructive hover:bg-interactive-light-destructive-hover focus:bg-interactive-light-destructive-focus text-white"
-    : "bg-interactive-light hover:bg-interactive-light-hover focus:bg-interactive-light-focus text-white";
+    ? "bg-interactive-light-destructive hover:bg-interactive-light-destructive-hover focus:bg-interactive-light-destructive-focus text-white ring-interactive-light-destructive-focus"
+    : "bg-interactive-light hover:bg-interactive-light-hover focus:bg-interactive-light-focus focus:ring-interactive-light text-white";
 
   // const handleClick = (e) => {
   //   onClick();
@@ -43,7 +44,7 @@ const Button = ({
 
   return (
     <div
-      className={`p-[4px] w-fit rounded-full border-[2px] ${dynamicBorderColor} ${containerClassName} ${
+      className={`p-[4px] w-fit rounded-full transition ${dynamicBorderColor} ${containerClassName} ${
         loading ? "opacity-60" : ""
       } ${centered ? "mx-auto" : ""}`}
     >
@@ -53,7 +54,7 @@ const Button = ({
         onClick={onClick}
         type={type}
         disabled={disabled}
-        className={`px-[20px] py-[12px] disabled:cursor-not-allowed rounded-full ${dynamicButtonClasses} text-button uppercase`}
+        className={`px-[20px] py-[12px] disabled:cursor-not-allowed rounded-full ${dynamicButtonClasses} text-button uppercase transition focus:ring-2 ring-offset-2`}
       >
         {children}
       </button>

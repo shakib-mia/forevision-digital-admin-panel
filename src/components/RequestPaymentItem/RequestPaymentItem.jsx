@@ -53,7 +53,7 @@ const RequestPaymentItem = ({ item }) => {
       <div className="flex gap-3 justify-center">
         <Link
           to={`/request-payment-details/${item._id}`}
-          className="px-3 py-1 bg-interactive-light bg-opacity-30 text-interactive-light font-bold rounded-full text-button"
+          className="px-3 py-1 bg-interactive-light bg-opacity-30 text-interactive-light font-bold rounded-full text-button h-fit"
           // onClick={() => setShowModal(true)}
         >
           Review

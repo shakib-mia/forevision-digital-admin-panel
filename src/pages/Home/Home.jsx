@@ -124,6 +124,7 @@ const Home = () => {
         <Agreements />
         <RecordLabelFiles />
       </div>
+      {/* )} */}
 
       {/* {role === "admin" && ( */}
       <div className="mb-24 mt-4 grid grid-cols-2 gap-4">

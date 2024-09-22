@@ -58,3 +58,13 @@ h6 {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.song-container::-webkit-scrollbar {
+  width: 0;
+}
+
+.custom-swal-width {
+  /* width: 600px !important;
+  max-width: 80% !important; */
+  @apply w-1/2 max-w-[80%] shadow-2xl;
+}
