@@ -35,6 +35,7 @@ const DeleteRevenueExcel = () => {
   // console.log(
   //   platforms.flatMap((item) => item.platforms).map((item) => item.cat_name)
   // );
+  // console.log(platforms);
 
   return (
     <div className="mt-6">
