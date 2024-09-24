@@ -61,7 +61,7 @@ const Login = () => {
         .catch((error) => toast.error(error.response.data.message));
     } else {
       axios
-        .post("http://localhost:5100/employee-login", {
+        .post(backendUrl + "employee-login", {
           employeeCode: e.target["employee-code"].value,
           employeePassword: e.target["employee-password"].value,
         })

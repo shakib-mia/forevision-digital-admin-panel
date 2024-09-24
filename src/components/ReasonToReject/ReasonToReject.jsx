@@ -26,19 +26,17 @@ const ReasonToReject = ({ updated }) => {
     updated.reason = reason;
     updated.status = "Rejected";
     // console.log(_id);
-    axios
-      .put("http://localhost:5100/songs/" + _id, updated, config)
-      .then(({ data }) => {
-        if (data.acknowledged) {
-          axios
-            .post(backendUrl + "send-song-status", updated)
-            .then(({ data }) => {
-              // if (data.acknowledged) {
-              Swal.close();
-              // }
-            });
-        }
-      });
+    axios.put(backendUrl + "songs/" + _id, updated, config).then(({ data }) => {
+      if (data.acknowledged) {
+        axios
+          .post(backendUrl + "send-song-status", updated)
+          .then(({ data }) => {
+            // if (data.acknowledged) {
+            Swal.close();
+            // }
+          });
+      }
+    });
 
     // formData.status = "Sent to Stores";
     // formData.isrc = newIsrc;

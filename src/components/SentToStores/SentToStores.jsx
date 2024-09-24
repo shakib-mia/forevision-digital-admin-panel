@@ -31,7 +31,7 @@ const SentToStores = ({ updated }) => {
     // console.log({ ...updated, ...formData });
     const newBody = { ...updated, status: "Sent to Stores", isrc: newIsrc };
 
-    console.log(newBody);
+    // console.log(newBody);
 
     axios.post(backendUrl + "songs", newBody, config).then(({ data }) => {
       if (data.insertCursor.acknowledged) {

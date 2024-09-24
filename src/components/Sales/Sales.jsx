@@ -16,10 +16,16 @@ import {
 //     month: "2024-10",
 //     ForevisionSocial: 0,
 //     ForevisionCRBTPlus: 139800,
-//     ForevisionPro: 0,
+//     ForevisionPro: 49800,
 //     ForevisionCRBT: 0,
 //   },
-//   // Add more data here
+//   {
+//     month: "2024-09",
+//     ForevisionSocial: 0,
+//     ForevisionCRBTPlus: 0,
+//     ForevisionPro: 49800,
+//     ForevisionCRBT: 0,
+//   },
 // ];
 
 const Sales = () => {

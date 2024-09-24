@@ -9,6 +9,7 @@ import Button from "../../components/Button/Button";
 import InputField from "../../components/InputField/InputField";
 import Select from "../../components/Select/Select";
 import Modal from "../../components/Modal/Modal";
+import { backendUrl } from "../../constants";
 // import { AppContext } from "../contexts/AppContext";
 
 const RequestPaymentDetails = () => {
@@ -27,7 +28,7 @@ const RequestPaymentDetails = () => {
   //   console.log(id);
   useEffect(() => {
     axios
-      .get("https://api.forevisiondigital.in/disburse-payment/" + id)
+      .get(backendUrl + "disburse-payment/" + id)
       .then(({ data }) => setItem(data));
   }, [id]);
 
@@ -36,13 +37,17 @@ const RequestPaymentDetails = () => {
     const month = date.getMonth() + 1;
 
     item.disbursed = true;
-    item.paymentDate = date.getDate() + "/" + month + "/" + date.getFullYear();
+    item.paymentDate =
+      date.getDate() + "/" + month > 9
+        ? month
+        : "0" + month + "/" + date.getFullYear();
     item.paymentMethod = paymentMethod;
     item.transactionID = transactionID;
     // console.log(item);
+    // console.log(item);
 
     axios
-      .put("http://api.forevisiondigital.in/disburse-payment/" + item._id, item)
+      .put(backendUrl + "disburse-payment/" + item._id, item)
       .then(({ data }) => {
         // console.log(data)
         if (data.message === "Success") {
@@ -62,10 +67,7 @@ const RequestPaymentDetails = () => {
     // console.log(newData);
 
     axios
-      .post(
-        "https://api.forevisiondigital.in/disburse-payment/" + item._id,
-        newData
-      )
+      .post(backendUrl + "disburse-payment/" + item._id, newData)
       .then(({ data }) => {
         if (data.deleteCursor.acknowledged) {
           navigate("/");

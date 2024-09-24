@@ -6,9 +6,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
   useEffect(() => {
-    axios
-      .get("http://localhost:5100/admin")
-      .then(({ data }) => setEmployees(data));
+    axios.get(backendUrl + "admin").then(({ data }) => setEmployees(data));
   }, []);
   return (
     <div className="bg-white rounded-[20px] custom-shadow text-interactive-dark-hover">

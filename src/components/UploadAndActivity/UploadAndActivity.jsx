@@ -55,21 +55,25 @@ const UploadAndActivity = () => {
     // console.log();
     setUpdateLoading(true);
 
-    axios.get(backendUrl + "calculate-lifetime-revenue").then(({ data }) => {
-      console.log(data);
-      data.length > 0 && setUpdateLoading(false);
-    });
-    axios.get(backendUrl + "calculate-account").then(({ data }) => {
-      console.log(data);
-      // data.length > 0 && setUpdateLoading(false);
-    });
+    axios
+      .get("https://api.forevisiondigital.in/calculate-lifetime-revenue")
+      .then(({ data }) => {
+        console.log(data);
+        data.length > 0 && setUpdateLoading(false);
+      });
+    axios
+      .get("https://api.forevisiondigital.in/calculate-account")
+      .then(({ data }) => {
+        console.log(data);
+        // data.length > 0 && setUpdateLoading(false);
+      });
   };
 
   const updateSong = () => {
     setUpdateSongLoading(true);
 
     axios
-      .get(backendUrl + "calculate-lifetime-revenue/songs")
+      .get("https://api.forevisiondigital.in/calculate-lifetime-revenue/songs")
       .then(({ data }) => console.log(data));
   };
 

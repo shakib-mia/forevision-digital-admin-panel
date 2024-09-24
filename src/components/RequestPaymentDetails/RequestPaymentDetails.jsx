@@ -4,6 +4,7 @@ import Modal from "../Modal/Modal";
 import { AppContext } from "../../contexts/AppContext";
 import PropTypes from "prop-types";
 import axios from "axios";
+import { backendUrl } from "../../constants";
 
 const RequestPaymentDetails = ({
   partner_name,
@@ -55,10 +56,7 @@ const RequestPaymentDetails = ({
     // console.log(item);
 
     axios
-      .put(
-        "https://api.forevisiondigital.in/disburse-payment/" + item._id,
-        item
-      )
+      .put(backendUrl + "disburse-payment/" + item._id, item)
       .then(({ data }) => console.log(data));
   };
 

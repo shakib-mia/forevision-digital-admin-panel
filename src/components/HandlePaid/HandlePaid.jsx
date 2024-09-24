@@ -34,13 +34,11 @@ const SentToStores = ({ updated }) => {
     // console.log("_id:", _id);
 
     // Example of using newData without _id in the PUT request
-    axios
-      .put(`http://localhost:5100/songs/${_id}`, newData, config)
-      .then(({ data }) => {
-        if (data.acknowledged) {
-          Swal.close();
-        }
-      });
+    axios.put(backendUrl + `songs/${_id}`, newData, config).then(({ data }) => {
+      if (data.acknowledged) {
+        Swal.close();
+      }
+    });
 
     // formData.status = "Sent to Stores";
     // formData.isrc = newIsrc;

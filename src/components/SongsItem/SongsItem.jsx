@@ -114,7 +114,7 @@ const SongsItem = ({ item }) => {
         const { _id, ...updatedData } = updated;
         updatedData.status = "Copyright infringed";
         axios
-          .put(`http://localhost:5100/songs/${_id}`, updatedData, config)
+          .put(`${backendUrl}songs/${_id}`, updatedData, config)
           .then(({ data }) => {
             if (data.acknowledged) {
               axios
@@ -180,15 +180,106 @@ const SongsItem = ({ item }) => {
     });
   };
 
+  // const downloadExcel = () => {
+  //   // console.log(flattenObject(item));
+
+  //   // Convert object into key-value array
+  //   const keyValueArray = objectToKeyValueArray(flattenObject(item));
+  //   console.log(keyValueArray);
+
+  //   // Use the keyValueArray in the jsonToExcel function
+  //   jsonToExcel(keyValueArray, "item.xlsx");
+  // };
+
+  const renameFields = (data) => {
+    return data.map((item) => ({
+      "CRBT CUT NAME": item.songName,
+      "SONG NAME": item.songName,
+      "FILM ALBUM NAME": item.albumTitle,
+      LANGUAGE: item.language || "", // Example: you can modify this if language is available in the data
+      "Album Type": item.albumType,
+      "Content Type": item.contentType,
+      Genre: item.genre,
+      "Sub-Genre": item.subGenre,
+      Mood: item.mood,
+      Description: item.description,
+      "UPC ID": item.UPC,
+      ISRC: item.isrc,
+      LABEL: item.recordLabel,
+      "IPRS Ownership Label": "", // Dynamic values can be added here if needed
+      "IPI Label": "",
+      Publisher: item.publisher,
+      "Album Level Main Artist Singer":
+        item.artists.find((artist) => artist.role === "Singer/Primary Artist")
+          ?.name || "",
+      "Track Level Main Artist Singer":
+        item.artists.find((artist) => artist.role === "Singer/Primary Artist")
+          ?.name || "",
+      "Track Level Featuring Artist Singer":
+        item.artists.find((artist) => artist.role === "Featuring Artist")
+          ?.name || "",
+      "Track Level Remixer Name": "", // Additional fields can be added similarly
+      Composer:
+        item.artists.find((artist) => artist.role === "Composer")?.name || "",
+      "IPRS Member Composer": "",
+      "IPI Composer": "",
+      Lyricist:
+        item.artists.find((artist) => artist.role === "Lyricist")?.name || "",
+      "IPI Lyricist": "",
+      "IPRS Member Lyricist": "",
+      "Track No": "",
+      "Track Duration": "",
+      "Time for CRBT Cut": "",
+      "Original Release Date of Movie": "",
+      "Original Release Date of Music": item.releaseDate,
+      "Go Live Date": item.liveDate,
+      "Time of Music Release": item.time,
+      "Date of Expiry": "",
+      "C Line": "",
+      "P Line": "",
+      "Film Banner": "",
+      "Film Director": "",
+      "Film Producer": "",
+      "Film Star Cast Actors": "",
+      "Parental Advisory": "",
+      "Is Instrumental": false,
+      "Spotify Artist Profile ID for Main Artist": "",
+      "Spotify Artist Profile ID for Featured Artist": "",
+      "Apple Artist ID for Main Artist": "",
+      "Apple Artist ID for Remixer": "",
+      "Apple Artist ID for Composer": "",
+      "Apple Artist ID for Lyricist": "",
+      "Apple Artist ID for Film Producer": "",
+      "Apple Artist ID for Film Director": "",
+      "Apple Artist ID for Starcast": "",
+      "Facebook Page Link for Track Main Artist": "",
+      "Instagram Artist Handle for Track Main Artist": "",
+    }));
+  };
+
   const downloadExcel = () => {
-    // console.log(flattenObject(item));
+    // Step 1: Rename fields dynamically
+    delete item._id;
+    const renamedData = renameFields([item]);
 
-    // Convert object into key-value array
-    const keyValueArray = objectToKeyValueArray(flattenObject(item));
-    console.log(keyValueArray);
+    console.log(renamedData);
 
-    // Use the keyValueArray in the jsonToExcel function
-    jsonToExcel(keyValueArray, "item.xlsx");
+    const flattenedObject = flattenObject(renamedData[0]);
+
+    // Create an array of keys and an array of values
+    const keys = Object.keys(flattenedObject);
+    const values = Object.values(flattenedObject);
+
+    // Create the JSON data with keys in the first row and values in the second row
+    const jsonData = [
+      values.reduce((acc, value, index) => {
+        acc[keys[index]] = value;
+        return acc;
+      }, {}),
+    ];
+
+    // Use the jsonData in the jsonToExcel function
+    jsonToExcel(jsonData, "item.xlsx");
   };
 
   return (

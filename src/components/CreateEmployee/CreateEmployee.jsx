@@ -3,6 +3,7 @@ import InputField from "../InputField/InputField";
 import Select from "../Select/Select";
 import Button from "../Button/Button";
 import axios from "axios";
+import { backendUrl } from "../../constants";
 
 const CreateEmployee = () => {
   const [role, setRole] = useState("");
@@ -12,7 +13,7 @@ const CreateEmployee = () => {
     e.preventDefault();
 
     axios
-      .post("http://localhost:5100/admin/create-employee", { name, role })
+      .post(backendUrl + "admin/create-employee", { name, role })
       .then(({ data }) => e.target.reset());
   };
 
