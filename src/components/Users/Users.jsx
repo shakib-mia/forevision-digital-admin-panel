@@ -87,7 +87,7 @@ const Users = ({ users, loading }) => {
                     className="text-interactive-light-confirmation"
                     title="Lifetime Revenue"
                   >
-                    &#8377; {lifetimeRevenue.toFixed(2)}
+                    &#8377; {lifetimeRevenue?.toFixed(2)}
                   </p>
                 </li>
               )

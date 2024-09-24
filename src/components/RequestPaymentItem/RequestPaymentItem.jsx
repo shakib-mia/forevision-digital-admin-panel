@@ -3,97 +3,66 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { backendUrl } from "../../constants";
 import Modal from "../Modal/Modal";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Button from "../Button/Button";
+import { AppContext } from "../../contexts/AppContext";
+import RequestPaymentDetails from "../RequestPaymentDetails/RequestPaymentDetails";
+import { Link } from "react-router-dom";
 
 const RequestPaymentItem = ({ item }) => {
   const date = new Date();
-  const [showModal, setShowModal] = useState(false);
+  const { showModal, setShowModal } = useContext(AppContext);
+  // const
+  const [enlargedAadhar, setEnlargedAadhar] = useState(false);
+  const [enlargedPan, setEnlargedPan] = useState(false);
+  const [enlargedCancelled, setEnlargedCancelled] = useState(false);
   // const [item, set]
 
-  const handleDisburse = () => {
-    // console.log(date.getMonth());
-    const month = date.getMonth() + 1;
+  // const handleDisburse = () => {
+  //   // console.log(date.getMonth());
+  //   const month = date.getMonth() + 1;
 
-    item.disbursed = true;
-    item.paymentDate = date.getDate() + "/" + month + "/" + date.getFullYear();
-    // console.log(item);
+  //   item.disbursed = true;
+  //   item.paymentDate = date.getDate() + "/" + month + "/" + date.getFullYear();
+  //   // console.log(item);
 
-    axios
-      .put("http://localhost:5000/disburse-payment/" + item._id, item)
-      .then(({ data }) => console.log(data));
-  };
+  //   axios
+  //     .put("https://api.forevisiondigital.in/disburse-payment/" + item._id, item)
+  //     .then(({ data }) => console.log(data));
+  // };
 
-  const handleDecline = () => {
-    const month = date.getMonth() + 1;
+  // const handleDecline = () => {
+  //   const month = date.getMonth() + 1;
 
-    item.paymentDate = date.getDate() + "/" + month + "/" + date.getFullYear();
-    const newData = { ...item };
-    delete newData._id;
+  //   item.paymentDate = date.getDate() + "/" + month + "/" + date.getFullYear();
+  //   const newData = { ...item };
+  //   delete newData._id;
 
-    axios
-      .post("http://localhost:5000/disburse-payment/" + item._id, newData)
-      .then(({ data }) => console.log(data));
-  };
+  //   // axios
+  //   //   .post(
+  //   //     "https://api.forevisiondigital.in/disburse-payment/" + item._id,
+  //   //     newData
+  //   //   )
+  //   //   .then(({ data }) => console.log(data));
+  // };
 
   return (
     <div className="grid grid-cols-3 p-4 text-center" key={item._id}>
-      <p>{item.partner_name}</p>
-      <p>&#8377; {item.lifetimeRevenue.toFixed(2)}</p>
+      <p>{item.partner_name || item.first_name + " " + item.last_name}</p>
+      <p>&#8377; {item.totalAmount}</p>
       <div className="flex gap-3 justify-center">
-        <button
+        <Link
+          to={`/request-payment-details/${item._id}`}
           className="px-3 py-1 bg-interactive-light bg-opacity-30 text-interactive-light font-bold rounded-full text-button"
-          onClick={() => setShowModal(true)}
+          // onClick={() => setShowModal(true)}
         >
           Review
-        </button>
-        {showModal && (
+        </Link>
+        {/* {showModal && (
           <Modal handleClose={() => setShowModal(false)}>
-            <div className="text-center">
-              <h5 className="font-medium">{item.partner_name}</h5>
-              <h5 className="font-medium my-2">
-                Total Songs: {item.isrc.split(",").length}
-              </h5>
-              <h5 className="font-medium">
-                Lifetime Revenue: {item.lifetimeRevenue.toFixed(2)}
-              </h5>
-              {item["gst-url"] ? (
-                <div className="flex">
-                  <h5>GST Certificate</h5>
-                  <img src={item["gst-url"]} alt="" />
-                </div>
-              ) : (
-                <div className="mt-4">
-                  <div className="flex justify-center">
-                    Adhar Card:{" "}
-                    <img src={item["adhar-url"]} alt="" className="w-1/2" />
-                  </div>
-                  <div className="flex justify-center">
-                    PAN Card:{" "}
-                    <img src={item["pan-url"]} alt="" className="w-1/2" />
-                  </div>
-                  <div className="flex justify-center">
-                    Cancelled Cheque:{" "}
-                    <img
-                      src={item["cancelled-cheque-url"]}
-                      alt=""
-                      className="w-1/2"
-                    />
-                  </div>
-                </div>
-              )}
-
-              <div className="flex gap-3 justify-center">
-                <Button action="confirmation" onClick={handleDisburse}>
-                  Disburse
-                </Button>
-                <Button action="destructive" onClick={handleDecline}>
-                  Decline
-                </Button>
-              </div>
-            </div>
+            <RequestPaymentDetails {...item} />
           </Modal>
-        )}
+        )} */}
 
         {/* <button
           disabled={item.disbursed}
