@@ -59,6 +59,10 @@ const UploadAndActivity = () => {
       console.log(data);
       data.length > 0 && setUpdateLoading(false);
     });
+    axios.get(backendUrl + "calculate-account").then(({ data }) => {
+      console.log(data);
+      // data.length > 0 && setUpdateLoading(false);
+    });
   };
 
   const updateSong = () => {
