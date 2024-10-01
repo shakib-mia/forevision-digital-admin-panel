@@ -45,7 +45,7 @@ const SongUpdateRequest = () => {
   // console.log(requests);
 
   return (
-    <div className="bg-white rounded-[20px] custom-shadow text-interactive-dark-hover ">
+    <div className="bg-white rounded-[20px] custom-shadow text-interactive-dark-hover h-[500px] overflow-y-auto">
       <div className="py-2 px-3 flex gap-[0.69rem] items-center justify-center border-b border-grey-light">
         <p className="text-heading-6-bold">Update Requests</p>
       </div>

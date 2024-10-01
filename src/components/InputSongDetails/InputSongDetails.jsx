@@ -17,34 +17,30 @@ const InputSongDetails = ({ platforms, updated }) => {
       token: store.token || localStorage.getItem("token"),
     },
   };
-  // console.log(store);
 
   useEffect(() => {
     axios
       .get(backendUrl + "generate-isrc")
       .then(({ data }) => setNewIsrc(data.newIsrc));
   }, []);
-  // console.log(updated);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     formData.status = "streaming";
     formData.isrc = newIsrc;
 
-    // console.log({ ...updated, ...formData });
     const newBody = { ...updated, ...formData };
-    console.log(newBody);
 
-    const selectedPlatforms = newBody.selectedPlatforms.map((platform) =>
+    const selectedPlatforms = updated.selectedPlatforms.map((platform) =>
       platform.toLowerCase().replace(/\s+/g, "-")
     );
 
-    const matchingKeys = Object.keys(newBody).filter((key) => {
+    const matchingKeys = Object.keys(formData).filter((key) => {
       const normalizedKey = key.toLowerCase().replace(/-/g, " ");
       return selectedPlatforms.includes(normalizedKey);
     });
 
-    // console.log(matchingKeys);
     newBody.availablePlatforms = matchingKeys;
     newBody.status = "streaming";
     delete newBody.hold;
@@ -52,70 +48,76 @@ const InputSongDetails = ({ platforms, updated }) => {
     delete newBody.requested;
     delete newBody.reason;
 
-    // console.log(config);
+    // Log formData and matchingKeys for debugging
+    console.log("Form Data:", newBody);
+    console.log("Matching Keys:", matchingKeys);
 
-    axios.post(backendUrl + "songs", newBody, config).then(({ data }) => {
-      console.log(data);
-      // if (data.insertCursor) {
-      if (data.insertCursor.acknowledged) {
-        axios
-          .post(backendUrl + "send-song-status", newBody)
-          .then(({ data }) => {
-            // if (data.acknowledged) {
+    // Calculate hasLinks: true if any platform URL exists in formData
+    const hasLinks = matchingKeys.some((key) => formData[key]?.length > 0);
+    // newBody.hasLinks = hasLinks;
+
+    // console.log("Has Links:", hasLinks);
+    // console.log(Object.keys(newBody).includes());
+    updated.selectedPlatforms.map((item) =>
+      console.log(Object.keys(newBody).includes(item))
+    );
+
+    if (matchingKeys.length > 0) {
+      newBody.hasLinks = true;
+      console.log(formData);
+      axios.post(backendUrl + "songs", newBody, config).then(({ data }) => {
+        if (data.insertCursor?.acknowledged) {
+          axios.post(backendUrl + "send-song-status", newBody).then(() => {
             Swal.close();
-            // }
           });
-      }
-      // }
-    });
+        }
+      });
+    }
   };
+  console.log(updated.selectedPlatforms);
+
+  useEffect(() => {
+    updated.selectedPlatforms.map((item) => {
+      const platformKey = item.includes(" ")
+        ? item.split(" ").join("-").toLowerCase()
+        : item.toLowerCase();
+
+      // console.log(platformKey);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [platformKey]: "",
+      }));
+    });
+  }, []);
+
+  // console.log(formData);
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="grid grid-cols-2 gap-4 mb-4">
-        {/* <InputField
-          containerClassName={"text-left"}
-          className={"mt-2"}
-          label={"ISRC"}
-          id={"isrc"}
-          disabled={true}
-          value={updated.isrc ? updated.isrc : newIsrc}
-          onChange={(e) => setFormData({ ...formData, isrc: e.target.value })}
-          placeholder={"Enter the Song's ISRC Here"}
-        />
-
-        <InputField
-          containerClassName={"text-left"}
-          className={"mt-2"}
-          label={"UPC"}
-          id={"UPC"}
-          onChange={(e) => setFormData({ ...formData, upc: e.target.value })}
-          placeholder={"Enter the Song's UPC Here"}
-        /> */}
-
         {updated.selectedPlatforms.map((item) => (
           <InputField
             containerClassName={"text-left"}
             className={"mt-2"}
-            label={item + "'s URL"}
+            label={`${item}'s URL`}
             id={`${item}-url`}
             onChange={(e) => {
-              if (e.target.value.length > 0) {
-                setFormData({
-                  ...formData,
-                  [item.includes(" ")
-                    ? `${item.split(" ").join("-").toLowerCase()}`
-                    : item.toLowerCase()]: e.target.value,
-                });
-                // console.log({ ...updated, ...formData });
-              } else {
-                delete formData[
-                  item.includes(" ")
-                    ? `${item.split(" ").join("-").toLowerCase()}`
-                    : item.toLowerCase()
-                ];
+              const platformKey = item.includes(" ")
+                ? item.split(" ").join("-").toLowerCase()
+                : item.toLowerCase();
 
-                // console.log({ ...updated, ...formData });
+              // Update formData with the entered URL
+              setFormData((prevFormData) => ({
+                ...prevFormData,
+                [platformKey]: e.target.value,
+              }));
+
+              // If the input is cleared, remove the platform key
+              if (!e.target.value) {
+                setFormData((prevFormData) => {
+                  const { [platformKey]: removed, ...rest } = prevFormData;
+                  return rest;
+                });
               }
             }}
             placeholder={`Enter the ${item}'s URL Here`}

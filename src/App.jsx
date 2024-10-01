@@ -82,7 +82,38 @@ const App = () => {
       });
   }, [store.token]);
 
-  console.log(store);
+  useEffect(() => {
+    axios
+      .get(backendUrl + "platforms/all")
+      .then(({ data }) => setStore({ ...store, platforms: data }));
+  }, [store.token]);
+
+  useEffect(() => {
+    if (store.token && location.pathname !== "/login") {
+      const config = {
+        headers: {
+          token: store.token,
+        },
+      };
+      axios
+        .get(backendUrl + "token-time", config)
+        // .then(({ data }) => setTokenDetails(data))
+        .catch((err) => {
+          // console.log(err.response);
+          if (err.response.status === 401) {
+            setToken("");
+            sessionStorage.removeItem("token");
+            toast.error("Token has expired", {
+              position: "bottom-center",
+            });
+            navigate("/login");
+          }
+        });
+      axios
+        .get(backendUrl + "record-labels", config)
+        .then(({ data }) => setRecordLabels(data));
+    }
+  }, [store.token]);
 
   return (
     <AppContext.Provider

@@ -27,6 +27,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Agreements from "../../components/Agreements/Agreements";
 import RecordLabelFiles from "../../components/RecordLabelFiles/RecordLabelFiles";
+import Sales from "../../components/Sales/Sales";
 // import Sales from "../../components/Sales/Sales";
 // import { useContext } from "react";
 // import { AppContext } from "../../contexts/AppContext";
@@ -134,7 +135,7 @@ const Home = () => {
       </div>
       {/* )} */}
 
-      {/* <Sales /> */}
+      <Sales />
     </div>
   );
 };

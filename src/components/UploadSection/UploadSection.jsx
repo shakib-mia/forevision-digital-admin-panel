@@ -14,6 +14,7 @@ import PropTypes from "prop-types";
 const UploadSection = ({ setProgress, setProgressVisible }) => {
   const { store } = useContext(AppContext);
   const options = store.platforms;
+  // console.log(store.platforms);
   // console.log(
   //   [
   //     ...options.flatMap((item) => item.platforms),
@@ -217,11 +218,11 @@ const UploadSection = ({ setProgress, setProgressVisible }) => {
               ]
                 .sort((a, b) => a.cat_name.localeCompare(b.cat_name))
                 .map((item) =>
-                  item.cat_name === "YouTube Content ID"
+                  item?.cat_name === "YouTube Content ID"
                     ? "YouTube"
-                    : item.cat_name === "YouTube Music"
+                    : item?.cat_name === "YouTube Music"
                     ? "YouTube New"
-                    : item.cat_name
+                    : item?.cat_name
                 )
             : []
         }

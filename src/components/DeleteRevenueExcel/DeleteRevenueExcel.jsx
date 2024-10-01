@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../contexts/AppContext";
 import Select from "../Select/Select";
 import InputField from "../InputField/InputField";
@@ -9,9 +9,15 @@ import { toast } from "react-toastify";
 
 const DeleteRevenueExcel = () => {
   const { store } = useContext(AppContext);
-  const { platforms } = store;
+  const [platforms, setPlatforms] = useState([]);
   const [selectedPlatform, setSelectedPlatform] = useState("");
   const [date, setDate] = useState("");
+  // console.log(store);
+  useEffect(() => {
+    axios
+      .get(backendUrl + "platforms/all")
+      .then(({ data }) => setPlatforms(data));
+  }, [store.token]);
 
   const handleDeleteRevenue = (e) => {
     e.preventDefault();
@@ -36,7 +42,7 @@ const DeleteRevenueExcel = () => {
       >
         <Select
           placeholder="Select Platform Name"
-          options={platforms ? platforms.map((item) => item.cat_name) : []}
+          options={platforms ? platforms.map((item) => item?.cat_name) : []}
           selectedValue={selectedPlatform}
           setSelectedValue={setSelectedPlatform}
         />

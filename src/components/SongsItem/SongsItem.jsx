@@ -1,5 +1,5 @@
 import { MdDownload } from "react-icons/md";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Dropdown from "../Dropdown/Dropdown";
 import Swal from "sweetalert2";
@@ -20,10 +20,12 @@ import ReasonToHold from "../ReasonToHold/ReasonToHold";
 import HandlePaid from "../HandlePaid/HandlePaid";
 import ReasonToReject from "../ReasonToReject/ReasonToReject";
 import HandleTakedown from "../HandleTakedown/HandleTakedown";
+import { AppContext } from "../../contexts/AppContext";
 
 const SongsItem = ({ item }) => {
   const [selectedOption, setSelectedOption] = useState("Set Status");
-  const [platforms, setPlatforms] = useState([]);
+  // const [platforms, setPlatforms] = useState([]);
+  const { platforms } = useContext(AppContext);
   const options = [
     {
       value: "Sent to Stores",
@@ -59,11 +61,11 @@ const SongsItem = ({ item }) => {
     },
   ];
 
-  useEffect(() => {
-    axios
-      .get(backendUrl + "platforms/all")
-      .then(({ data }) => setPlatforms(data));
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get(backendUrl + "platforms/all")
+  //     .then(({ data }) => setPlatforms(data));
+  // }, []);
 
   const handleChange = (e) => {
     console.log(e.target.value);
