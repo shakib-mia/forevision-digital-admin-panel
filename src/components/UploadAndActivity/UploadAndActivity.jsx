@@ -21,10 +21,6 @@ const UploadAndActivity = () => {
   const [loading, setLoading] = useState(true);
   const [updateLoading, setUpdateLoading] = useState(false);
   const [updateSongLoading, setUpdateSongLoading] = useState(false);
-  // const { store, setStore } = useContext(AppContext);
-  // console.log(store);
-  // const [role, setRole] = useState("");
-  const { role } = store;
 
   useEffect(() => {
     axios.get(backendUrl + "all-users").then(({ data }) => {
@@ -63,10 +59,6 @@ const UploadAndActivity = () => {
       console.log(data);
       data.length > 0 && setUpdateLoading(false);
     });
-    axios.get(backendUrl + "calculate-account").then(({ data }) => {
-      console.log(data);
-      // data.length > 0 && setUpdateLoading(false);
-    });
   };
 
   const updateSong = () => {
@@ -89,47 +81,35 @@ const UploadAndActivity = () => {
         </div>
       )}
       <div className="w-7/12 bg-white rounded-[20px] custom-shadow px-11 pt-7">
-        <div
-          className={`grid ${
-            role === "admin" ? "grid-cols-2" : "grid-cols-1"
-          } divide-x divide-interactive-light`}
-        >
-          {(role === "Content Manager" || role === "admin") && (
-            <UploadSection
-              setProgress={setProgress}
-              setProgressVisible={setProgressVisible}
-            />
-          )}
+        <div className="grid grid-cols-2 divide-x divide-interactive-light">
+          <UploadSection
+            setProgress={setProgress}
+            setProgressVisible={setProgressVisible}
+          />
 
           <aside className="pl-7">
-            {(role === "User Manager" || role === "admin") && (
-              <Users users={users} loading={loading} />
-            )}
+            <Users users={users} loading={loading} />
 
-            {(role === "Finance Manager" || role === "admin") && (
-              <DeleteRevenueExcel />
-            )}
+            <DeleteRevenueExcel />
           </aside>
         </div>
 
-        {(role === "Content Manager" || role === "admin") && (
-          <div className="py-3 flex justify-center border-t border-grey-light gap-4">
-            <Button
-              onClick={updateAccount}
-              disabled={updateLoading}
-              loading={updateLoading}
-            >
-              Update User Account
-            </Button>
-            <Button
-              onClick={updateSong}
-              disabled={updateSongLoading}
-              loading={updateSongLoading}
-            >
-              Update Song Data
-            </Button>
-          </div>
-        )}
+        <div className="py-3 flex justify-center border-t border-grey-light gap-4">
+          <Button
+            onClick={updateAccount}
+            disabled={updateLoading}
+            loading={updateLoading}
+          >
+            Update User Account
+          </Button>
+          <Button
+            onClick={updateSong}
+            disabled={updateSongLoading}
+            loading={updateSongLoading}
+          >
+            Update Song Data
+          </Button>
+        </div>
       </div>
     </>
   );

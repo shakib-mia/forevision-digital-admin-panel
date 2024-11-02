@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import InputField from "../InputField/InputField";
 import PropTypes from "prop-types";
-import UserDetailsPopup from "../UserDetailsPopup/UserDetailsPopup";
-import CreateNewRecordLabel from "../CreateNewRecordLabel/CreateNewRecordLabel";
 
 const Users = ({ users, loading }) => {
   const [detailedId, setDetailedId] = useState("");
