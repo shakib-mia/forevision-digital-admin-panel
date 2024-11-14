@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { backendUrl, config } from "../../constants";
 import Button from "../Button/Button";
 import RefundRequestsItem from "./../RefundRequestItem/RefundRequestItem";
+import { AiOutlineLoading } from "react-icons/ai";
 
 const RefundRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -31,15 +32,17 @@ const RefundRequests = () => {
         <h6>Amount</h6>
         <h6>Action</h6>
       </div>
-      <ul className="flex flex-col gap-1 py-4">
-        {requests.length > 0 ? (
-          requests.map((item) =>
+      {requests.length > 0 ? (
+        <ul className="flex flex-col gap-1 py-4">
+          {requests.map((item) =>
             item._id.length > 0 ? <RefundRequestsItem {...item} /> : <></>
-          )
-        ) : (
-          <></>
-        )}
-      </ul>
+          )}
+        </ul>
+      ) : (
+        <div className="flex justify-center">
+          <AiOutlineLoading className="text-heading-4 text-center animate-spin" />
+        </div>
+      )}
     </div>
   );
 };

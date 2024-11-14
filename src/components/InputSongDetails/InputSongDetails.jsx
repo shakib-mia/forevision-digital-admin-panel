@@ -24,6 +24,19 @@ const InputSongDetails = ({ platforms, updated }) => {
       .then(({ data }) => setNewIsrc(data.newIsrc));
   }, []);
 
+  const allowedPlatforms = [
+    "JioSaavn",
+    "Gaana",
+    "Wynk Music",
+    "Spotify",
+    "Apple Music",
+    "YouTube Topic",
+    "YouTube Music",
+    "Meta",
+    "Hungama",
+    "Amazon Music",
+  ];
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -38,7 +51,10 @@ const InputSongDetails = ({ platforms, updated }) => {
 
     const matchingKeys = Object.keys(formData).filter((key) => {
       const normalizedKey = key.toLowerCase().replace(/-/g, " ");
-      return selectedPlatforms.includes(normalizedKey);
+      return (
+        selectedPlatforms.includes(normalizedKey) &&
+        allowedPlatforms.includes(normalizedKey)
+      );
     });
 
     newBody.availablePlatforms = matchingKeys;
@@ -62,19 +78,18 @@ const InputSongDetails = ({ platforms, updated }) => {
       console.log(Object.keys(newBody).includes(item))
     );
 
-    if (matchingKeys.length > 0) {
-      newBody.hasLinks = true;
-      console.log(formData);
-      axios.post(backendUrl + "songs", newBody, config).then(({ data }) => {
-        if (data.insertCursor?.acknowledged) {
-          axios.post(backendUrl + "send-song-status", newBody).then(() => {
-            Swal.close();
-          });
-        }
-      });
-    }
+    console.log(newBody.selectedPlatforms, allowedPlatforms);
+
+    // if (matchingKeys.length > 0) {
+    axios.post(backendUrl + "songs", newBody, config).then(({ data }) => {
+      if (data.insertCursor?.acknowledged) {
+        axios.post(backendUrl + "send-song-status", newBody).then(() => {
+          Swal.close();
+        });
+      }
+    });
+    // }
   };
-  console.log(updated.selectedPlatforms);
 
   useEffect(() => {
     updated.selectedPlatforms.map((item) => {
@@ -82,48 +97,55 @@ const InputSongDetails = ({ platforms, updated }) => {
         ? item.split(" ").join("-").toLowerCase()
         : item.toLowerCase();
 
-      // console.log(platformKey);
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [platformKey]: "",
-      }));
+      if (allowedPlatforms.includes(platformKey)) {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          [platformKey]: "",
+        }));
+      }
     });
   }, []);
 
-  // console.log(formData);
+  updated.selectedPlatforms.includes("YouTube Topic") ||
+    updated.selectedPlatforms.push("YouTube Topic");
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="grid grid-cols-2 gap-4 mb-4">
-        {updated.selectedPlatforms.map((item) => (
-          <InputField
-            containerClassName={"text-left"}
-            className={"mt-2"}
-            label={`${item}'s URL`}
-            id={`${item}-url`}
-            onChange={(e) => {
-              const platformKey = item.includes(" ")
-                ? item.split(" ").join("-").toLowerCase()
-                : item.toLowerCase();
+        {updated.selectedPlatforms.map((item) => {
+          // const platformKey = item.includes(" ")
+          //   ? item.split(" ").join("-")
+          //   : item;
+          console.log(allowedPlatforms, item);
+          if (allowedPlatforms.includes(item)) {
+            return (
+              <InputField
+                containerClassName={"text-left"}
+                className={"mt-2"}
+                label={`${item}'s URL`}
+                id={`${item}-url`}
+                onChange={(e) => {
+                  // Update formData with the entered URL
+                  setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    [item.includes(" ") ? item.split(" ").join("-") : item]:
+                      e.target.value,
+                  }));
 
-              // Update formData with the entered URL
-              setFormData((prevFormData) => ({
-                ...prevFormData,
-                [platformKey]: e.target.value,
-              }));
-
-              // If the input is cleared, remove the platform key
-              if (!e.target.value) {
-                setFormData((prevFormData) => {
-                  const { [platformKey]: removed, ...rest } = prevFormData;
-                  return rest;
-                });
-              }
-            }}
-            placeholder={`Enter the ${item}'s URL Here`}
-            required={false}
-          />
-        ))}
+                  // If the input is cleared, remove the platform key
+                  if (!e.target.value) {
+                    setFormData((prevFormData) => {
+                      const { [item]: removed, ...rest } = prevFormData;
+                      return rest;
+                    });
+                  }
+                }}
+                placeholder={`Enter the ${item}'s URL Here`}
+                required={false}
+              />
+            );
+          }
+        })}
       </div>
 
       <Button type={"submit"}>Save</Button>

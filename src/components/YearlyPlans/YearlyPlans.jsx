@@ -14,6 +14,7 @@ const YearlyPlans = () => {
   const [selectedItem, setSelectedItem] = useState({});
   const [declineReason, setDeclineReason] = useState("");
   // delete selectedItem._id;
+  const [paymentLink, setPaymentLink] = useState("");
 
   useEffect(() => {
     axios
@@ -74,7 +75,7 @@ const YearlyPlans = () => {
   };
 
   return (
-    <div className="bg-white rounded-[20px] custom-shadow text-interactive-dark-hover">
+    <div className="bg-white h-96 rounded-[20px] custom-shadow text-interactive-dark-hover">
       <div className="py-2 px-3 flex gap-[0.69rem] items-center justify-center border-b border-grey-light">
         <p className="text-heading-6-bold">Yearly Plan Requests</p>
       </div>
@@ -156,9 +157,14 @@ const YearlyPlans = () => {
             <InputField
               label={"Payment Link"}
               name={"paymentLink"}
+              onChange={(e) => setPaymentLink(e.target.value)}
               containerClassName={"mt-4 mx-2 w-11/12"}
             />
-            <Button type={"submit"} containerClassName={"w-1/12"}>
+            <Button
+              disabled={paymentLink.length === 0}
+              type={"submit"}
+              containerClassName={"w-1/12"}
+            >
               <IoIosSend className="text-heading-6" />
             </Button>
           </form>
@@ -170,10 +176,15 @@ const YearlyPlans = () => {
             containerClassName={"mt-4 mx-2 w-11/12"}
           />
           <div className="flex gap-4 justify-center mt-4">
-            <Button onClick={handleApprove} action={"confirmation"}>
+            <Button
+              onClick={handleApprove}
+              // disabled={!paymentLink.length}
+              action={"confirmation"}
+            >
               Approve
             </Button>
             <Button
+              disabled={!declineReason.length}
               onClick={() =>
                 handleDecline(selectedItem.emailId, selectedItem._id)
               }

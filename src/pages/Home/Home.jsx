@@ -42,20 +42,20 @@ const Home = () => {
 
   console.log(role);
 
-  const handleLogout = () => {
-    setStore({});
+  // const handleLogout = () => {
+  //   setStore({});
 
-    navigate("/login");
-  };
+  //   navigate("/login");
+  // };
 
   return (
     <div className={`container relative`}>
-      <button
+      {/* <button
         className="text-interactive-light-destructive absolute right-4 top-4 text-heading-6"
         onClick={handleLogout}
       >
         <AiOutlineLogout />
-      </button>
+      </button> */}
 
       {role === "admin" && <Header />}
 
@@ -75,51 +75,51 @@ const Home = () => {
 
       {/* {(role === "Finance Manager" || role === "admin") && ( */}
       <>
-        {role === "admin" && (
+        {/* {role === "admin" && (
           <div className="flex my-4 gap-4">
             <RequestPayment />
             <PaymentHistory />
           </div>
-        )}
-        <div className="grid grid-cols-2 gap-4">
+        )} */}
+        {/* <div className="grid grid-cols-2 gap-4 mt-4">
           <GenerateCouponCode />
           <GeneratedCoupons />
-        </div>
+        </div> */}
       </>
       {/* )} */}
 
       {/* {(role === "Content Manager" || role === "admin") && ( */}
-      <div className="mt-4">
+      {/* <div className="mt-4">
         <Songs />
-      </div>
+      </div> */}
       {/* )} */}
 
       {/* {(role === "Content Manager" || role === "admin") && ( */}
       <div className="mt-4 flex gap-4">
-        <div className="w-2/3">
+        {/* <div className="w-2/3">
           <SongUpdateRequest />
-        </div>
+        </div> */}
         <div className="w-1/3">
           <RecordLabelRequests />
         </div>
+        <div className="w-2/3">
+          <Kyc />
+        </div>
       </div>
       {/* )} */}
-      <div className="mt-4 grid grid-cols-2 gap-4">
-        <Kyc />
-        <YearlyPlans />
-      </div>
+      <div className="mt-4 grid grid-cols-2 gap-4">{/* <YearlyPlans /> */}</div>
 
       {/* {(role === "Content Manager" || role === "admin") && ( */}
-      <div className="mt-4 grid grid-cols-2 gap-4">
+      {/* <div className="mt-4 grid grid-cols-2 gap-4">
         <SearchSongByISRC />
         <TakedownRequests />
-      </div>
+      </div> */}
       {/* )} */}
 
       {/* {(role === "Finance Manager" || role === "admin") && ( */}
-      <div className="mt-4">
+      {/* <div className="mt-4">
         <RefundRequests />
-      </div>
+      </div> */}
       {/* )} */}
 
       <div className="mt-4 grid grid-cols-2 gap-4">
@@ -135,7 +135,7 @@ const Home = () => {
       </div>
       {/* )} */}
 
-      <Sales />
+      {/* <Sales /> */}
     </div>
   );
 };

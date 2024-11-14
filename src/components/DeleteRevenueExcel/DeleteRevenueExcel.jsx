@@ -51,7 +51,7 @@ const DeleteRevenueExcel = () => {
             platforms
               ? platforms
                   .flatMap((item) => item.platforms)
-                  .map((item) => item.cat_name)
+                  .map((item) => item?.cat_name)
               : []
           }
           selectedValue={selectedPlatform}

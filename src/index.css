@@ -68,3 +68,7 @@ h6 {
   max-width: 80% !important; */
   @apply w-1/2 max-w-[80%] shadow-2xl;
 }
+
+nav .active {
+  @apply text-warning-light relative after:absolute after:w-full after:left-0 after:h-px after:-bottom-2 after:bg-warning;
+}

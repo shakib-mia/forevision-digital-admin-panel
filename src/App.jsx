@@ -1,5 +1,12 @@
 // import React from 'react';
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  BrowserRouter,
+  Route,
+  Router,
+  RouterProvider,
+  Routes,
+  createBrowserRouter,
+} from "react-router-dom";
 import RequireAuth from "./RequireAuth";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
@@ -13,13 +20,17 @@ import axios from "axios";
 import { backendUrl } from "./constants";
 import SongDetails from "./pages/SongDetails/SongDetails";
 import "sweetalert2/src/sweetalert2.scss";
+import Navbar from "./components/Navbar/Navbar";
+import SalesPage from "./pages/SalesPage/SalesPage";
+import Songs from "./pages/Songs/Songs";
+import Payment from "./pages/Payment/Payment";
 
 // import RequestPaymentDetails from "./pages/RequestPaymentDetails/RequestPaymentDetails";
 // import axios from 'axios';
 // import pLimit from 'p-limit'
 
 const App = () => {
-  const router = createBrowserRouter([
+  const router = [
     {
       path: "/",
       element: (
@@ -46,7 +57,7 @@ const App = () => {
       path: "/song/:id",
       element: <SongDetails />,
     },
-  ]);
+  ];
 
   const [couponInsertedId, setCouponInsertedId] = useState("");
   const [store, setStore] = useState({
@@ -109,9 +120,9 @@ const App = () => {
             navigate("/login");
           }
         });
-      axios
-        .get(backendUrl + "record-labels", config)
-        .then(({ data }) => setRecordLabels(data));
+      // axios
+      //   .get(backendUrl + "record-labels", config)
+      //   .then(({ data }) => setRecordLabels(data));
     }
   }, [store.token]);
 
@@ -127,8 +138,32 @@ const App = () => {
         history,
       }}
     >
-      <RouterProvider router={router} />
-      <ToastContainer />
+      <BrowserRouter>
+        {store.token && <Navbar />}
+        <div className="pt-20 pb-10">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <RequireAuth>
+                  <Home />
+                </RequireAuth>
+              }
+            />
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/request-payment-details/:id"
+              element={<RequestPaymentDetails />}
+            />
+            <Route path="/payment-details/:id" element={<PaymentDetails />} />
+            <Route path="/song/:id" element={<SongDetails />} />
+            <Route path="/sales" element={<SalesPage />} />
+            <Route path="/songs" element={<Songs />} />
+            <Route path="/payments" element={<Payment />} />
+          </Routes>
+        </div>
+        <ToastContainer />
+      </BrowserRouter>
     </AppContext.Provider>
   );
 };

@@ -123,6 +123,18 @@ export default {
         DEFAULT: "#22C55E",
         light: "#86EFAC",
       },
+      warning: {
+        DEFAULT: "#EAC608",
+        light: "#FFED8E",
+      },
+      info: {
+        light: "#BFDBFE",
+        DEFAULT: "#60A5FA",
+      },
+      error: {
+        DEFAULT: "#F87171",
+        light: "#FECACA",
+      },
     },
 
     fontSize: {
@@ -322,6 +334,15 @@ export default {
         xl: "0px 10px 10px rgba(0, 0, 0, 0.04), 0px 20px 25px rgba(0, 0, 0, 0.1)",
         "2xl": "0px 25px 50px rgba(0, 0, 0, 0.25)",
         inner: "inset 0px 2px 4px rgba(0, 0, 0, 0.06)",
+      },
+      keyframes: {
+        "modal-fade-in": {
+          "0%": { opacity: "0", transform: "scale(0.95)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
+      },
+      animation: {
+        "modal-fade-in": "modal-fade-in 0.3s ease-out forwards",
       },
     },
   },

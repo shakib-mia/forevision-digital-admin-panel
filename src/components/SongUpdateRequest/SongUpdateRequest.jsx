@@ -17,29 +17,29 @@ const SongUpdateRequest = () => {
       .then(({ data }) => setRequests(data));
   }, []);
 
-  useEffect(() => {
-    axios.get(backendUrl + "songs/all", config).then(({ data }) => {
-      console.log(data);
-      if (data.length) {
-        if (data.find((item) => item?.ISRC === requests[checkedIndex]?.ISRC)) {
-          setSelectedSong(
-            data.find((item) => item?.ISRC === requests[checkedIndex]?.ISRC)
-          );
-        }
-      }
-    });
+  // useEffect(() => {
+  //   axios.get(backendUrl + "songs/all", config).then(({ data }) => {
+  //     console.log(data);
+  //     if (data.length) {
+  //       if (data.find((item) => item?.ISRC === requests[checkedIndex]?.ISRC)) {
+  //         setSelectedSong(
+  //           data.find((item) => item?.ISRC === requests[checkedIndex]?.ISRC)
+  //         );
+  //       }
+  //     }
+  //   });
 
-    axios.get(backendUrl + "recent-uploads/admin", config).then(({ data }) => {
-      // console.log(data);
-      if (data.length) {
-        if (data.find((item) => item?.ISRC === requests[checkedIndex]?.ISRC)) {
-          setSelectedSong(
-            data.find((item) => item?.ISRC === requests[checkedIndex]?.ISRC)
-          );
-        }
-      }
-    });
-  }, [checkedIndex]);
+  //   axios.get(backendUrl + "recent-uploads/admin", config).then(({ data }) => {
+  //     console.log(data);
+  //     if (data.length) {
+  //       if (data.find((item) => item?.ISRC === requests[checkedIndex]?.ISRC)) {
+  //         setSelectedSong(
+  //           data.find((item) => item?.ISRC === requests[checkedIndex]?.ISRC)
+  //         );
+  //       }
+  //     }
+  //   });
+  // }, [checkedIndex]);
   // const requested
 
   // console.log(requests);
@@ -83,7 +83,7 @@ const SongUpdateRequest = () => {
         <EditSongAction
           requests={requests}
           checkedIndex={checkedIndex}
-          selectedSong={selectedSong}
+          // selectedSong={selectedSong}
           setCheck={setCheck}
           setCheckedIndex={setCheckedIndex}
         />

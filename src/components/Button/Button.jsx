@@ -23,7 +23,11 @@ const Button = ({
     : "border-transparent";
 
   const dynamicButtonClasses = disabled
-    ? "bg-interactive-light-confirmation-disabled"
+    ? action === "confirmation"
+      ? "bg-interactive-light-confirmation-disabled text-white ring-interactive-light-confirmation"
+      : action === "destructive"
+      ? "bg-interactive-light-destructive-disabled text-white ring-interactive-light-destructive-focus"
+      : "bg-interactive-light-disabled text-white"
     : outlined
     ? action === "confirmation"
       ? "border border-interactive-light-confirmation text-interactive-light-confirmation hover:bg-interactive-light-confirmation-hover focus:bg-interactive-light-confirmation-disabled ring-interactive-light-confirmation"

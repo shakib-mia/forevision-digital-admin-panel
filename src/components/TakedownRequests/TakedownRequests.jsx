@@ -23,7 +23,7 @@ const TakedownRequests = () => {
   // console.log(requests);
 
   return (
-    <div className="bg-white rounded-[20px] custom-shadow  text-interactive-dark-hover">
+    <div className="bg-white rounded-[20px] custom-shadow  text-interactive-dark-hover h-[500px] overflow-y-auto">
       {takedown > -1 && (
         <div className="fixed top-0 left-0 w-screen h-screen backdrop-blur flex justify-center items-center">
           <div className="w-1/2 h-1/2 shadow-lg bg-white relative p-3 text-black">
