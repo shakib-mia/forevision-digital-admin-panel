@@ -29,8 +29,8 @@ const EditSongAction = ({
   // delete request._id;
   // delete request.emailId;
   const handleApprove = (e) => {
-    console.log(selectedSong);
-    if (selectedSong.songUrl) {
+    // console.log(selectedSong);
+    if (!selectedSong["S.no"]) {
       // new
       request.updated = true;
       axios
@@ -137,6 +137,8 @@ const EditSongAction = ({
                           ))}
                         </ul>
                       )
+                    ) : key === "selectedPlatforms" ? (
+                      selectedValue.join(", ")
                     ) : (
                       selectedValue
                     )}
