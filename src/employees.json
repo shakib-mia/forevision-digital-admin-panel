@@ -1,0 +1,17 @@
+[
+  {
+    "employeeCode": "FVDE00001",
+    "password": "123456",
+    "role": "Content Manager"
+  },
+  {
+    "employeeCode": "FVDE00002",
+    "password": "abcdef",
+    "role": "User Manager"
+  },
+  {
+    "employeeCode": "FVDE00003",
+    "password": "qwerty",
+    "role": "Finance Manager"
+  }
+]

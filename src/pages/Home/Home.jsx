@@ -28,6 +28,7 @@ import { useNavigate } from "react-router-dom";
 import Agreements from "../../components/Agreements/Agreements";
 import RecordLabelFiles from "../../components/RecordLabelFiles/RecordLabelFiles";
 import Sales from "../../components/Sales/Sales";
+import Payment from "../Payment/Payment";
 // import Sales from "../../components/Sales/Sales";
 // import { useContext } from "react";
 // import { AppContext } from "../../contexts/AppContext";
@@ -48,96 +49,49 @@ const Home = () => {
   //   navigate("/login");
   // };
 
-  return (
-    <div className={`container relative`}>
-      {/* <button
-        className="text-interactive-light-destructive absolute right-4 top-4 text-heading-6"
-        onClick={handleLogout}
-      >
-        <AiOutlineLogout />
-      </button> */}
+  if (role === "admin") {
+    return (
+      <div className={`container relative`}>
+        <Header />
 
-      {role === "admin" && <Header />}
-
-      {/* <div className="flex gap-4 mt-4">
-        {(role === "User Manager" || role === "admin") && <TopPerformer />}
-
-        {(role === "Content Manager" ||
-          role === "User Manager" ||
-          role === "admin") && <UploadAndActivity />}
-      </div> */}
-      {role === "admin" && (
         <div className="mt-4 flex gap-4">
           <TopPerformer />
           <UploadAndActivity />
         </div>
-      )}
 
-      {/* {(role === "Finance Manager" || role === "admin") && ( */}
-      <>
-        {/* {role === "admin" && (
-          <div className="flex my-4 gap-4">
-            <RequestPayment />
-            <PaymentHistory />
+        <div className="mt-4 flex gap-4">
+          <div className="w-1/3">
+            <RecordLabelRequests />
           </div>
-        )} */}
-        {/* <div className="grid grid-cols-2 gap-4 mt-4">
-          <GenerateCouponCode />
-          <GeneratedCoupons />
-        </div> */}
-      </>
-      {/* )} */}
+          <div className="w-2/3">
+            <Kyc />
+          </div>
+        </div>
 
-      {/* {(role === "Content Manager" || role === "admin") && ( */}
-      {/* <div className="mt-4">
+        <div className="mt-4 grid grid-cols-2 gap-4">
+          <Agreements />
+          <RecordLabelFiles />
+        </div>
+
+        <div className="mb-24 mt-4 grid grid-cols-2 gap-4">
+          <CreateEmployee />
+          <EmployeeList />
+        </div>
+      </div>
+    );
+  }
+  // console.log(role === "Finance Manager");
+  if (role === "Finance Manager") {
+    return <Payment />;
+  }
+
+  if (role === "Content Manager") {
+    return (
+      <div className="container">
         <Songs />
-      </div> */}
-      {/* )} */}
-
-      {/* {(role === "Content Manager" || role === "admin") && ( */}
-      <div className="mt-4 flex gap-4">
-        {/* <div className="w-2/3">
-          <SongUpdateRequest />
-        </div> */}
-        <div className="w-1/3">
-          <RecordLabelRequests />
-        </div>
-        <div className="w-2/3">
-          <Kyc />
-        </div>
       </div>
-      {/* )} */}
-      <div className="mt-4 grid grid-cols-2 gap-4">{/* <YearlyPlans /> */}</div>
-
-      {/* {(role === "Content Manager" || role === "admin") && ( */}
-      {/* <div className="mt-4 grid grid-cols-2 gap-4">
-        <SearchSongByISRC />
-        <TakedownRequests />
-      </div> */}
-      {/* )} */}
-
-      {/* {(role === "Finance Manager" || role === "admin") && ( */}
-      {/* <div className="mt-4">
-        <RefundRequests />
-      </div> */}
-      {/* )} */}
-
-      <div className="mt-4 grid grid-cols-2 gap-4">
-        <Agreements />
-        <RecordLabelFiles />
-      </div>
-      {/* )} */}
-
-      {/* {role === "admin" && ( */}
-      <div className="mb-24 mt-4 grid grid-cols-2 gap-4">
-        <CreateEmployee />
-        <EmployeeList />
-      </div>
-      {/* )} */}
-
-      {/* <Sales /> */}
-    </div>
-  );
+    );
+  }
 };
 
 export default Home;

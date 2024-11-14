@@ -70,5 +70,5 @@ h6 {
 }
 
 nav .active {
-  @apply text-warning-light relative after:absolute after:w-full after:left-0 after:h-px after:-bottom-2 after:bg-warning;
+  @apply text-warning-light relative after:absolute after:w-full after:left-0 after:h-px after:-bottom-2 after:bg-warning transition;
 }

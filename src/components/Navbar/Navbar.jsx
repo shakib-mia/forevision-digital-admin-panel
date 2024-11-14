@@ -42,13 +42,15 @@ const Navbar = () => {
             <img src={logo} alt="logo" />
           </Link>
 
-          <ul className="flex gap-10 items-center">
-            {listItems.map(({ path, text }, key) => (
-              <li>
-                <NavLink to={path}>{text}</NavLink>
-              </li>
-            ))}
-          </ul>
+          {store.role === "admin" && (
+            <ul className="flex gap-10 items-center">
+              {listItems.map(({ path, text }, key) => (
+                <li>
+                  <NavLink to={path}>{text}</NavLink>
+                </li>
+              ))}
+            </ul>
+          )}
 
           <button
             className="text-interactive-light-destructive text-heading-4"

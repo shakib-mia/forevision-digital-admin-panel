@@ -142,7 +142,13 @@ const App = () => {
         {location.pathname === "/login" || location.pathname === "/signup" || (
           <Navbar />
         )}
-        <div className="pt-20 pb-10">
+        <div
+          className={
+            location.pathname === "/login" || location.pathname === "/signup"
+              ? ""
+              : "pt-20 pb-10"
+          }
+        >
           <Routes>
             <Route
               path="/"
