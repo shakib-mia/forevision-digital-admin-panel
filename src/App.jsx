@@ -139,7 +139,9 @@ const App = () => {
       }}
     >
       <BrowserRouter>
-        {store.token && <Navbar />}
+        {location.pathname === "/login" || location.pathname === "/signup" || (
+          <Navbar />
+        )}
         <div className="pt-20 pb-10">
           <Routes>
             <Route
