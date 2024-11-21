@@ -5,7 +5,7 @@ import axios from "axios";
 import Button from "../Button/Button";
 import Swal from "sweetalert2";
 
-const ReasonToHold = ({ updated }) => {
+const ReasonToHold = ({ updated, album }) => {
   const [newIsrc, setNewIsrc] = useState("");
   const [reason, setreason] = useState(updated.reason || "");
   console.log(updated);
@@ -22,21 +22,51 @@ const ReasonToHold = ({ updated }) => {
     const { _id } = updated;
     delete updated._id;
     // updated.ISRC = newIsrc;
-    updated.hold = true;
-    updated.reason = reason;
-    updated.status = "On Hold";
-    // console.log(_id);
-    axios.put(backendUrl + "songs/" + _id, updated, config).then(({ data }) => {
-      if (data.acknowledged) {
-        axios
-          .post(backendUrl + "send-song-status", updated)
-          .then(({ data }) => {
-            // if (data.acknowledged) {
-            Swal.close();
-            // }
-          });
-      }
-    });
+
+    if (album.songs?.length) {
+      // console.log();
+      const foundSong = album.songs.find((item) => item.isrc === updated.isrc);
+      foundSong.reason = reason;
+
+      // updatedSingleSong.status =
+      // console.log(album);
+      const newBody = {
+        songName: foundSong.songName,
+        userEmail: foundSong.userEmail,
+        status: "On Hold",
+        reason,
+      };
+
+      axios
+        .put(backendUrl + "recent-uploads/" + album._id, album, config)
+        .then(({ data }) => {
+          if (data.acknowledged) {
+            axios
+              .post(backendUrl + "send-song-status", newBody)
+              .then(({ data }) => {
+                console.log(data);
+              });
+          }
+        });
+    } else {
+      updated.hold = true;
+      updated.reason = reason;
+      updated.status = "On Hold";
+      // console.log(_id);
+      axios
+        .put(backendUrl + "songs/" + _id, updated, config)
+        .then(({ data }) => {
+          if (data.acknowledged) {
+            axios
+              .post(backendUrl + "send-song-status", updated)
+              .then(({ data }) => {
+                // if (data.acknowledged) {
+                Swal.close();
+                // }
+              });
+          }
+        });
+    }
 
     // formData.status = "Sent to Stores";
     // formData.isrc = newIsrc;

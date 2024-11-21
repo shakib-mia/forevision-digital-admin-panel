@@ -4,6 +4,7 @@ import TakedownRequests from "../../components/TakedownRequests/TakedownRequests
 import Songs from "../../components/Songs/Songs";
 import SearchSongByISRC from "../../components/SearchSongByISRC/SearchSongByISRC";
 import { AppContext } from "../../contexts/AppContext";
+import Albums from "../../components/Albums/Albums";
 
 const SongsPage = () => {
   const { store } = useContext(AppContext);
@@ -15,6 +16,7 @@ const SongsPage = () => {
         <SongUpdateRequest />
         <TakedownRequests />
         <Songs />
+        <Albums />
       </div>
     );
   }

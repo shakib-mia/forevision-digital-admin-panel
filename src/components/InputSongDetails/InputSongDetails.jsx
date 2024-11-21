@@ -39,11 +39,11 @@ const InputSongDetails = ({ platforms, updated }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // console.log();
 
     formData.status = "streaming";
-    formData.isrc = newIsrc;
 
-    const newBody = { ...updated, ...formData };
+    const newBody = { ...formData, ...updated };
 
     const selectedPlatforms = updated.selectedPlatforms.map((platform) =>
       platform.toLowerCase().replace(/\s+/g, "-")
@@ -78,7 +78,10 @@ const InputSongDetails = ({ platforms, updated }) => {
       console.log(Object.keys(newBody).includes(item))
     );
 
-    console.log(newBody.selectedPlatforms, allowedPlatforms);
+    if (!newBody.isrc) {
+      newBody.isrc = newIsrc;
+    }
+    console.log(newBody);
 
     // if (matchingKeys.length > 0) {
     axios.post(backendUrl + "songs", newBody, config).then(({ data }) => {
@@ -88,7 +91,6 @@ const InputSongDetails = ({ platforms, updated }) => {
         });
       }
     });
-    // }
   };
 
   useEffect(() => {

@@ -5,10 +5,11 @@ import axios from "axios";
 import Button from "../Button/Button";
 import Swal from "sweetalert2";
 
-const SentToStores = ({ updated }) => {
+const SentToStores = ({ updated, album }) => {
   const [newIsrc, setNewIsrc] = useState("");
   const [upc, setUpc] = useState(updated.upc || "");
-  //   console.log(updated?.upc);
+  // console.log(album, updated);
+  // console.log();
 
   useEffect(() => {
     axios
@@ -19,31 +20,60 @@ const SentToStores = ({ updated }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    updated.ISRC = newIsrc;
-    updated.UPC = upc;
+    if (album.songs?.length) {
+      // console.log();
+      const song = album.songs.find((item) => item.isrc === updated.isrc);
+      // updatedSingleSong.status =
+      // console.log(album);
+      const { userEmail } = album;
 
-    // console.log(updated);
-    // Swal.close();
+      const newBody = {
+        songName: song.songName,
+        userEmail,
+        status: "Sent to Stores",
+      };
 
-    // formData.status = "Sent to Stores";
-    // formData.isrc = newIsrc;
+      axios
+        .put(backendUrl + "recent-uploads/" + album._id, album, config)
+        .then(({ data }) => {
+          console.log(data);
+          if (data.acknowledged) {
+            axios
+              .post(backendUrl + "send-song-status", newBody)
+              .then(({ data }) => {
+                if (data.acknowledged) {
+                  Swal.close();
+                }
+              });
+          }
+        });
+    } else {
+      updated.ISRC = newIsrc;
+      updated.UPC = upc;
 
-    // console.log({ ...updated, ...formData });
-    const newBody = { ...updated, status: "Sent to Stores", isrc: newIsrc };
+      // console.log(updated);
+      // Swal.close();
 
-    // console.log(newBody);
+      // formData.status = "Sent to Stores";
+      // formData.isrc = newIsrc;
 
-    axios.post(backendUrl + "songs", newBody, config).then(({ data }) => {
-      if (data.insertCursor.acknowledged) {
-        axios
-          .post(backendUrl + "send-song-status", newBody)
-          .then(({ data }) => {
-            // if (data.acknowledged) {
-            Swal.close();
-            // }
-          });
-      }
-    });
+      // console.log({ ...updated, ...formData });
+      const newBody = { ...updated, status: "Sent to Stores", isrc: newIsrc };
+
+      // console.log(newBody);
+
+      axios.post(backendUrl + "songs", newBody, config).then(({ data }) => {
+        if (data.insertCursor.acknowledged) {
+          axios
+            .post(backendUrl + "send-song-status", newBody)
+            .then(({ data }) => {
+              // if (data.acknowledged) {
+              Swal.close();
+              // }
+            });
+        }
+      });
+    }
   };
 
   return (
