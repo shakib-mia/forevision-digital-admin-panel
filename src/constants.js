@@ -3,6 +3,6 @@ export const backendUrl = "https://server.forevisiondigital.in/";
 
 export const config = {
   headers: {
-    token: localStorage.getItem("token"),
+    token: sessionStorage.getItem("token"),
   },
 };

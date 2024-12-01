@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const RequireAuth = ({ children }) => {
   const location = useLocation();
-  if (localStorage.getItem("token") === null) {
+  if (sessionStorage.getItem("token") === null) {
     return <Navigate to="/login" state={{ from: location }} replace></Navigate>;
   }
   return children;

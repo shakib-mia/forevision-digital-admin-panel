@@ -53,8 +53,8 @@ const Login = () => {
           console.log(data);
           if (data.token) {
             navigate("/");
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("role", data.role);
+            sessionStorage.setItem("token", data.token);
+            sessionStorage.setItem("role", data.role);
             setStore({ ...store, token: data.token, role: "admin" });
           }
         })
@@ -68,9 +68,9 @@ const Login = () => {
         .then(({ data }) => {
           if (data.token) {
             navigate("/");
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("role", data.role);
-            localStorage.setItem("name", data.name);
+            sessionStorage.setItem("token", data.token);
+            sessionStorage.setItem("role", data.role);
+            sessionStorage.setItem("name", data.name);
             setStore({ ...store, ...data });
           }
         })

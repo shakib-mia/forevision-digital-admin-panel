@@ -14,7 +14,7 @@ const InputSongDetails = ({ platforms, updated }) => {
 
   const config = {
     headers: {
-      token: store.token || localStorage.getItem("token"),
+      token: store.token || sessionStorage.getItem("token"),
     },
   };
 

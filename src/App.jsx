@@ -61,8 +61,8 @@ const App = () => {
 
   const [couponInsertedId, setCouponInsertedId] = useState("");
   const [store, setStore] = useState({
-    token: localStorage.getItem("token"),
-    role: localStorage.getItem("role"),
+    token: sessionStorage.getItem("token"),
+    role: sessionStorage.getItem("role"),
   });
   const [showModal, setShowModal] = useState(false);
   const [history, setHistory] = useState([]);
@@ -88,7 +88,7 @@ const App = () => {
       .then(({ data }) => {
         // console.log(data.role);
         // setRole(data.role);
-        localStorage.setItem("role", data.role);
+        sessionStorage.setItem("role", data.role);
         setStore({ ...store, role: data.role });
       });
   }, [store.token]);

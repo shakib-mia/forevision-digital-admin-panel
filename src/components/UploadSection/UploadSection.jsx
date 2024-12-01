@@ -73,7 +73,7 @@ const UploadSection = ({ setProgress, setProgressVisible }) => {
     const uploadBatch = async (batch, batchNumber) => {
       const config = {
         headers: {
-          token: localStorage.getItem("token"),
+          token: sessionStorage.getItem("token"),
         },
         // onUploadProgress: progressEvent => {
         //     // Calculate the upload percentage
