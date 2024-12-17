@@ -11,57 +11,40 @@ const Users = ({ users, loading }) => {
   const [searchText, setSearchText] = useState("");
   const [userEmail, setUserEmail] = useState("");
 
-  // console.log(selectedItem);
+  console.log(users);
 
-  // selectedItem && console.log(selectedItem['isrc']);
-  // console.log(users);
+  // Set filteredList whenever users change
   useEffect(() => {
     setFilteredList(users);
-  }, [users, users.length]);
+  }, [users]);
 
-  function camelCaseToSpaces(str) {
-    return str
-      .replace(/([a-z])([A-Z])/g, "$1 $2") // Add a space before each capital letter
-      .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2"); // Handle consecutive capital letters followed by a lowercase letter
-  }
+  console.log(users);
 
   const handleSearch = (e) => {
-    // console.log(users);
-    setSearchText(e.target.value);
-    const foundUser = users.filter(
-      ({ first_name, last_name, partner_name, emailId }) => {
-        // console.log(emailId.includes(e.target.value.toLowerCase()));
-        if (first_name && first_name.length) {
-          const fullName = first_name + " " + last_name;
-          // return fullName.toLowerCase().includes(e.target.value.toLowerCase().length > 0 ? e.target.value.toLowerCase() : '');
-          if (e.target.value.toLowerCase().length > 0) {
-            return fullName
-              .toLowerCase()
-              .includes(e.target.value.toLowerCase());
-          } else {
-            return users;
-          }
-        } else if (emailId) {
-          return emailId.includes(e.target.value.toLowerCase());
-        } else {
-          // return fullName.toLowerCase().includes(e.target.value.toLowerCase().length > 0 ? e.target.value.toLowerCase() : '');
-          if (e.target.value.toLowerCase().length > 0) {
-            return partner_name
-              .toLowerCase()
-              .includes(e.target.value.toLowerCase());
-          } else {
-            return users;
-          }
+    const query = e.target.value.toLowerCase();
+    setSearchText(query);
+
+    const filteredUsers = users.filter(
+      ({ first_name, last_name, partner_name, emailId, user_email }) => {
+        const fullName = (first_name + " " + last_name).toLowerCase();
+
+        // If both emailId and user_email are missing, search by name
+        if (!emailId && !user_email) {
+          return fullName.includes(query);
         }
+
+        // If one or both emails exist, search by email or name
+        return (
+          fullName.includes(query) ||
+          (emailId && emailId.toLowerCase().includes(query)) ||
+          (user_email && user_email.toLowerCase().includes(query)) ||
+          (partner_name && partner_name.toLowerCase().includes(query))
+        );
       }
     );
 
-    // console.log(foundUser);
-
-    setFilteredList(foundUser);
+    setFilteredList(filteredUsers);
   };
-
-  // console.log(selectedItem?.lifetimeRevenue - selectedItem?.lifetimeDisbursed);
 
   return (
     <>
@@ -92,7 +75,7 @@ const Users = ({ users, loading }) => {
                     className="py-2 px-3 capitalize cursor-pointer hover:bg-grey rounded flex justify-between"
                     onClick={() => {
                       setDetailedId(_id);
-                      setUserEmail(user_email);
+                      // setUserEmail(user_email);
                     }}
                     key={_id}
                   >
@@ -114,47 +97,7 @@ const Users = ({ users, loading }) => {
         </ul>
       </div>
 
-      {/* {detailedId.length ? (
-        <div className="fixed top-0 left-0 h-screen w-screen bg-black bg-opacity-45 flex items-center justify-center z-[999999]">
-          <div className="bg-white w-1/2 shadow-lg rounded relative">
-            <button
-              className="absolute -top-6 -right-6 text-heading-5 text-white"
-              onClick={() => setDetailedId("")}
-            >
-              &times;
-            </button>
-            <div className="overflow-auto  max-h-[50vh]">
-              {Object.keys(selectedItem).map(
-                (item) =>
-                  item !== "_id" && (
-                    <div className="flex py-3 w-1/2 mx-auto" key={item}>
-                      <aside className="w-1/2 capitalize">
-                        {item !== "accountBalance"
-                          ? item.includes("_")
-                            ? item.split("_").join(" ")
-                            : camelCaseToSpaces(item)
-                          : "Account Balance"}
-                      </aside>
-                      <aside className="w-1/2 text-wrap">
-                        {item === "isrc"
-                          ? selectedItem[item]
-                              .split(",")
-                              .map((ite, key) => <li key={key}>{ite}</li>)
-                          : item === "accountBalance"
-                          ? selectedItem.lifetimeRevenue -
-                            selectedItem.lifetimeDisbursed
-                          : selectedItem[item]}
-                      </aside>
-                    </div>
-                  )
-              )}
-            </div>
-          </div>
-        </div>
-      ) : (
-        <></>
-      )} */}
-
+      {/* User Details Popup */}
       {selectedItem && (
         <UserDetailsPopup
           user={selectedItem}
@@ -165,6 +108,7 @@ const Users = ({ users, loading }) => {
         />
       )}
 
+      {/* Create New Record Label */}
       {userEmail && (
         <div className="fixed left-0 top-0 bg-black bg-opacity-50 h-screen w-screen flex justify-center items-center z-[9999999999]">
           <CreateNewRecordLabel

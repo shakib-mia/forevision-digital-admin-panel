@@ -82,7 +82,7 @@ const UserDetailsPopup = ({ user, onClose, setUserEmail }) => {
         <div className="border-t border-grey-light flex justify-center px-6 py-4 rounded-b-lg">
           <Button
             onClick={() => {
-              setUserEmail(user.emailId);
+              setUserEmail(user.emailId || user.user_email);
               onClose();
             }}
           >

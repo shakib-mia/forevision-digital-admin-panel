@@ -18,6 +18,7 @@ const AlbumCard = ({ album }) => {
   const [collapsed, setCollapsed] = useState(true);
   const [popupSong, setPopupSong] = useState(null);
   const [selectedOption, setSelectedOption] = useState("Set Status");
+  const [albumSelectedOption, setAlbumSelectedOption] = useState("Set Status");
   const [item, setItem] = useState({});
 
   const options = [
@@ -100,13 +101,13 @@ const AlbumCard = ({ album }) => {
       const updated = { ...item };
 
       const handleSwal = (Component, title) => {
-        console.log(item);
         let swalContent = document.createElement("div");
         ReactDOM.render(
           <Component
             platforms={item.selectedPlatforms}
             updated={updated}
             album={album}
+            albumSelectedOption={albumSelectedOption}
           />,
           swalContent
         );
@@ -121,6 +122,10 @@ const AlbumCard = ({ album }) => {
         }).then((result) => {
           if (result.isConfirmed) {
             triggerFinalSwal(updated);
+          }
+
+          if (result.dismiss === Swal.DismissReason.backdrop) {
+            setSelectedOption("Set Status");
           }
         });
       };
@@ -184,18 +189,113 @@ const AlbumCard = ({ album }) => {
     }
   }, [selectedOption]);
 
+  useEffect(() => {
+    if (albumSelectedOption !== "Set Status") {
+      item.status = albumSelectedOption;
+      const updated = { ...item };
+
+      const handleSwal = (Component, title) => {
+        console.log(album);
+        let swalContent = document.createElement("div");
+        ReactDOM.render(
+          <Component
+            platforms={item.selectedPlatforms}
+            updated={updated}
+            album={album}
+            albumSelectedOption={albumSelectedOption}
+          />,
+          swalContent
+        );
+
+        Swal.fire({
+          title: title,
+          html: swalContent,
+          showConfirmButton: false,
+          customClass: {
+            popup: "custom-swal-width",
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            triggerFinalSwal(updated);
+          }
+
+          if (result.dismiss === Swal.DismissReason.backdrop) {
+            setAlbumSelectedOption("Set Status");
+          }
+        });
+      };
+
+      // console.log(albumSelectedOption);
+
+      if (albumSelectedOption === "streaming") {
+        handleSwal(InputSongDetails, "Input Song details");
+      } else if (albumSelectedOption === "Sent to Stores") {
+        handleSwal(SentToStores, "Input Song details");
+      } else if (albumSelectedOption === "on-hold") {
+        handleSwal(ReasonToHold, "Enter Reason");
+      } else if (albumSelectedOption === "paid") {
+        handleSwal(HandlePaid, "Enter Transaction Id");
+      } else if (albumSelectedOption === "taken-down") {
+        handleSwal(HandleTakedown, "Enter Reason for Taking Down");
+      } else if (albumSelectedOption === "copyright-infringed") {
+        updated.status = "Copyright infringed";
+        const { ...updatedData } = updated;
+        updatedData.status = "Copyright infringed";
+
+        axios
+          .put(`${backendUrl}songs/${album._id}`, album, config)
+          .then(({ data }) => {
+            if (data.acknowledged) {
+              axios
+                .post(backendUrl + "send-song-status", updatedData)
+                .then(({ data }) => {
+                  if (data.acknowledged) {
+                    Swal.close();
+                  }
+                });
+            }
+          });
+      } else if (albumSelectedOption === "rejected") {
+        handleSwal(ReasonToReject, "Enter Reason for Song Rejection");
+
+        // handleSwal(HandlePaid, "Enter Transaction Id");
+
+        // updated.rejected = true;
+        // const { _id, ...updatedData } = updated;
+        // axios
+        //   .put(`http://localhost:5100/songs/${_id}`, updatedData, config)
+        //   .then(({ data }) => {
+        //     if (data.acknowledged) {
+        //       updatedData.status = "Rejected";
+        //       axios
+        //         .post(backendUrl + "send-song-status", updatedData)
+        //         .then(({ data }) => {
+        //           // if (data.acknowledged) {
+        //           Swal.close();
+        //           // }
+        //         });
+        //     }
+        //   });
+      } else {
+        // Handle default case if necessary
+      }
+
+      console.log(albumSelectedOption);
+    }
+  }, [albumSelectedOption]);
+
   return (
     <div className="p-4 bg-white">
       {/* Album Header */}
       <div className="flex items-center gap-4">
-        <div className="w-40 h-40 relative group rounded-lg overflow-hidden">
+        <div className="w-64 h-6w-64 relative group rounded-lg overflow-hidden">
           <a
             href={album.artWork}
             target="_blank"
             rel="noreferrer"
             className="relative"
           >
-            <span className="inline-flex justify-center items-center text-white text-heading-4 w-full h-full bg-black-primary bg-opacity-20 absolute left-0 top-0 opacity-0 group-hover:opacity-100 transition">
+            <span className="inline-flex justify-center items-center text-white text-heading-2 w-full h-full bg-black-primary bg-opacity-20 absolute left-0 top-0 opacity-0 group-hover:opacity-100 transition">
               <LuArrowUpRightFromCircle />
             </span>
             <img
@@ -215,6 +315,20 @@ const AlbumCard = ({ album }) => {
             Platforms: {album?.selectedPlatforms?.length}
           </p>
 
+          <p className="text-sm text-success">Order ID: {album?.orderId}</p>
+          <p className="text-sm text-success">
+            Payment ID: {album?.payment_id}
+          </p>
+
+          <p className="text-sm text-success">
+            Platforms: {album?.selectedPlatforms?.length}
+          </p>
+
+          <div className="text-lg font-bold text-secondary">
+            <MdCurrencyRupee className="inline-block" />
+            {(album.price / 100).toFixed(2)}
+          </div>
+
           <div className="mt-4 flex gap-4">
             <button
               onClick={downloadAlbumAsExcel}
@@ -229,11 +343,15 @@ const AlbumCard = ({ album }) => {
             >
               {collapsed ? "Show Songs" : "Hide Songs"}
             </button>
+
+            <div className="w-1/2">
+              <Dropdown
+                options={options}
+                selected={albumSelectedOption}
+                onSelectedChange={setAlbumSelectedOption}
+              />
+            </div>
           </div>
-        </div>
-        <div className="text-lg font-bold text-secondary">
-          <MdCurrencyRupee className="inline-block" />
-          {(album.price / 100).toFixed(2)}
         </div>
       </div>
 
@@ -269,8 +387,14 @@ const AlbumCard = ({ album }) => {
 
       {/* Popup Modal */}
       {popupSong && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-md shadow-lg w-full max-w-lg relative">
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          onClick={closeModal}
+        >
+          <div
+            className="bg-white p-6 rounded-md shadow-lg w-full max-w-lg relative"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               onClick={closeModal}
               className="absolute top-2 right-2 text-black bg-grey-light rounded-full w-8 h-8 flex items-center justify-center hover:bg-grey-dark"
@@ -278,17 +402,60 @@ const AlbumCard = ({ album }) => {
               ✕
             </button>
             <h3 className="text-heading-5-bold text-primary">
-              {popupSong.songName}
+              {popupSong.songName || "N/A"}
             </h3>
-            <p className="text-sm text-grey">ISRC: {popupSong.isrc}</p>
-            <p className="text-sm text-grey">Genre: {popupSong.genre}</p>
-            <p className="text-sm text-grey">Mood: {popupSong.mood}</p>
-            <p className="text-sm text-grey">Language: {popupSong.language}</p>
+            <p className="text-sm text-grey">ISRC: {popupSong.isrc || "N/A"}</p>
             <p className="text-sm text-grey">
-              Description: {popupSong.description}
+              Genre: {popupSong.genre || "N/A"}
             </p>
-            <audio controls className="mt-4 w-full">
-              <source src={popupSong.songUrl} type="audio/mp3" />
+            <p className="text-sm text-grey">
+              Sub-Genre: {popupSong.subGenre || "N/A"}
+            </p>
+            <p className="text-sm text-grey">Mood: {popupSong.mood || "N/A"}</p>
+            <p className="text-sm text-grey">
+              Language: {popupSong.language || "N/A"}
+            </p>
+            <p className="text-sm text-grey">
+              Description: {popupSong.description || "N/A"}
+            </p>
+            <p className="text-sm text-grey">
+              Release Date: {popupSong.releaseDate || "N/A"}
+            </p>
+            <p className="text-sm text-grey">
+              Live Date: {popupSong.liveDate || "N/A"}
+            </p>
+            <p className="text-sm text-grey">
+              Status: {popupSong.status || "N/A"}
+            </p>
+            <p className="text-sm text-grey">
+              Parental Advisory: {popupSong.parentalAdvisory ? "Yes" : "No"}
+            </p>
+            <p className="text-sm text-grey">
+              Instrumental: {popupSong.instrumental ? "Yes" : "No"}
+            </p>
+            <p className="text-sm text-grey">
+              Reason: {popupSong.reason || "N/A"}
+            </p>
+            <p className="text-sm text-grey">
+              User Email: {popupSong.userEmail || "N/A"}
+            </p>
+            <p className="text-sm text-grey">
+              Go Live Time: {popupSong.time || "N/A"}
+            </p>
+
+            <h4 className="mt-4 text-heading-6-bold text-primary">Artists:</h4>
+            <ul className="text-sm text-grey list-disc list-inside">
+              {popupSong.artists?.length
+                ? popupSong.artists.map((artist, index) => (
+                    <li key={index}>
+                      {artist.name} ({artist.role})
+                    </li>
+                  ))
+                : "No artists available"}
+            </ul>
+
+            <audio controls className="my-4 w-full">
+              <source src={popupSong.songUrl || ""} type="audio/mp3" />
               Your browser does not support the audio tag.
             </audio>
 

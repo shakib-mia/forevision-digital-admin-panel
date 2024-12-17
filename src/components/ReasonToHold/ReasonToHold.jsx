@@ -5,7 +5,7 @@ import axios from "axios";
 import Button from "../Button/Button";
 import Swal from "sweetalert2";
 
-const ReasonToHold = ({ updated, album }) => {
+const ReasonToHold = ({ updated, album, setRefetch }) => {
   const [newIsrc, setNewIsrc] = useState("");
   const [reason, setreason] = useState(updated.reason || "");
   console.log(updated);
@@ -60,6 +60,7 @@ const ReasonToHold = ({ updated, album }) => {
             axios
               .post(backendUrl + "send-song-status", updated)
               .then(({ data }) => {
+                setRefetch((ref) => !ref);
                 // if (data.acknowledged) {
                 Swal.close();
                 // }

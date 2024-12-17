@@ -5,7 +5,7 @@ import axios from "axios";
 import Button from "../Button/Button";
 import Swal from "sweetalert2";
 
-const SentToStores = ({ updated }) => {
+const SentToStores = ({ updated, setRefetch }) => {
   const [newIsrc, setNewIsrc] = useState("");
   const [trId, setTrId] = useState(updated.transactionId || "");
   //   console.log(updated?.reason);
@@ -37,6 +37,7 @@ const SentToStores = ({ updated }) => {
     axios.put(backendUrl + `songs/${_id}`, newData, config).then(({ data }) => {
       if (data.acknowledged) {
         Swal.close();
+        setRefetch((ref) => !ref);
       }
     });
 

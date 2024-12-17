@@ -5,7 +5,7 @@ import axios from "axios";
 import Button from "../Button/Button";
 import Swal from "sweetalert2";
 
-const ReasonToReject = ({ updated }) => {
+const ReasonToReject = ({ updated, setRefetch }) => {
   const [newIsrc, setNewIsrc] = useState("");
   const [reason, setreason] = useState(updated.reason || "");
   //   console.log(updated);
@@ -33,6 +33,8 @@ const ReasonToReject = ({ updated }) => {
           .then(({ data }) => {
             // if (data.acknowledged) {
             Swal.close();
+            setRefetch((ref) => !ref);
+
             // }
           });
       }

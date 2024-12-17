@@ -6,10 +6,18 @@ import Button from "../Button/Button";
 import { AppContext } from "../../contexts/AppContext";
 import Swal from "sweetalert2";
 
-const InputSongDetails = ({ platforms, updated }) => {
+const InputSongDetails = ({
+  platforms,
+  updated,
+  setRefetch,
+  albumSelectedOption,
+  album,
+}) => {
+  // console.log(albumSelectedOption);
   const [newIsrc, setNewIsrc] = useState("");
   const [formData, setFormData] = useState({ isrc: newIsrc });
 
+  const parent = albumSelectedOption.length ? album : updated;
   const store = useContext(AppContext);
 
   const config = {
@@ -43,9 +51,9 @@ const InputSongDetails = ({ platforms, updated }) => {
 
     formData.status = "streaming";
 
-    const newBody = { ...formData, ...updated };
+    const newBody = { ...formData, ...parent };
 
-    const selectedPlatforms = updated.selectedPlatforms.map((platform) =>
+    const selectedPlatforms = parent.selectedPlatforms.map((platform) =>
       platform.toLowerCase().replace(/\s+/g, "-")
     );
 
@@ -74,7 +82,7 @@ const InputSongDetails = ({ platforms, updated }) => {
 
     // console.log("Has Links:", hasLinks);
     // console.log(Object.keys(newBody).includes());
-    updated.selectedPlatforms.map((item) =>
+    parent.selectedPlatforms.map((item) =>
       console.log(Object.keys(newBody).includes(item))
     );
 
@@ -87,6 +95,7 @@ const InputSongDetails = ({ platforms, updated }) => {
     axios.post(backendUrl + "songs", newBody, config).then(({ data }) => {
       if (data.insertCursor?.acknowledged) {
         axios.post(backendUrl + "send-song-status", newBody).then(() => {
+          setRefetch((ref) => !ref);
           Swal.close();
         });
       }
@@ -94,7 +103,7 @@ const InputSongDetails = ({ platforms, updated }) => {
   };
 
   useEffect(() => {
-    updated.selectedPlatforms.map((item) => {
+    parent.selectedPlatforms.map((item) => {
       const platformKey = item.includes(" ")
         ? item.split(" ").join("-").toLowerCase()
         : item.toLowerCase();
@@ -107,18 +116,14 @@ const InputSongDetails = ({ platforms, updated }) => {
       }
     });
   }, []);
-
-  updated.selectedPlatforms.includes("YouTube Topic") ||
-    updated.selectedPlatforms.push("YouTube Topic");
+  console.log(parent.selectedPlatforms);
+  parent.selectedPlatforms.includes("YouTube Topic") ||
+    parent.selectedPlatforms.push("YouTube Topic");
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="grid grid-cols-2 gap-4 mb-4">
-        {updated.selectedPlatforms.map((item) => {
-          // const platformKey = item.includes(" ")
-          //   ? item.split(" ").join("-")
-          //   : item;
-          console.log(allowedPlatforms, item);
+        {parent.selectedPlatforms.map((item) => {
           if (allowedPlatforms.includes(item)) {
             return (
               <InputField

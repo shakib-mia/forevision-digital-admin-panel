@@ -5,7 +5,7 @@ import axios from "axios";
 import Button from "../Button/Button";
 import Swal from "sweetalert2";
 
-const HandleTakedown = ({ updated, album }) => {
+const HandleTakedown = ({ updated, album, setRefetch }) => {
   const [newIsrc, setNewIsrc] = useState("");
   const [reason, setreason] = useState(updated.reason || "");
   console.log(album);
@@ -53,7 +53,9 @@ const HandleTakedown = ({ updated, album }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (album.songs?.length) {
+    // console.log(object);
+
+    if (album?.songs?.length) {
       // console.log();
       const song = album.songs.find((item) => item.isrc === updated.isrc);
       // updatedSingleSong.status =
@@ -79,6 +81,7 @@ const HandleTakedown = ({ updated, album }) => {
               .then(({ data }) => {
                 if (data.acknowledged) {
                   Swal.close();
+                  setRefetch((ref) => !ref);
                 }
               });
           }

@@ -7,12 +7,18 @@ import SongsItem from "../SongsItem/SongsItem";
 
 const Songs = () => {
   const [songs, setSongs] = useState([]);
+  const [refetch, setRefetch] = useState(false);
 
   useEffect(() => {
-    axios
-      .get(backendUrl + "upload-song", config)
-      .then(({ data }) => setSongs(data));
-  }, []);
+    axios.get(backendUrl + "upload-song", config).then(({ data }) => {
+      console.log(data.find((item) => !item.songs));
+      setSongs(data);
+    });
+  }, [refetch]);
+
+  const singleSongs = songs
+    .map((item) => item.hasOwnProperty("songName") && item)
+    .filter((item) => item);
 
   return (
     <div className="bg-white rounded-[20px] custom-shadow text-interactive-dark-hover h-[500px] overflow-auto">
@@ -28,8 +34,8 @@ const Songs = () => {
         <p>Action</p>
       </div>
 
-      {songs.map((item, key) => (
-        <SongsItem item={item} key={key} />
+      {singleSongs.map((item, key) => (
+        <SongsItem setRefetch={setRefetch} item={item} key={key} />
       ))}
     </div>
   );

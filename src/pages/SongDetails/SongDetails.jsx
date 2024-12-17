@@ -87,6 +87,51 @@ const SongDetails = () => {
                           <tr key={index} className="border-t border-gray-200">
                             <td className="px-4 py-2">{artist.name}</td>
                             <td className="px-4 py-2">{artist.role}</td>
+                            <td className="px-4 py-2">
+                              <div className="flex divide-x">
+                                {artist.appleArtist && (
+                                  <a
+                                    href={artist.appleArtist}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:opacity-80 px-2"
+                                  >
+                                    Apple Music
+                                  </a>
+                                )}
+                                {artist.facebookUrl && (
+                                  <a
+                                    href={artist.facebookUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:opacity-80 px-2"
+                                  >
+                                    Facebook
+                                  </a>
+                                )}
+                                {artist.instagramUrl && (
+                                  <a
+                                    href={artist.instagramUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:opacity-80 px-2"
+                                  >
+                                    Instagram
+                                  </a>
+                                )}
+
+                                {artist.spotifyUrl && (
+                                  <a
+                                    href={artist.spotifyUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:opacity-80 px-2"
+                                  >
+                                    spotify
+                                  </a>
+                                )}
+                              </div>
+                            </td>
                           </tr>
                         ))}
                       </tbody>

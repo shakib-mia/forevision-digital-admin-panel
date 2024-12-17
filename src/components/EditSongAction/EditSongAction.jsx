@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Modal from "../Modal/Modal";
 import Button from "../Button/Button";
 import { camelCaseToNormalText } from "../../utils/camelCaseToNormalText";
 import axios from "axios";
 import { backendUrl } from "../../constants";
 import Swal from "sweetalert2";
+import { AppContext } from "../../contexts/AppContext";
 
 const EditSongAction = ({
   requests,
@@ -21,18 +22,32 @@ const EditSongAction = ({
   //   setCheck,
   //   setCheckedIndex,
   // });
-  const selectedSong = requests[checkedIndex];
+  const { updated, setUpdated } = useContext(AppContext);
+
+  const selectedSong = requests.filter(
+    (item) => item.requested === true && !item.approved && !item.denied
+  )[checkedIndex];
   const selectedSong2 = { ...selectedSong };
-  const request = { ...requests[checkedIndex] };
+  const request = {
+    ...requests.filter(
+      (item) => item.requested === true && !item.approved && !item.denied
+    )[checkedIndex],
+  };
 
   delete selectedSong2._id;
   // delete request._id;
   // delete request.emailId;
   const handleApprove = (e) => {
     // console.log(selectedSong);
+    delete request.requested;
+    request.approved = true;
+    if (Object.keys(request).includes("denied")) {
+      delete request.denied;
+    }
+
     if (!selectedSong["S.no"]) {
       // new
-      request.updated = true;
+      // request.updated = true;
       axios
         .put(backendUrl + "edit-song/new/" + selectedSong._id, request)
         .then(({ data }) => {
@@ -40,6 +55,7 @@ const EditSongAction = ({
           // if (data.acknowledged) {
           setCheck(false);
           setCheckedIndex("");
+          setUpdated(!updated);
           Swal.fire({
             text: "Edit request has ben approved successfully",
             icon: "success",
@@ -50,6 +66,9 @@ const EditSongAction = ({
       // old
       // console.log("editing old song");
       // console.log(selectedSong);
+      // request.approved = true;
+      delete selectedSong.S;
+
       axios
         .put(backendUrl + "edit-song/old/" + selectedSong._id, request)
         .then(({ data }) => {
@@ -57,6 +76,7 @@ const EditSongAction = ({
           // if (data.acknowledged) {
           setCheck(false);
           setCheckedIndex("");
+          setUpdated(!updated);
           Swal.fire({
             text: "Edit request has ben approved successfully",
             icon: "success",
@@ -75,18 +95,46 @@ const EditSongAction = ({
   // console.log(selectedSong2, request);
 
   useEffect(() => {
-    console.log(request);
-    axios
-      .get(backendUrl + "songs/by-isrc/" + (request.ISRC || request.isrc))
-      .then(({ data }) => {
-        delete data.S;
-        setOldSong(data);
-      });
+    if (request.ISRC || request.isrc) {
+      axios
+        .get(backendUrl + "songs/by-isrc/" + (request.ISRC || request.isrc))
+        .then(({ data }) => {
+          delete data.S;
+          setOldSong(data);
+        });
+    } else {
+      axios
+        .get(backendUrl + "songs/by-order-id/" + request.orderId)
+        .then(({ data }) => {
+          delete data.S;
+          setOldSong(data);
+        });
+    }
   }, [request.ISRC]);
   delete selectedSong2.S;
   // delete selectedSong2.artists;
   // console.log(oldSong);
-  console.log(selectedSong2);
+  // console.log(selectedSong2);
+
+  const handleDeny = (e) => {
+    request.denied = true;
+    delete request.requested;
+    // console.log(request);
+    axios
+      .put(backendUrl + "edit-song/new/" + selectedSong._id, request)
+      .then(({ data }) => {
+        // console.log("closing");
+        // if (data.acknowledged) {
+        setCheck(false);
+        setCheckedIndex("");
+        setUpdated((upd) => !upd);
+        Swal.fire({
+          text: "Edit request has ben denied successfully",
+          icon: "success",
+        });
+        // }
+      });
+  };
 
   return (
     <Modal
@@ -216,7 +264,9 @@ const EditSongAction = ({
         <Button onClick={handleApprove} action={"confirmation"}>
           Approve
         </Button>
-        <Button action={"destructive"}>Deny</Button>
+        <Button onClick={handleDeny} action={"destructive"}>
+          Deny
+        </Button>
       </div>
     </Modal>
   );

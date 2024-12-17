@@ -22,7 +22,7 @@ import ReasonToReject from "../ReasonToReject/ReasonToReject";
 import HandleTakedown from "../HandleTakedown/HandleTakedown";
 import { AppContext } from "../../contexts/AppContext";
 
-const SongsItem = ({ item }) => {
+const SongsItem = ({ item, setRefetch }) => {
   const [selectedOption, setSelectedOption] = useState("Set Status");
   // const [platforms, setPlatforms] = useState([]);
   const { platforms } = useContext(AppContext);
@@ -79,7 +79,11 @@ const SongsItem = ({ item }) => {
       const handleSwal = (Component, title) => {
         let swalContent = document.createElement("div");
         ReactDOM.render(
-          <Component platforms={platforms} updated={updated} />,
+          <Component
+            platforms={platforms}
+            updated={updated}
+            setRefetch={setRefetch}
+          />,
           swalContent
         );
 
@@ -93,6 +97,10 @@ const SongsItem = ({ item }) => {
         }).then((result) => {
           if (result.isConfirmed) {
             triggerFinalSwal(updated);
+          }
+
+          if (result.dismiss === Swal.DismissReason.backdrop) {
+            setSelectedOption("Set Status");
           }
         });
       };
@@ -286,12 +294,8 @@ const SongsItem = ({ item }) => {
     <div className="grid grid-cols-5 p-3 items-center text-center gap-2">
       <Link to={`/song/${item._id}`}>{item.songName}</Link>
       <p>{item.userEmail}</p>
-      <p
-        className={
-          item.status === "pending" && "text-interactive-light-destructive"
-        }
-      >
-        {item.status}
+      <p className={!item.status && "text-interactive-light-destructive"}>
+        {item.status || "pending"}
       </p>
       <audio controls className="w-full max-w-md">
         <source src={item.songUrl} type="audio/mpeg" />

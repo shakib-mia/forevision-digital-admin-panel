@@ -6,6 +6,7 @@ import SearchSongByISRC from "../../components/SearchSongByISRC/SearchSongByISRC
 import { AppContext } from "../../contexts/AppContext";
 import Albums from "../../components/Albums/Albums";
 import RoyaltySplitRequest from "../../components/RoyaltySplitRequest/RoyaltySplitRequest";
+import LiveAlbums from "../../components/LiveAlbums/LiveAlbums";
 
 const SongsPage = () => {
   const { store } = useContext(AppContext);
@@ -18,6 +19,7 @@ const SongsPage = () => {
         <TakedownRequests />
         <Songs />
         <Albums />
+        <LiveAlbums />
         <RoyaltySplitRequest />
       </div>
     );

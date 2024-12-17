@@ -66,6 +66,7 @@ const App = () => {
   });
   const [showModal, setShowModal] = useState(false);
   const [history, setHistory] = useState([]);
+  const [updated, setUpdated] = useState(false);
 
   useEffect(() => {
     if (showModal) {
@@ -136,6 +137,8 @@ const App = () => {
         showModal,
         setShowModal,
         history,
+        updated,
+        setUpdated,
       }}
     >
       <BrowserRouter>
