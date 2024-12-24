@@ -32,6 +32,10 @@ const Navbar = () => {
       text: "Sales",
       path: "/sales",
     },
+    {
+      text: "Forms",
+      path: "/forms",
+    },
   ];
 
   return (

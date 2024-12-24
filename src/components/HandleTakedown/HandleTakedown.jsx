@@ -79,9 +79,9 @@ const HandleTakedown = ({ updated, album, setRefetch }) => {
             axios
               .post(backendUrl + "send-song-status", newBody)
               .then(({ data }) => {
+                setRefetch((ref) => !ref);
                 if (data.acknowledged) {
                   Swal.close();
-                  setRefetch((ref) => !ref);
                 }
               });
           }

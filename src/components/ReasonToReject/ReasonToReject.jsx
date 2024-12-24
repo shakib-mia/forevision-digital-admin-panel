@@ -20,25 +20,28 @@ const ReasonToReject = ({ updated, setRefetch }) => {
     e.preventDefault();
 
     const { _id } = updated;
-    delete updated._id;
+    // delete updated._id;
+    const newUpdated = { ...updated };
+    delete newUpdated._id;
     // updated.ISRC = newIsrc;
     updated.hold = true;
     updated.reason = reason;
     updated.status = "Rejected";
-    // console.log(_id);
-    axios.put(backendUrl + "songs/" + _id, updated, config).then(({ data }) => {
-      if (data.acknowledged) {
-        axios
-          .post(backendUrl + "send-song-status", updated)
-          .then(({ data }) => {
-            // if (data.acknowledged) {
-            Swal.close();
-            setRefetch((ref) => !ref);
 
-            // }
-          });
-      }
-    });
+    axios
+      .put(backendUrl + "songs/" + _id, newUpdated, config)
+      .then(({ data }) => {
+        if (data.acknowledged) {
+          axios
+            .post(backendUrl + "send-song-status", updated)
+            .then(({ data }) => {
+              if (data.acknowledged) {
+                setRefetch((ref) => !ref);
+                Swal.close();
+              }
+            });
+        }
+      });
 
     // formData.status = "Sent to Stores";
     // formData.isrc = newIsrc;

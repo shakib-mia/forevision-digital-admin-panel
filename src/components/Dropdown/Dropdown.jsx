@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
-const Dropdown = ({ options, selected, onSelectedChange, setPopupSong }) => {
+const Dropdown = ({ options, selected, onSelectedChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   // console.log(options);
   const handleOptionClick = (option) => {
     onSelectedChange(option);
     setIsOpen(false);
-    setPopupSong(false);
+    // setPopupSong(false);
   };
 
   return (

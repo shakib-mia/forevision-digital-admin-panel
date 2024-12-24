@@ -96,6 +96,7 @@ const AlbumCard = ({ album }) => {
   };
 
   useEffect(() => {
+    console.log(selectedOption);
     if (selectedOption !== "Set Status") {
       item.status = selectedOption;
       const updated = { ...item };
@@ -108,6 +109,7 @@ const AlbumCard = ({ album }) => {
             updated={updated}
             album={album}
             albumSelectedOption={albumSelectedOption}
+            selectedOption={selectedOption}
           />,
           swalContent
         );
@@ -347,8 +349,14 @@ const AlbumCard = ({ album }) => {
             <div className="w-1/2">
               <Dropdown
                 options={options}
-                selected={albumSelectedOption}
-                onSelectedChange={setAlbumSelectedOption}
+                selected={
+                  album.price === 99900 ? albumSelectedOption : selectedOption
+                }
+                onSelectedChange={
+                  album.price === 99900
+                    ? setAlbumSelectedOption
+                    : setAlbumSelectedOption
+                }
               />
             </div>
           </div>

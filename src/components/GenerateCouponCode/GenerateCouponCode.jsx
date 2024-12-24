@@ -54,7 +54,6 @@ const GenerateCouponCode = () => {
 
       <div className="py-2 px-3 flex gap-[0.69rem] items-center justify-center border-b border-grey-light">
         <p className="text-heading-6-bold">Generate A Coupon Code</p>
-        {/* <Arrow increased={true} /> */}
       </div>
 
       <form
@@ -71,6 +70,7 @@ const GenerateCouponCode = () => {
             placeholder={"Enter Your Coupon Code Here"}
             className={"mb-4 text-black-secondary"}
             containerClassName={"w-full"}
+            required
           />
           <InputField
             type="number"
@@ -79,6 +79,9 @@ const GenerateCouponCode = () => {
             placeholder={"Enter Discount Percentage Here"}
             className={"text-black-secondary"}
             containerClassName={"w-full"}
+            max="100"
+            min="0"
+            required
           />
           <InputField
             type="date"
@@ -86,6 +89,7 @@ const GenerateCouponCode = () => {
             name="valid-from"
             className={"text-black-secondary mb-4"}
             containerClassName={"w-full"}
+            required
           />
           <InputField
             type="date"
@@ -93,6 +97,7 @@ const GenerateCouponCode = () => {
             name="valid-till"
             className={"text-black-secondary"}
             containerClassName={"w-full"}
+            required
           />
 
           <Select
@@ -102,6 +107,7 @@ const GenerateCouponCode = () => {
             placeholder="Select a Plan"
             label="Plan"
             // name="plan"
+            required
           />
 
           <InputField
@@ -109,6 +115,7 @@ const GenerateCouponCode = () => {
             name="email"
             type="email"
             label={"Email Address"}
+            required
           />
         </div>
 

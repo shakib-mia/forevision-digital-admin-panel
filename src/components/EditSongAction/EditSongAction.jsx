@@ -155,9 +155,9 @@ const EditSongAction = ({
             {Object.keys(oldSong).map((key, index) => {
               const requestValue = request[key];
               const selectedValue = key === "artists" ? "" : oldSong[key];
-              if (key === "artists") {
-                delete oldSong[key];
-              }
+              // if (key === "artists") {
+              //   delete oldSong[key];
+              // }
               // console.log(oldSong);
               if (key !== "_id") {
                 return (
@@ -219,7 +219,8 @@ const EditSongAction = ({
                   <div
                     key={index}
                     className={`p-2 w-full ${
-                      requestValue !== selectedValue
+                      JSON.stringify(requestValue) !==
+                      JSON.stringify(selectedValue)
                         ? "bg-interactive-dark-destructive-hover text-white"
                         : ""
                     }`}

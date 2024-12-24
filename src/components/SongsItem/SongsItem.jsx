@@ -83,6 +83,7 @@ const SongsItem = ({ item, setRefetch }) => {
             platforms={platforms}
             updated={updated}
             setRefetch={setRefetch}
+            selectedOption={selectedOption}
           />,
           swalContent
         );
@@ -104,8 +105,6 @@ const SongsItem = ({ item, setRefetch }) => {
           }
         });
       };
-
-      console.log(selectedOption);
 
       if (selectedOption === "streaming") {
         handleSwal(InputSongDetails, "Input Song details");
@@ -129,6 +128,7 @@ const SongsItem = ({ item, setRefetch }) => {
                 .post(backendUrl + "send-song-status", updatedData)
                 .then(({ data }) => {
                   // if (data.acknowledged) {
+                  setRefetch((ref) => !ref);
                   Swal.close();
                   // }
                 });
@@ -287,16 +287,19 @@ const SongsItem = ({ item, setRefetch }) => {
     ];
 
     // Use the jsonData in the jsonToExcel function
-    jsonToExcel(jsonData, "item.xlsx");
+    jsonToExcel(jsonData, renamedData[0]["SONG NAME"] + ".xlsx");
   };
 
   return (
-    <div className="grid grid-cols-5 p-3 items-center text-center gap-2">
+    <div className="grid grid-cols-6 p-3 items-center text-center gap-2">
       <Link to={`/song/${item._id}`}>{item.songName}</Link>
       <p>{item.userEmail}</p>
       <p className={!item.status && "text-interactive-light-destructive"}>
         {item.status || "pending"}
       </p>
+
+      <p>{item.orderId}</p>
+
       <audio controls className="w-full max-w-md">
         <source src={item.songUrl} type="audio/mpeg" />
         Your browser does not support the audio element.

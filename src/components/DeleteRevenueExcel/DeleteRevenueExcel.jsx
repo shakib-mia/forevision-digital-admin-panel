@@ -32,9 +32,7 @@ const DeleteRevenueExcel = () => {
       });
   };
 
-  // console.log(
-  //   platforms.flatMap((item) => item.platforms).map((item) => item.cat_name)
-  // );
+  // console.log(platforms.flatMap((item) => item.cat_name));
   // console.log(platforms);
 
   return (
@@ -47,13 +45,7 @@ const DeleteRevenueExcel = () => {
       >
         <Select
           placeholder="Select Platform Name"
-          options={
-            platforms
-              ? platforms
-                  .flatMap((item) => item.platforms)
-                  .map((item) => item?.cat_name)
-              : []
-          }
+          options={platforms ? platforms.flatMap((item) => item.cat_name) : []}
           selectedValue={selectedPlatform}
           song={true}
           setSelectedValue={setSelectedPlatform}

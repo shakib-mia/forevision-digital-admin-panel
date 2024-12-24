@@ -36,8 +36,8 @@ const SentToStores = ({ updated, setRefetch }) => {
     // Example of using newData without _id in the PUT request
     axios.put(backendUrl + `songs/${_id}`, newData, config).then(({ data }) => {
       if (data.acknowledged) {
-        Swal.close();
         setRefetch((ref) => !ref);
+        Swal.close();
       }
     });
 

@@ -5,19 +5,34 @@ import { backendUrl } from "../../constants";
 import Button from "../Button/Button";
 import { AppContext } from "../../contexts/AppContext";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const InputSongDetails = ({
   platforms,
   updated,
   setRefetch,
   albumSelectedOption,
+  selectedOption,
   album,
 }) => {
-  // console.log(albumSelectedOption);
-  const [newIsrc, setNewIsrc] = useState("");
-  const [formData, setFormData] = useState({ isrc: newIsrc });
+  console.log(selectedOption, updated);
+  const [formData, setFormData] = useState({});
+  // const navigate = useNavigate();
 
-  const parent = albumSelectedOption.length ? album : updated;
+  // const parent = (albumSelectedOption)?.length
+  //   ? album
+  //   : updated;
+  let parent;
+
+  if (albumSelectedOption) {
+    parent = album;
+  }
+  if (selectedOption) {
+    parent = updated;
+  }
+
+  console.log(parent);
+
   const store = useContext(AppContext);
 
   const config = {
@@ -25,12 +40,6 @@ const InputSongDetails = ({
       token: store.token || sessionStorage.getItem("token"),
     },
   };
-
-  useEffect(() => {
-    axios
-      .get(backendUrl + "generate-isrc")
-      .then(({ data }) => setNewIsrc(data.newIsrc));
-  }, []);
 
   const allowedPlatforms = [
     "JioSaavn",
@@ -73,8 +82,6 @@ const InputSongDetails = ({
     delete newBody.reason;
 
     // Log formData and matchingKeys for debugging
-    console.log("Form Data:", newBody);
-    console.log("Matching Keys:", matchingKeys);
 
     // Calculate hasLinks: true if any platform URL exists in formData
     const hasLinks = matchingKeys.some((key) => formData[key]?.length > 0);
@@ -82,24 +89,56 @@ const InputSongDetails = ({
 
     // console.log("Has Links:", hasLinks);
     // console.log(Object.keys(newBody).includes());
-    parent.selectedPlatforms.map((item) =>
-      console.log(Object.keys(newBody).includes(item))
-    );
+    // parent.selectedPlatforms.map((item) =>
+    //   console.log(Object.keys(newBody).includes(item))
+    // );
 
-    if (!newBody.isrc) {
-      newBody.isrc = newIsrc;
-    }
-    console.log(newBody);
+    // delete newBody.isrc;
+    console.log(parent.ISRC);
+    const { _id, ...updated } = newBody;
+    // console.log(_id);
 
-    // if (matchingKeys.length > 0) {
-    axios.post(backendUrl + "songs", newBody, config).then(({ data }) => {
-      if (data.insertCursor?.acknowledged) {
-        axios.post(backendUrl + "send-song-status", newBody).then(() => {
-          setRefetch((ref) => !ref);
-          Swal.close();
-        });
-      }
-    });
+    axios
+      .put(backendUrl + "songs/update-upload-list/" + _id, updated, config)
+      .then(({ data }) => {
+        setRefetch((ref) => !ref);
+
+        if (data.insertCursor?.acknowledged) {
+          axios.post(backendUrl + "send-song-status", newBody).then(() => {
+            setRefetch((ref) => !ref);
+            Swal.close();
+          });
+        }
+      })
+      .catch((err) => {
+        if (err.status === 401) {
+          // navigate("/login");
+          const element = document.createElement("a");
+          element.href = "/login";
+          element.click();
+        }
+      });
+
+    // axios
+    //   .put(backendUrl + "songs", newBody, config)
+    //   .then(({ data }) => {
+    //     setRefetch((ref) => !ref);
+
+    //     if (data.insertCursor?.acknowledged) {
+    //       axios.post(backendUrl + "send-song-status", newBody).then(() => {
+    //         setRefetch((ref) => !ref);
+    //         Swal.close();
+    //       });
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     if (err.status === 401) {
+    //       // navigate("/login");
+    //       const element = document.createElement("a");
+    //       element.href = "/login";
+    //       element.click();
+    //     }
+    //   });
   };
 
   useEffect(() => {

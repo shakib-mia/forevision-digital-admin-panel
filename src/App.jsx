@@ -24,6 +24,7 @@ import Navbar from "./components/Navbar/Navbar";
 import SalesPage from "./pages/SalesPage/SalesPage";
 import Songs from "./pages/Songs/Songs";
 import Payment from "./pages/Payment/Payment";
+import Forms from "./pages/Forms/Forms";
 
 // import RequestPaymentDetails from "./pages/RequestPaymentDetails/RequestPaymentDetails";
 // import axios from 'axios';
@@ -156,9 +157,9 @@ const App = () => {
             <Route
               path="/"
               element={
-                <RequireAuth>
-                  <Home />
-                </RequireAuth>
+                // <RequireAuth>
+                <Home />
+                // </RequireAuth>
               }
             />
             <Route path="/login" element={<Login />} />
@@ -171,6 +172,7 @@ const App = () => {
             <Route path="/sales" element={<SalesPage />} />
             <Route path="/songs" element={<Songs />} />
             <Route path="/payments" element={<Payment />} />
+            <Route path="/forms" element={<Forms />} />
           </Routes>
         </div>
         <ToastContainer />

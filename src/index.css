@@ -72,3 +72,17 @@ h6 {
 nav .active {
   @apply text-warning-light relative after:absolute after:w-full after:left-0 after:h-px after:-bottom-2 after:bg-warning transition;
 }
+
+/* For most modern browsers */
+input[type="number"] {
+  -moz-appearance: textfield; /* For Firefox */
+  -webkit-appearance: none; /* For Chrome, Safari, and Edge */
+  appearance: none; /* Standard property */
+}
+
+/* For removing spin buttons in Edge and Internet Explorer */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

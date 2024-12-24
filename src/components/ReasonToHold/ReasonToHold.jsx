@@ -20,10 +20,12 @@ const ReasonToHold = ({ updated, album, setRefetch }) => {
     e.preventDefault();
 
     const { _id } = updated;
-    delete updated._id;
+    // delete updated._id;
+    console.log(_id);
+    const newupdated = { ...updated };
     // updated.ISRC = newIsrc;
 
-    if (album.songs?.length) {
+    if (album?.songs?.length) {
       // console.log();
       const foundSong = album.songs.find((item) => item.isrc === updated.isrc);
       foundSong.reason = reason;
@@ -40,18 +42,20 @@ const ReasonToHold = ({ updated, album, setRefetch }) => {
       axios
         .put(backendUrl + "recent-uploads/" + album._id, album, config)
         .then(({ data }) => {
+          setRefetch((ref) => !ref);
           if (data.acknowledged) {
             axios
               .post(backendUrl + "send-song-status", newBody)
               .then(({ data }) => {
-                console.log(data);
+                // console.log(data);
+                Swal.close();
               });
           }
         });
     } else {
-      updated.hold = true;
-      updated.reason = reason;
-      updated.status = "On Hold";
+      newupdated.hold = true;
+      newupdated.reason = reason;
+      newupdated.status = "On Hold";
       // console.log(_id);
       axios
         .put(backendUrl + "songs/" + _id, updated, config)

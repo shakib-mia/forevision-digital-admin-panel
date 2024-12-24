@@ -5,6 +5,7 @@ import axios from "axios";
 import { backendUrl } from "../../constants";
 import Modal from "../Modal/Modal";
 import Swal from "sweetalert2";
+import SearchSongModal from "../SearchSongModal/SearchSongModal";
 
 const SearchSongByISRC = () => {
   const [song, setSong] = useState({});
@@ -41,51 +42,8 @@ const SearchSongByISRC = () => {
         </div>
       </form>
 
-      {song.Song && (
-        <Modal handleClose={() => setSong({})}>
-          {/* Display song name and ISRC at the top */}
-          <div className="mb-4">
-            <h4 className="font-bold text-2xl text-primary">{song.Song}</h4>
-            <p className="text-lg text-gray-600 italic">
-              ISRC: {song.isrc || song.ISRC}
-            </p>
-          </div>
-
-          {/* Display the rest of the song details, excluding 'Song' and 'isrc' */}
-          <ul>
-            {Object.keys(song).map(
-              (item) =>
-                item !== "_id" &&
-                item !== "Song" &&
-                item !== "isrc" &&
-                item !== "S.no" && (
-                  <li
-                    key={item}
-                    className="grid grid-cols-2 text-nowrap capitalize"
-                  >
-                    <aside className="p-3 font-semibold text-gray-800">
-                      {item}
-                    </aside>
-                    <aside className="p-3">
-                      {typeof song[item] === "string" &&
-                      song[item].includes("https") ? (
-                        <a
-                          href={song[item]}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 underline"
-                        >
-                          Open
-                        </a>
-                      ) : (
-                        song[item]
-                      )}
-                    </aside>
-                  </li>
-                )
-            )}
-          </ul>
-        </Modal>
+      {(song.Song || song.songName) && (
+        <SearchSongModal song={song} setSong={setSong} />
       )}
     </div>
   );

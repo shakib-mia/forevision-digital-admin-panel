@@ -26,10 +26,11 @@ const Songs = () => {
         <p className="text-heading-6-bold">Uploads</p>
       </div>
 
-      <div className="grid grid-cols-5 text-center py-2">
+      <div className="grid grid-cols-6 text-center py-2">
         <p>Song Name</p>
         <p>User Email</p>
         <p>Status</p>
+        <p>Order ID</p>
         <p></p>
         <p>Action</p>
       </div>

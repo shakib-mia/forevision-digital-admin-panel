@@ -6,12 +6,13 @@ import Button from "../Button/Button";
 const RoyaltySplitRequest = () => {
   const [splits, setSplits] = useState([]);
   const [activeIndex, setActiveIndex] = useState(null); // Track the active accordion item
+  const [refetch, setRefetch] = useState(0);
 
   useEffect(() => {
     axios
       .get(backendUrl + "royalty-splits", config)
       .then(({ data }) => setSplits(data));
-  }, []);
+  }, [refetch]);
 
   // Toggle accordion
   const handleToggle = (index) => {
@@ -21,14 +22,16 @@ const RoyaltySplitRequest = () => {
   const handleApprove = (_id) => {
     // alert(_id);
     const split = splits.find((song) => song._id === _id);
-    split.approved = true;
+    split.confirmed = true;
     if (Object.keys(split).includes("denied")) {
       delete split.denied;
     }
     // console.log(split);
-    axios
-      .put(backendUrl + "royalty-splits/" + _id, split)
-      .then((data) => console.log(data.data));
+    axios.put(backendUrl + "royalty-splits/" + _id, split).then(({ data }) => {
+      if (data.message.length) {
+        setRefetch(new Date().getTime()); // Use a unique value like a timestamp
+      }
+    });
   };
 
   const handleDeny = (_id) => {
@@ -39,7 +42,11 @@ const RoyaltySplitRequest = () => {
     if (Object.keys(split).includes("approved")) {
       delete split.approved;
     }
-    console.log(split);
+    axios.put(backendUrl + "royalty-splits/" + _id, split).then(({ data }) => {
+      if (data.message.length) {
+        setRefetch(new Date().getTime()); // Use a unique value like a timestamp
+      }
+    });
   };
 
   return (
@@ -94,14 +101,16 @@ const RoyaltySplitRequest = () => {
                 <Button
                   onClick={() => handleApprove(item._id)}
                   action={"confirmation"}
+                  disabled={item.denied || item.confirmed}
                 >
-                  Approve
+                  Approve{item.confirmed && "d"}
                 </Button>
                 <Button
                   onClick={() => handleDeny(item._id)}
                   action={"destructive"}
+                  disabled={item.denied || item.confirmed}
                 >
-                  Deny
+                  Den{item.denied ? "ied" : "y"}
                 </Button>
               </div>
             </div>

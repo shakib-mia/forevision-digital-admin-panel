@@ -5,11 +5,16 @@ import axios from "axios";
 import Button from "../Button/Button";
 import Swal from "sweetalert2";
 
-const SentToStores = ({ updated, album, setRefetch, albumSelectedOption }) => {
+const SentToStores = ({
+  updated,
+  album,
+  setRefetch,
+  albumSelectedOption,
+  selectedOption,
+}) => {
   console.log({ albumSelectedOption });
   const [newIsrc, setNewIsrc] = useState("");
-  const [upc, setUpc] = useState(updated.upc || album.UPC || "");
-  // console.log(album);
+  const [upc, setUpc] = useState(updated.UPC || album.UPC || "");
   // console.log();
 
   useEffect(() => {
@@ -43,12 +48,12 @@ const SentToStores = ({ updated, album, setRefetch, albumSelectedOption }) => {
         .put(backendUrl + "recent-uploads/" + album._id, album, config)
         .then(({ data }) => {
           console.log(data);
+          setRefetch((ref) => !ref);
           if (data.acknowledged) {
             axios
               .post(backendUrl + "send-song-status", newBody)
               .then(({ data }) => {
                 if (data.acknowledged) {
-                  setRefetch((ref) => !ref);
                   Swal.close();
                 }
               });
@@ -70,22 +75,24 @@ const SentToStores = ({ updated, album, setRefetch, albumSelectedOption }) => {
       // console.log(newBody);
 
       axios.post(backendUrl + "songs", newBody, config).then(({ data }) => {
-        if (data.insertCursor.acknowledged) {
-          axios
-            .post(backendUrl + "send-song-status", newBody)
-            .then(({ data }) => {
-              // if (data.acknowledged) {
-              Swal.close();
-              // }
-            });
-        }
+        // if (data.insertCursor.acknowledged) {
+        axios
+          .post(backendUrl + "send-song-status", newBody)
+          .then(({ data }) => {
+            setRefetch((ref) => !ref);
+            // if (data.acknowledged) {
+            Swal.close();
+
+            // }
+          });
+        // }
       });
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      {albumSelectedOption ? (
+      {selectedOption && albumSelectedOption ? (
         <></>
       ) : (
         <InputField
@@ -93,7 +100,7 @@ const SentToStores = ({ updated, album, setRefetch, albumSelectedOption }) => {
           className={"mt-2"}
           label={"ISRC"}
           id={"isrc"}
-          disabled={true}
+          // disabled={true}
           value={updated.isrc ? updated.isrc : newIsrc}
           onChange={(e) => setFormData({ ...formData, isrc: e.target.value })}
           placeholder={"Enter the Song's ISRC Here"}
