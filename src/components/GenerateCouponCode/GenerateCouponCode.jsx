@@ -3,14 +3,19 @@ import InputField from "../InputField/InputField";
 import Button from "../Button/Button";
 import axios from "axios";
 import { backendUrl } from "../../constants";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../contexts/AppContext";
 import Select from "../Select/Select";
 
 const GenerateCouponCode = () => {
   const { store, setCouponInsertedId } = useContext(AppContext);
-  const options = [1, 2, 3, 4, 5];
+  // const options = [1, 2, 3, 4, 5];
   const [selectedValue, setSelectedValue] = useState("");
+  const [plans, setPlans] = useState([]);
+
+  useEffect(() => {
+    axios.get(backendUrl + "plans").then(({ data }) => setPlans(data));
+  }, []);
 
   const handleCouponSubmit = (e) => {
     e.preventDefault();
@@ -101,7 +106,12 @@ const GenerateCouponCode = () => {
           />
 
           <Select
-            options={options}
+            options={[
+              ...plans
+                .map((plan) => plan.name)
+                .filter((item) => item !== "ForeVision Social"),
+              "ForeVision Album",
+            ]}
             selectedValue={selectedValue}
             setSelectedValue={setSelectedValue}
             placeholder="Select a Plan"
@@ -115,7 +125,6 @@ const GenerateCouponCode = () => {
             name="email"
             type="email"
             label={"Email Address"}
-            required
           />
         </div>
 

@@ -88,6 +88,7 @@ const GeneratedCoupons = () => {
       {/* <div className="flex "> */}
       <div className="w-full grid grid-cols-5 p-4 text-center font-medium text-interactive-light">
         <p>Coupon Code</p>
+        <p>Plan Name</p>
         <p>Discount</p>
         <p>Valid From</p>
         <p>Valid Till</p>
@@ -98,14 +99,17 @@ const GeneratedCoupons = () => {
       {coupons.map((item) => (
         <div className="grid grid-cols-5 p-4 text-center" key={item._id}>
           <p>{item.couponCode}</p>
+          <p>{item.plan}</p>
           <p>{item.discountPercentage}%</p>
           <p>{item.validFrom}</p>
-          <p>{item.validTill}</p>
-          <div className="text-center">
-            <RiDeleteBin6Line
-              className="text-interactive-light-destructive mx-auto cursor-pointer"
-              onClick={() => handleDelete(item._id)}
-            />
+          <div className="flex gap-4">
+            <p>{item.validTill}</p>
+            <div className="text-center">
+              <RiDeleteBin6Line
+                className="text-interactive-light-destructive mx-auto cursor-pointer"
+                onClick={() => handleDelete(item._id)}
+              />
+            </div>
           </div>
         </div>
       ))}

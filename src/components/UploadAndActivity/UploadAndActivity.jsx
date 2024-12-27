@@ -10,6 +10,8 @@ import UploadSection from "../UploadSection/UploadSection";
 import Users from "../Users/Users";
 import Button from "../Button/Button";
 import DeleteRevenueExcel from "../DeleteRevenueExcel/DeleteRevenueExcel";
+import InputField from "../InputField/InputField";
+import { FaCheck } from "react-icons/fa";
 // import DisbursePayment from "../DisbursePayment/DisbursePayment";
 
 const UploadAndActivity = () => {
@@ -21,6 +23,7 @@ const UploadAndActivity = () => {
   const [loading, setLoading] = useState(true);
   const [updateLoading, setUpdateLoading] = useState(false);
   const [updateSongLoading, setUpdateSongLoading] = useState(false);
+  const [date, setDate] = useState(false);
   // const { store, setStore } = useContext(AppContext);
   // console.log(store);
   // const [role, setRole] = useState("");
@@ -81,6 +84,41 @@ const UploadAndActivity = () => {
       .then(({ data }) => console.log(data));
   };
 
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split("T")[0];
+
+  const handleDateSubmit = (e) => {
+    e.preventDefault();
+
+    console.log(date);
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const newDate = new Date(date);
+
+    const month = monthNames[newDate.getMonth()]; // Get month name
+    const year = newDate.getFullYear(); // Get year
+
+    const latestDate = `${month}, ${year}`;
+
+    // console.log({ latestDate });
+    axios.put(backendUrl + "upload-date", { latestDate }).then(({ data }) => {
+      e.target.reset();
+      setDate("");
+    });
+  };
+
   return (
     <>
       {/* <div className="w-screen h-screen absolute left-0 top-0 backdrop-blur-md z-[999]"></div> */}
@@ -119,6 +157,7 @@ const UploadAndActivity = () => {
         {(role === "Content Manager" || role === "admin") && (
           <div className="py-3 flex justify-center border-t border-grey-light gap-4">
             <Button
+              dynamicButtonClasses="!text-nowrap"
               onClick={updateAccount}
               disabled={updateLoading}
               loading={updateLoading}
@@ -132,6 +171,20 @@ const UploadAndActivity = () => {
             >
               Update Song Data
             </Button>
+
+            <form
+              className="flex items-center gap-2"
+              onSubmit={handleDateSubmit}
+            >
+              <InputField
+                type="date"
+                onChange={(e) => setDate(e.target.value)}
+                max={today}
+              />
+              <Button disabled={!date.length}>
+                <FaCheck />
+              </Button>
+            </form>
           </div>
         )}
       </div>

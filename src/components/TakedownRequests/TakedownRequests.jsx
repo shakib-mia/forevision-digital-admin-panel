@@ -17,7 +17,7 @@ const TakedownRequests = () => {
     console.log(_id, isrc);
     axios
       .put(backendUrl + "takedown-requests/" + _id, { isrc })
-      .then(({ data }) => console.log(data));
+      .then(({ data }) => showTakedown(-1));
   };
 
   // console.log(requests);

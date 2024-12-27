@@ -1,20 +1,27 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import InputField from "../InputField/InputField";
 import Select from "../Select/Select";
 import Button from "../Button/Button";
 import axios from "axios";
 import { backendUrl } from "../../constants";
+import { AppContext } from "../../contexts/AppContext";
 
 const CreateEmployee = () => {
   const [role, setRole] = useState("");
   const [name, setName] = useState("");
+  const { updated, setUpdated } = useContext(AppContext);
+
+  // alert(updated);
 
   const handleCreateEmployee = (e) => {
     e.preventDefault();
 
     axios
       .post(backendUrl + "admin/create-employee", { name, role })
-      .then(({ data }) => e.target.reset());
+      .then(({ data }) => {
+        setUpdated(!updated);
+        e.target.reset();
+      });
   };
 
   return (

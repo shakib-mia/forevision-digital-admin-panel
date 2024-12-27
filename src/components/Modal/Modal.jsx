@@ -12,7 +12,7 @@ const Modal = ({ handleClose, children, className }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          className="absolute top-4 right-4 w-8 h-8 border-gray-400 hover:bg-gray-100 transition-colors duration-200 ease-in-out flex items-center justify-center rounded-full text-lg text-gray-600 text-heading-5"
+          className="absolute top-4 text-interactive-light-destructive text-heading-4 right-4 w-8 h-8 border-gray-400 hover:bg-gray-100 transition-colors duration-200 ease-in-out flex items-center justify-center rounded-full text-lg text-gray-600"
           onClick={handleClose}
         >
           &times;

@@ -58,7 +58,7 @@ const Button = ({
         onClick={onClick}
         type={type}
         disabled={disabled}
-        className={`px-[20px] py-[12px] disabled:cursor-not-allowed rounded-full ${dynamicButtonClasses} text-button uppercase transition focus:ring-2 ring-offset-2`}
+        className={`px-[20px] py-[12px] text-nowrap disabled:cursor-not-allowed rounded-full ${dynamicButtonClasses} text-button uppercase transition focus:ring-2 ring-offset-2`}
       >
         {children}
       </button>

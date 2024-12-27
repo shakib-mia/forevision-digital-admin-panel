@@ -56,7 +56,7 @@ const Kyc = () => {
 
       {selectedItem.name && (
         <Modal className={"w-5/6"} handleClose={() => setSelectedItem({})}>
-          <ul className="grid grid-cols-9 text-center">
+          {/* <ul className="grid grid-cols-9 text-center">
             {Object.keys(selectedItem).map(
               (item) => item !== "_id" && <li>{camelCaseToNormalText(item)}</li>
             )}
@@ -73,7 +73,39 @@ const Kyc = () => {
                   )
               )}
             </li>
-          </ul>
+          </ul> */}
+
+          <table className="border border-black text-black divide-black divide-y w-full">
+            {Object.keys(selectedItem).map((item) => {
+              return (
+                item !== "_id" &&
+                selectedItem[item] && (
+                  <tr className="divide-x divide-black">
+                    <th className="capitalize p-2">
+                      {item === "accepted"
+                        ? "T&C Accepted"
+                        : camelCaseToNormalText(item)}
+                    </th>
+                    <td className="p-2">
+                      {typeof selectedItem[item] === "string" &&
+                      selectedItem[item].includes("http") ? (
+                        <a
+                          className="underline hover:no-underline"
+                          href={selectedItem[item]}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Open
+                        </a>
+                      ) : (
+                        selectedItem[item].toString()
+                      )}
+                    </td>
+                  </tr>
+                )
+              );
+            })}
+          </table>
         </Modal>
       )}
     </div>
