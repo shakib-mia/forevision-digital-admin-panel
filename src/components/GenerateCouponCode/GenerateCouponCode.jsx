@@ -6,12 +6,15 @@ import { backendUrl } from "../../constants";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../contexts/AppContext";
 import Select from "../Select/Select";
+import MultiSelect from "../MultiSelect/MultiSelect";
 
 const GenerateCouponCode = () => {
   const { store, setCouponInsertedId } = useContext(AppContext);
   // const options = [1, 2, 3, 4, 5];
   const [selectedValue, setSelectedValue] = useState("");
   const [plans, setPlans] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState("");
+  const [adding, setAdding] = useState(false);
 
   useEffect(() => {
     axios.get(backendUrl + "plans").then(({ data }) => setPlans(data));
@@ -23,31 +26,24 @@ const GenerateCouponCode = () => {
       headers: { token: store.token },
     };
 
-    console.log({
+    setAdding(true);
+
+    // console.log();
+    const couponDetails = {
       couponCode: e.target.coupon.value,
       discountPercentage: e.target["discount-percentage"].value,
       validFrom: e.target["valid-from"].value,
       validTill: e.target["valid-till"].value,
       email_id: e.target.email.value,
-      plan: selectedValue,
-    });
+      plan: selectedOptions.join(","),
+    };
 
     axios
-      .post(
-        backendUrl + "coupon-codes",
-        {
-          couponCode: e.target.coupon.value,
-          discountPercentage: e.target["discount-percentage"].value,
-          validFrom: e.target["valid-from"].value,
-          validTill: e.target["valid-till"].value,
-          email_id: e.target.email.value,
-          plan: selectedValue,
-        },
-        config
-      )
+      .post(backendUrl + "coupon-codes", couponDetails, config)
       .then(({ data }) => {
         if (data.insertedId) {
           setCouponInsertedId(data.insertedId);
+          setAdding(false);
           e.target.reset();
         }
       });
@@ -105,7 +101,7 @@ const GenerateCouponCode = () => {
             required
           />
 
-          <Select
+          {/* <Select
             options={[
               ...plans
                 .map((plan) => plan.name)
@@ -118,6 +114,19 @@ const GenerateCouponCode = () => {
             label="Plan"
             // name="plan"
             required
+          /> */}
+
+          <MultiSelect
+            label={"Platforms"}
+            placeholder={"Select Platform(s)"}
+            options={[
+              ...plans
+                .map((plan) => plan.name)
+                .filter((item) => item !== "ForeVision Social"),
+              "ForeVision Album",
+            ]}
+            selectedItems={selectedOptions}
+            setSelectedItems={setSelectedOptions}
           />
 
           <InputField
@@ -132,8 +141,9 @@ const GenerateCouponCode = () => {
           type={"submit"}
           dynamicButtonClasses="w-fit"
           containerClassName="mt-5 text-center"
+          disabled={adding}
         >
-          Add
+          Add{adding ? "ing" : ""}
         </Button>
       </form>
     </div>
