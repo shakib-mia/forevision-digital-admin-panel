@@ -7,11 +7,14 @@ import { useLocation } from "react-router-dom";
 import { camelCaseToNormalText } from "../../utils/camelCaseToNormalText";
 import Button from "./../../components/Button/Button";
 import Dropdown from "../../components/Dropdown/Dropdown";
+import Swal from "sweetalert2";
 
 const SongDetails = () => {
   const location = useLocation();
   const [tableData, setTableData] = useState({});
   const [selectedOption, setSelectedOption] = useState("Select an option");
+  const [checking, setChecking] = useState(false);
+
   const options = [
     {
       value: "sent-to-stores",
@@ -50,6 +53,89 @@ const SongDetails = () => {
     }
   }, [selectedOption]);
 
+  const checkAudioFile = (value, type = "main") => {
+    setChecking(true);
+
+    axios
+      .post(backendUrl + "check-audio-file/" + tableData.orderId, {
+        songUrl: value,
+      })
+      .then(({ data }) => {
+        if (data.success) {
+          // console.log(data);
+          const formatDetails = (part, title) => `
+            <div style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; background-color: #f9f9f9;">
+              <h4 style="color: #4CAF50; font-size: 20px; margin-bottom: 10px;">${title}</h4>
+              <p><b style="color: #333;">Title:</b> ${part.title || "N/A"}</p>
+              <p><b style="color: #333;">Artists:</b> ${
+                part.artists?.map((artist) => artist.name).join(", ") || "N/A"
+              }</p>
+              <p><b style="color: #333;">Album:</b> ${
+                part.album?.name || "N/A"
+              }</p>
+              <p><b style="color: #333;">Label:</b> ${part.label || "N/A"}</p>
+              <p><b style="color: #333;">Release Date:</b> ${
+                part.release_date || "N/A"
+              }</p>
+              <p><b style="color: #333;">Score:</b> ${part.score || "N/A"}</p>
+              <p><b style="color: #333;">Duration (ms):</b> ${
+                part.duration_ms || "N/A"
+              }</p>
+            </div>
+          `;
+
+          const htmlContent = `
+            <div style="font-family: Arial, sans-serif; color: #333;">
+              <p style="text-align: center; font-size: 16px;">This ${
+                type === "main" ? "song" : "humming (cover song)"
+              } is already available.</p>
+              <hr style="border: 0; border-top: 1px solid #ccc; margin: 20px 0;" />
+              ${formatDetails(
+                data?.data?.data?.firstPart,
+                "First Part Details"
+              )}
+              ${formatDetails(
+                data?.data?.data?.middlePart,
+                "Middle Part Details"
+              )}
+              ${formatDetails(data?.data?.data?.lastPart, "Last Part Details")}
+            </div>
+          `;
+
+          Swal.fire({
+            title: `${type === "main" ? "Song Found!" : "Humming Song Found!"}`,
+            html: htmlContent,
+            icon: "info",
+            width: 700,
+            confirmButtonText: "Close",
+            customClass: {
+              container: "swal-container",
+              title: "swal-title",
+              popup: "swal-popup",
+            },
+          });
+        } else {
+          Swal.fire({
+            title: "No Data Found",
+            text: "The song is not available in our database.",
+            icon: "warning",
+            confirmButtonText: "Close",
+          });
+        }
+        setChecking(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        Swal.fire({
+          title: "Error",
+          text: "An error occurred while checking the audio file.",
+          icon: "error",
+          confirmButtonText: "Close",
+        });
+        setChecking(false);
+      });
+  };
+
   return (
     <div className="w-3/4 mx-auto my-5 rounded-2xl bg-white shadow-[0px_0px_35px_#ccc] px-7">
       <div className="container mx-auto p-4">
@@ -69,6 +155,8 @@ const SongDetails = () => {
                           ? "refundRequested"
                           : key === "reason"
                           ? "reasonForRefund"
+                          : key === "songUrl"
+                          ? "song"
                           : key
                       )
                     : camelCaseToNormalText(key)}
@@ -149,10 +237,22 @@ const SongDetails = () => {
                       className="max-w-xs h-auto"
                     />
                   ) : key === "songUrl" ? (
-                    <audio controls className="w-full">
-                      <source src={value} type="audio/mpeg" />
-                      Your browser does not support the audio element.
-                    </audio>
+                    <div className="flex gap-2 items-center">
+                      <audio controls className="w-full">
+                        <source src={value} type="audio/mpeg" />
+                        Your browser does not support the audio element.
+                      </audio>
+                      <Button
+                        disabled={checking}
+                        onClick={() => checkAudioFile(value)}
+                      >
+                        {checking
+                          ? "Checking..."
+                          : // : tableData.checked
+                            // ? "Already Checked"
+                            "Check Audio File"}
+                      </Button>
+                    </div>
                   ) : (
                     <span>{value.toString()}</span>
                   )}

@@ -1,15 +1,20 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { backendUrl, config } from "../../constants";
+import { useContext, useEffect, useState } from "react";
+import { backendUrl } from "../../constants";
 import { Link } from "react-router-dom";
 import Dropdown from "../Dropdown/Dropdown";
 import SongsItem from "../SongsItem/SongsItem";
+import { AppContext } from "../../contexts/AppContext";
 
 const Songs = () => {
   const [songs, setSongs] = useState([]);
   const [refetch, setRefetch] = useState(false);
+  const { store } = useContext(AppContext);
 
   useEffect(() => {
+    const config = {
+      headers: { token: store.token },
+    };
     axios.get(backendUrl + "upload-song", config).then(({ data }) => {
       console.log(data.find((item) => !item.songs));
       setSongs(data);

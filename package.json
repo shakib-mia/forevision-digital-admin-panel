@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "acrcloud": "^1.4.0",
     "axios": "^1.6.5",
     "caniuse-lite": "^1.0.30001662",
     "exceljs": "^4.4.0",

@@ -1,14 +1,21 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { backendUrl, config } from "../../constants";
+import React, { useContext, useEffect, useState } from "react";
+import { backendUrl } from "../../constants";
 import Button from "../Button/Button";
+import { AppContext } from "../../contexts/AppContext";
 
 const RoyaltySplitRequest = () => {
   const [splits, setSplits] = useState([]);
   const [activeIndex, setActiveIndex] = useState(null); // Track the active accordion item
   const [refetch, setRefetch] = useState(0);
+  const { store } = useContext(AppContext);
 
   useEffect(() => {
+    const config = {
+      headers: {
+        token: store.token,
+      },
+    };
     axios
       .get(backendUrl + "royalty-splits", config)
       .then(({ data }) => setSplits(data));

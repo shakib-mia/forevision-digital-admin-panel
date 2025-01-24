@@ -48,7 +48,9 @@ const RequestPaymentItem = ({ item }) => {
 
   return (
     <div className="grid grid-cols-3 p-4 text-center" key={item._id}>
-      <p>{item.partner_name || item.first_name + " " + item.last_name}</p>
+      <p>
+        {item.partner_name || <>{item.first_name + " " + item.last_name}</>}
+      </p>
       <p>&#8377; {item.totalAmount}</p>
       <div className="flex gap-3 justify-center">
         <Link

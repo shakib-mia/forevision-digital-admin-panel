@@ -11,19 +11,21 @@ const DisbursePayment = () => {
 
   const handleDisburse = (e) => {
     e.preventDefault();
-    // const config = {
-    //     headers: {
-    //         token: store.token
-    //     }
-    // }
+    const config = {
+      headers: {
+        token: store.token,
+      },
+    };
 
-    // const body = {
-    //     date: e.target.updateDate.value,
-    //     amount: e.target.amount.value,
-    //     user_email: e.target.email.value
-    // }
+    const body = {
+      date: e.target.updateDate.value,
+      amount: e.target.amount.value,
+      user_email: "smdshakibmia2001@gmail.com",
+    };
 
-    // axios.post(backendUrl + 'disburse-payment', body, config).then(({ data }) => console.log(data))
+    axios
+      .post(backendUrl + "disburse-payment", body, config)
+      .then(({ data }) => console.log(data));
   };
 
   return (
