@@ -62,48 +62,125 @@ const SongDetails = () => {
       })
       .then(({ data }) => {
         if (data.success) {
-          // console.log(data);
-          const formatDetails = (part, title) => `
+          const formatDetails = (part, title) => {
+            // Flexible handling for different data structures
+            const artistNames = part?.artists
+              ? part?.artists
+                  .map(
+                    (artist) =>
+                      artist.name || (artist.langs ? artist.langs[0]?.name : "")
+                  )
+                  .filter((name) => name)
+              : [];
+
+            return `
             <div style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; background-color: #f9f9f9;">
               <h4 style="color: #4CAF50; font-size: 20px; margin-bottom: 10px;">${title}</h4>
-              <p><b style="color: #333;">Title:</b> ${part.title || "N/A"}</p>
+              <p><b style="color: #333;">Title:</b> ${part?.title || "N/A"}</p>
+              <p><b style="color: #333;">Type:</b> ${part?.type || "N/A"}</p>
               <p><b style="color: #333;">Artists:</b> ${
-                part.artists?.map((artist) => artist.name).join(", ") || "N/A"
+                artistNames.join(", ") || "N/A"
               }</p>
               <p><b style="color: #333;">Album:</b> ${
-                part.album?.name || "N/A"
+                part?.album?.name || "N/A"
               }</p>
-              <p><b style="color: #333;">Label:</b> ${part.label || "N/A"}</p>
+              <p><b style="color: #333;">Label:</b> ${part?.label || "N/A"}</p>
               <p><b style="color: #333;">Release Date:</b> ${
-                part.release_date || "N/A"
+                part?.release_date || "N/A"
               }</p>
-              <p><b style="color: #333;">Score:</b> ${part.score || "N/A"}</p>
+              <p><b style="color: #333;">Score:</b> ${part?.score || "N/A"}</p>
               <p><b style="color: #333;">Duration (ms):</b> ${
-                part.duration_ms || "N/A"
+                part?.duration_ms || "N/A"
+              }</p>
+              <p><b style="color: #333;">Play Offset (ms):</b> ${
+                part?.play_offset_ms || "N/A"
+              }</p>
+              ${
+                part?.langs
+                  ? `
+              <p><b style="color: #333;">Languages:</b> ${part?.langs
+                .map((lang) => `${lang.name} (${lang.code})`)
+                .join(", ")}</p>`
+                  : ""
+              }
+            </div>
+            `;
+          };
+
+          const externalMetadataDetails = (part, platform) => {
+            const platformMetadata =
+              part?.external_metadata?.[platform.toLowerCase()]?.track;
+            return platformMetadata
+              ? `
+            <div style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; background-color: #f9f9f9;">
+              <h4 style="color: #4CAF50; font-size: 20px; margin-bottom: 10px;">${platform} Metadata</h4>
+              <p><b style="color: #333;">Track Name:</b> ${
+                platformMetadata.name || "N/A"
+              }</p>
+              <p><b style="color: #333;">Track ID:</b> ${
+                platformMetadata.id || "N/A"
               }</p>
             </div>
-          `;
+            `
+              : "";
+          };
 
           const htmlContent = `
-            <div style="font-family: Arial, sans-serif; color: #333;">
-              <p style="text-align: center; font-size: 16px;">This ${
-                type === "main" ? "song" : "humming (cover song)"
-              } is already available.</p>
-              <hr style="border: 0; border-top: 1px solid #ccc; margin: 20px 0;" />
-              ${formatDetails(
-                data?.data?.data?.firstPart,
-                "First Part Details"
-              )}
-              ${formatDetails(
-                data?.data?.data?.middlePart,
-                "Middle Part Details"
-              )}
-              ${formatDetails(data?.data?.data?.lastPart, "Last Part Details")}
+          <div style="font-family: Arial, sans-serif; color: #333;">
+            <div style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; background-color: #f9f9f9;">
+              <h4 style="color: #4CAF50; font-size: 20px; margin-bottom: 10px;">Order Details</h4>
+              <p><b style="color: #333;">Order ID:</b> ${
+                data.orderId || "N/A"
+              }</p>
+              <p><b style="color: #333;">Total Duration:</b> ${
+                data.duration ? data.duration.toFixed(2) + " seconds" : "N/A"
+              }</p>
             </div>
+        
+            ${
+              data.timestamps
+                ? `
+            <div style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; background-color: #f9f9f9;">
+              <h4 style="color: #4CAF50; font-size: 20px; margin-bottom: 10px;">Timestamps</h4>
+              <p><b style="color: #333;">Start:</b> Time: ${data.timestamps.start.time}, Duration: ${data.timestamps.start.duration}</p>
+              <p><b style="color: #333;">Middle:</b> Time: ${data.timestamps.middle.time}, Duration: ${data.timestamps.middle.duration}</p>
+              <p><b style="color: #333;">End:</b> Time: ${data.timestamps.end.time}, Duration: ${data.timestamps.end.duration}</p>
+            </div>`
+                : ""
+            }
+        
+            ${
+              data.data
+                ? `
+              ${formatDetails(data.data.firstPart, "First Part Details")}
+              ${formatDetails(data.data.middlePart, "Middle Part Details")}
+              ${formatDetails(data.data.lastPart, "Last Part Details")}
+            `
+                : ""
+            }
+        
+            ${
+              data.songMetadata
+                ? `
+            <div style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; background-color: #f9f9f9;">
+              <h4 style="color: #4CAF50; font-size: 20px; margin-bottom: 10px;">Song Metadata Status</h4>
+              <p><b style="color: #333;">Status Message:</b> ${
+                data.songMetadata.status?.msg || "N/A"
+              }</p>
+              <p><b style="color: #333;">Status Code:</b> ${
+                data.songMetadata.status?.code || "N/A"
+              }</p>
+              <p><b style="color: #333;">Version:</b> ${
+                data.songMetadata.status?.version || "N/A"
+              }</p>
+            </div>`
+                : ""
+            }
+          </div>
           `;
 
           Swal.fire({
-            title: `${type === "main" ? "Song Found!" : "Humming Song Found!"}`,
+            title: "Music Metadata Details",
             html: htmlContent,
             icon: "info",
             width: 700,

@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 const PromotionalTools = () => {
   const [data, setData] = useState([]);
   const [detailsId, setDetailsId] = useState(-1);
+  const [refetch, setRefetch] = useState(false);
 
   useEffect(() => {
     axios
@@ -16,7 +17,7 @@ const PromotionalTools = () => {
       .catch((error) =>
         console.error("Failed to fetch promotional tools:", error)
       );
-  }, []);
+  }, [refetch]);
 
   const formatFieldName = (key) => {
     if (!key.includes("promotional_tool_")) return key;
@@ -50,7 +51,25 @@ const PromotionalTools = () => {
       approved: true,
     };
 
-    console.log(rest);
+    axios
+      .put(backendUrl + "submit-form/promotional-tool/" + _id, rest)
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Approved",
+          text: "The promotional tool has been approved.",
+        });
+        setDetailsId(-1); // Close the modal
+        setRefetch(!refetch);
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to submit deny reason. Please try again.",
+        });
+        console.error(err);
+      });
   };
 
   const handleDeny = async () => {
@@ -85,6 +104,7 @@ const PromotionalTools = () => {
             text: "The promotional tool has been denied.",
           });
           setDetailsId(-1); // Close the modal
+          setRefetch(!refetch);
         })
         .catch((err) => {
           Swal.fire({
@@ -108,6 +128,7 @@ const PromotionalTools = () => {
           <tr>
             <th className="py-4">ISRC</th>
             <th className="py-4">Email</th>
+            <th className="py-4">Status</th>
           </tr>
         </thead>
 
@@ -115,12 +136,17 @@ const PromotionalTools = () => {
           {data.map((item, id) => (
             <tr
               key={item?._id || id}
-              className="text-center hover:bg-grey-light transition cursor-pointer"
+              className={`text-center hover:bg-grey-light transition cursor-pointer`}
               onClick={() => setDetailsId(id)}
             >
               <td className="py-2">{item?.promotional_tool_isrc || "-"}</td>
               <td className="py-2">
-                {item?.promotional_tool_upload_user_email || "-"}
+                {item?.promotional_tool_upload_user_email ||
+                  item.emailId ||
+                  "-"}
+              </td>
+              <td className="py-2">
+                {item.approved ? "Approved" : item.denied ? "Denied" : ""}
               </td>
             </tr>
           ))}
@@ -146,10 +172,18 @@ const PromotionalTools = () => {
             </tbody>
           </table>
           <div className="flex justify-center gap-4 mt-4">
-            <Button onClick={handleApprove} action={"confirmation"}>
+            <Button
+              onClick={handleApprove}
+              action={"confirmation"}
+              disabled={selectedItem.approved || selectedItem.denied}
+            >
               Approve
             </Button>
-            <Button onClick={handleDeny} action={"destructive"}>
+            <Button
+              onClick={handleDeny}
+              action={"destructive"}
+              disabled={selectedItem.approved || selectedItem.denied}
+            >
               Deny
             </Button>
           </div>
