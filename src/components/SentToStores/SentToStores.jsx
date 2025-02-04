@@ -12,10 +12,9 @@ const SentToStores = ({
   albumSelectedOption,
   selectedOption,
 }) => {
-  console.log({ albumSelectedOption });
+  console.log(updated);
   const [newIsrc, setNewIsrc] = useState("");
-  const [upc, setUpc] = useState(updated.UPC || album.UPC || "");
-  // console.log();
+  const [upc, setUpc] = useState(updated.UPC || album?.UPC || "");
 
   useEffect(() => {
     axios

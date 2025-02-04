@@ -43,6 +43,11 @@ const Sales = () => {
           <Bar dataKey="ForevisionCRBTPlus" stackId="a" fill="#82ca9d" />
           <Bar dataKey="ForevisionPro" stackId="a" fill="#ffc658" />
           <Bar dataKey="ForevisionCRBT" stackId="a" fill="#ff7300" />
+          <Bar
+            dataKey="ForeVision Digital Yearly Plan"
+            stackId="a"
+            fill="#ff7300"
+          />
         </BarChart>
       </ResponsiveContainer>
 
@@ -59,6 +64,11 @@ const Sales = () => {
           <Bar dataKey="ForevisionCRBTPlus" fill="#82ca9d" />
           <Bar dataKey="ForevisionPro" fill="#ffc658" />
           <Bar dataKey="ForevisionCRBT" fill="#ff7300" />
+          <Bar
+            dataKey="ForeVision Digital Yearly Plan"
+            stackId="a"
+            fill="#ff7300"
+          />
         </BarChart>
       </ResponsiveContainer>
     </>

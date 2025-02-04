@@ -46,8 +46,8 @@ const RoyaltySplitRequest = () => {
     const split = splits.find((song) => song._id === _id);
     split.denied = true;
 
-    if (Object.keys(split).includes("approved")) {
-      delete split.approved;
+    if (Object.keys(split).includes("confirmed")) {
+      delete split.confirmed;
     }
     axios.put(backendUrl + "royalty-splits/" + _id, split).then(({ data }) => {
       if (data.message.length) {

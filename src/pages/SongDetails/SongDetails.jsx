@@ -1,4 +1,5 @@
-// import React from "react";
+import React from "react";
+import ReactDOM from "react-dom";
 
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -8,6 +9,11 @@ import { camelCaseToNormalText } from "../../utils/camelCaseToNormalText";
 import Button from "./../../components/Button/Button";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import Swal from "sweetalert2";
+import ReasonToReject from "../../components/ReasonToReject/ReasonToReject";
+import InputSongDetails from "../../components/InputSongDetails/InputSongDetails";
+import SentToStores from "../../components/SentToStores/SentToStores";
+import ReasonToHold from "../../components/ReasonToHold/ReasonToHold";
+import HandleTakedown from "../../components/HandleTakedown/HandleTakedown";
 
 const SongDetails = () => {
   const location = useLocation();
@@ -44,12 +50,99 @@ const SongDetails = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedOption !== "Select an option") {
+    console.log(selectedOption);
+    if (selectedOption !== "Set Status") {
+      tableData.status = selectedOption;
+      const updated = { ...tableData };
+
+      const handleSwal = (Component, title) => {
+        let swalContent = document.createElement("div");
+        ReactDOM.render(
+          <Component
+            platforms={tableData.selectedPlatforms}
+            updated={updated}
+            // album={album}
+            // albumSelectedOption={albumSelectedOption}
+            selectedOption={selectedOption}
+          />,
+          swalContent
+        );
+
+        Swal.fire({
+          title: title,
+          html: swalContent,
+          showConfirmButton: false,
+          customClass: {
+            popup: "custom-swal-width",
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            triggerFinalSwal(updated);
+          }
+
+          if (result.dismiss === Swal.DismissReason.backdrop) {
+            setSelectedOption("Set Status");
+          }
+        });
+      };
+
       // console.log(selectedOption);
-      // console.log(tableData);
-      // clg
-    } else {
-      console.log("default");
+
+      if (selectedOption === "streaming") {
+        handleSwal(InputSongDetails, "Input Song details");
+      } else if (selectedOption === "sent-to-stores") {
+        handleSwal(SentToStores, "Input Song details");
+      } else if (selectedOption === "on-hold") {
+        handleSwal(ReasonToHold, "Enter Reason");
+      } else if (selectedOption === "paid") {
+        // handleSwal(HandlePaid, "Enter Transaction Id");
+      } else if (selectedOption === "taken-down") {
+        handleSwal(HandleTakedown, "Enter Reason for Taking Down");
+      } else if (selectedOption === "copyright-infringed") {
+        updated.status = "Copyright infringed";
+        const { _id, ...rest } = updated;
+        rest.status = "Copyright infringed";
+        // console.log(_id, rest);
+
+        axios
+          .put(`${backendUrl}songs/${_id}`, rest, config)
+          .then(({ data }) => {
+            if (data.acknowledged) {
+              axios
+                .post(backendUrl + "send-song-status", rest)
+                .then(({ data }) => {
+                  if (data.acknowledged) {
+                    Swal.close();
+                  }
+                });
+            }
+          });
+      } else if (selectedOption === "rejected") {
+        handleSwal(ReasonToReject, "Enter Reason for Song Rejection");
+
+        // handleSwal(HandlePaid, "Enter Transaction Id");
+
+        // updated.rejected = true;
+        // const { _id, ...updatedData } = updated;
+        // axios
+        //   .put(`http://localhost:5100/songs/${_id}`, updatedData, config)
+        //   .then(({ data }) => {
+        //     if (data.acknowledged) {
+        //       updatedData.status = "Rejected";
+        //       axios
+        //         .post(backendUrl + "send-song-status", updatedData)
+        //         .then(({ data }) => {
+        //           // if (data.acknowledged) {
+        //           Swal.close();
+        //           // }
+        //         });
+        //     }
+        //   });
+      } else {
+        // Handle default case if necessary
+      }
+
+      console.log(selectedOption);
     }
   }, [selectedOption]);
 
@@ -74,55 +167,79 @@ const SongDetails = () => {
               : [];
 
             return `
-            <div style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; background-color: #f9f9f9;">
-              <h4 style="color: #4CAF50; font-size: 20px; margin-bottom: 10px;">${title}</h4>
-              <p><b style="color: #333;">Title:</b> ${part?.title || "N/A"}</p>
-              <p><b style="color: #333;">Type:</b> ${part?.type || "N/A"}</p>
-              <p><b style="color: #333;">Artists:</b> ${
-                artistNames.join(", ") || "N/A"
-              }</p>
-              <p><b style="color: #333;">Album:</b> ${
-                part?.album?.name || "N/A"
-              }</p>
-              <p><b style="color: #333;">Label:</b> ${part?.label || "N/A"}</p>
-              <p><b style="color: #333;">Release Date:</b> ${
-                part?.release_date || "N/A"
-              }</p>
-              <p><b style="color: #333;">Score:</b> ${part?.score || "N/A"}</p>
-              <p><b style="color: #333;">Duration (ms):</b> ${
-                part?.duration_ms || "N/A"
-              }</p>
-              <p><b style="color: #333;">Play Offset (ms):</b> ${
-                part?.play_offset_ms || "N/A"
-              }</p>
-              ${
-                part?.langs
-                  ? `
-              <p><b style="color: #333;">Languages:</b> ${part?.langs
-                .map((lang) => `${lang.name} (${lang.code})`)
-                .join(", ")}</p>`
-                  : ""
-              }
-            </div>
+              <div style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; background-color: #f9f9f9;">
+                <h4 style="color: #4CAF50; font-size: 20px; margin-bottom: 10px;">${title}</h4>
+                <p><b style="color: #333;">Title:</b> ${
+                  part?.title || "N/A"
+                }</p>
+                <p><b style="color: #333;">Type:</b> ${part?.type || "N/A"}</p>
+                <p><b style="color: #333;">Artists:</b> ${
+                  artistNames.join(", ") || "N/A"
+                }</p>
+                <p><b style="color: #333;">Album:</b> ${
+                  part?.album?.name || "N/A"
+                }</p>
+                <p><b style="color: #333;">Label:</b> ${
+                  part?.label || "N/A"
+                }</p>
+                <p><b style="color: #333;">Release Date:</b> ${
+                  part?.release_date || "N/A"
+                }</p>
+                <p><b style="color: #333;">Score:</b> ${
+                  part?.score || "N/A"
+                }</p>
+                <p><b style="color: #333;">Duration (ms):</b> ${
+                  part?.duration_ms || "N/A"
+                }</p>
+                <p><b style="color: #333;">Play Offset (ms):</b> ${
+                  part?.play_offset_ms || "N/A"
+                }</p>
+                ${
+                  part?.langs
+                    ? `
+                <p><b style="color: #333;">Languages:</b> ${part?.langs
+                  .map((lang) => `${lang.name} (${lang.code})`)
+                  .join(", ")}</p>`
+                    : ""
+                }
+              </div>
+              ${Object.keys(part.external_metadata).map((item) =>
+                externalMetadataDetails(part, item)
+              )}
             `;
           };
 
           const externalMetadataDetails = (part, platform) => {
             const platformMetadata =
               part?.external_metadata?.[platform.toLowerCase()]?.track;
-            return platformMetadata
-              ? `
-            <div style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; background-color: #f9f9f9;">
-              <h4 style="color: #4CAF50; font-size: 20px; margin-bottom: 10px;">${platform} Metadata</h4>
-              <p><b style="color: #333;">Track Name:</b> ${
-                platformMetadata.name || "N/A"
-              }</p>
-              <p><b style="color: #333;">Track ID:</b> ${
+
+            if (platformMetadata) {
+              // Define the platform's URL template
+              const platformLinks = {
+                deezer: `https://www.deezer.com/track/${platformMetadata.id}`,
+                spotify: `https://open.spotify.com/track/${platformMetadata.id}`,
+                apple: `https://music.apple.com/us/album/${platformMetadata.id}`,
+                youtube: `https://www.youtube.com/watch?v=${platformMetadata.id}`,
+                soundcloud: `https://soundcloud.com/${platformMetadata.id}`,
+              };
+
+              // Return the metadata with clickable link for the track ID
+              return `
+                <div style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; background-color: #f9f9f9;">
+                  <h4 style="color: #4CAF50; font-size: 20px; margin-bottom: 10px;">${platform} Metadata</h4>
+                  <p><b style="color: #333;">Track Name:</b> ${
+                    platformMetadata.name || "N/A"
+                  }</p>
+                  <p><b style="color: #333;">Track ID:</b> <a href="${
+                    platformLinks[platform.toLowerCase()] || "#"
+                  }" target="_blank" style="color: blue; text-decoration: underline;">${
                 platformMetadata.id || "N/A"
-              }</p>
-            </div>
-            `
-              : "";
+              }</a></p>
+                </div>
+              `;
+            } else {
+              return "";
+            }
           };
 
           const htmlContent = `
@@ -152,12 +269,22 @@ const SongDetails = () => {
             ${
               data.data
                 ? `
-              ${formatDetails(data.data.firstPart, "First Part Details")}
-              ${formatDetails(data.data.middlePart, "Middle Part Details")}
-              ${formatDetails(data.data.lastPart, "Last Part Details")}
+              ${formatDetails(
+                data.data.firstPart || data.data.data.firstPart,
+                "First Part Details"
+              )}
+              ${formatDetails(
+                data.data.middlePart || data.data.data.middlePart,
+                "Middle Part Details"
+              )}
+              ${formatDetails(
+                data.data.lastPart || data.data.data.lastPart,
+                "Last Part Details"
+              )}
             `
                 : ""
             }
+          
         
             ${
               data.songMetadata
@@ -213,6 +340,9 @@ const SongDetails = () => {
       });
   };
 
+  const processUrl = (url) =>
+    url.startsWith("https://") ? url : `https://${url}`;
+
   return (
     <div className="w-3/4 mx-auto my-5 rounded-2xl bg-white shadow-[0px_0px_35px_#ccc] px-7">
       <div className="container mx-auto p-4">
@@ -256,7 +386,7 @@ const SongDetails = () => {
                               <div className="flex divide-x">
                                 {artist.appleArtist && (
                                   <a
-                                    href={artist.appleArtist}
+                                    href={processUrl(artist.appleArtist)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="hover:opacity-80 px-2"
@@ -266,7 +396,7 @@ const SongDetails = () => {
                                 )}
                                 {artist.facebookUrl && (
                                   <a
-                                    href={artist.facebookUrl}
+                                    href={processUrl(artist.facebookUrl)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="hover:opacity-80 px-2"
@@ -276,7 +406,7 @@ const SongDetails = () => {
                                 )}
                                 {artist.instagramUrl && (
                                   <a
-                                    href={artist.instagramUrl}
+                                    href={processUrl(artist.instagramUrl)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="hover:opacity-80 px-2"
@@ -284,15 +414,14 @@ const SongDetails = () => {
                                     Instagram
                                   </a>
                                 )}
-
                                 {artist.spotifyUrl && (
                                   <a
-                                    href={artist.spotifyUrl}
+                                    href={processUrl(artist.spotifyUrl)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="hover:opacity-80 px-2"
                                   >
-                                    spotify
+                                    Spotify
                                   </a>
                                 )}
                               </div>
