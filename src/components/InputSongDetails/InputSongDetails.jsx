@@ -90,11 +90,11 @@ const InputSongDetails = ({
     // console.log("Has Links:", hasLinks);
     // console.log(Object.keys(newBody).includes());
     // parent.selectedPlatforms.map((item) =>
-    //   console.log(Object.keys(newBody).includes(item))
+    //// console.log(Object.keys(newBody).includes(item))
     // );
 
     // delete newBody.isrc;
-    console.log(parent.ISRC);
+    // console.log(parent.ISRC);
     const { _id, ...updated } = newBody;
     // console.log(_id);
 

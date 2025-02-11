@@ -18,7 +18,7 @@ const YouTubeOAC = () => {
 
   const handleApprove = () => {
     data[detailsId].approved = true;
-    console.log(data[detailsId]);
+    // console.log(data[detailsId]);
     // Add your API call here if needed
     const { _id, ...rest } = {
       id: "youtube-oac",

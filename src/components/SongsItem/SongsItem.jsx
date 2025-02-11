@@ -68,7 +68,7 @@ const SongsItem = ({ item, setRefetch }) => {
   // }, []);
 
   const handleChange = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
 
   useEffect(() => {
@@ -159,7 +159,7 @@ const SongsItem = ({ item, setRefetch }) => {
         // Handle default case if necessary
       }
 
-      console.log(selectedOption);
+      // console.log(selectedOption);
     }
   }, [selectedOption]);
 
@@ -193,7 +193,7 @@ const SongsItem = ({ item, setRefetch }) => {
 
   //   // Convert object into key-value array
   //   const keyValueArray = objectToKeyValueArray(flattenObject(item));
-  //   console.log(keyValueArray);
+  //// console.log(keyValueArray);
 
   //   // Use the keyValueArray in the jsonToExcel function
   //   jsonToExcel(keyValueArray, "item.xlsx");
@@ -270,7 +270,7 @@ const SongsItem = ({ item, setRefetch }) => {
     delete item._id;
     const renamedData = renameFields([item]);
 
-    console.log(renamedData);
+    // console.log(renamedData);
 
     const flattenedObject = flattenObject(renamedData[0]);
 

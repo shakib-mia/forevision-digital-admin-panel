@@ -56,7 +56,7 @@ const YearlyPlans = () => {
   };
 
   const handleDecline = (emailId, id) => {
-    console.log(emailId, id);
+    // console.log(emailId, id);
 
     if (declineReason.length > 0) {
       axios

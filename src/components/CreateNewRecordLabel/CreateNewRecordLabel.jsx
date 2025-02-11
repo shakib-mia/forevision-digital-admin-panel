@@ -12,7 +12,7 @@ const CreateNewRecordLabel = ({ email, onClose }) => {
   const [selectedCode, setSelectedCode] = useState("91");
   const [isPerpetual, setIsPerpetual] = useState(false);
   const { store } = useContext(AppContext);
-  //   console.log(store);
+  //// console.log(store);
   // const { recordLabels } = useContext(ProfileContext);
   // console.log(recordLabels);
 

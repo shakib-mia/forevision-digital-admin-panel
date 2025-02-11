@@ -11,7 +11,7 @@ const Upload = ({ handleFileUpload }) => {
     handleFileUpload(e);
     // console.log();
     const { size } = e.target.files[0];
-    console.log(size);
+    // console.log(size);
     e.target.files[0].size / 1000 < 1024
       ? setFileSize(`${(e.target.files[0].size / 1000).toFixed(2)}KB`)
       : setFileSize(`${(e.target.files[0].size / (1000 * 1000)).toFixed(2)}MB`);

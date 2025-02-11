@@ -86,3 +86,67 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+/* Using ID to scope the styles */
+#visualizeDataModal {
+  font-family: "Arial", sans-serif;
+  color: #333;
+  border-radius: 10px;
+}
+
+#visualizeDataModal .song-detail {
+  background-color: #f4f7fa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+}
+
+#visualizeDataModal .song-detail .section-title {
+  color: #333;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+#visualizeDataModal .song-detail p {
+  font-size: 14px;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+#visualizeDataModal .link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+#visualizeDataModal .link:hover {
+  text-decoration: underline;
+}
+
+#visualizeDataModal .order-details {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+#visualizeDataModal .btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#visualizeDataModal .btn:hover {
+  background-color: #0056b3;
+}
+
+#album-details-modal::-webkit-scrollbar {
+  @apply w-0;
+}

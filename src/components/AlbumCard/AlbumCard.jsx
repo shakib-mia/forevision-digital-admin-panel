@@ -13,6 +13,9 @@ import ReasonToReject from "../ReasonToReject/ReasonToReject";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { backendUrl, config } from "../../constants";
+import Button from "../Button/Button";
+import visualizeData from "../../utils/visualizeData";
+import { camelCaseToNormalText } from "../../utils/camelCaseToNormalText";
 
 const AlbumCard = ({ album }) => {
   const [collapsed, setCollapsed] = useState(true);
@@ -20,6 +23,12 @@ const AlbumCard = ({ album }) => {
   const [selectedOption, setSelectedOption] = useState("Set Status");
   const [albumSelectedOption, setAlbumSelectedOption] = useState("Set Status");
   const [item, setItem] = useState({});
+  const [checking, setChecking] = useState(false);
+  const [popupIdx, setPopupIdx] = useState(-1);
+  const { selectedPlatforms, userEmail, _id, songs, ...rest } = album;
+
+  // console.log();
+  // ;
 
   const options = [
     {
@@ -96,7 +105,7 @@ const AlbumCard = ({ album }) => {
   };
 
   useEffect(() => {
-    console.log(selectedOption);
+    // console.log(selectedOption);
     if (selectedOption !== "Set Status") {
       item.status = selectedOption;
       const updated = { ...item };
@@ -187,7 +196,7 @@ const AlbumCard = ({ album }) => {
         // Handle default case if necessary
       }
 
-      console.log(selectedOption);
+      // console.log(selectedOption);
     }
   }, [selectedOption]);
 
@@ -197,7 +206,7 @@ const AlbumCard = ({ album }) => {
       const updated = { ...item };
 
       const handleSwal = (Component, title) => {
-        console.log(album);
+        // console.log(album);
         let swalContent = document.createElement("div");
         ReactDOM.render(
           <Component
@@ -282,9 +291,18 @@ const AlbumCard = ({ album }) => {
         // Handle default case if necessary
       }
 
-      console.log(albumSelectedOption);
+      // console.log(albumSelectedOption);
     }
   }, [albumSelectedOption]);
+
+  const checkAudioFile = (popupIdx, orderId) => {
+    // console.log(popupIdx, orderId);
+    setChecking(true);
+    axios
+      .get(backendUrl + `check-audio-file/${orderId}/${popupIdx}`)
+      .then(({ data }) => visualizeData(data))
+      .finally(() => setChecking(false));
+  };
 
   return (
     <div className="p-4 bg-white">
@@ -297,11 +315,11 @@ const AlbumCard = ({ album }) => {
             rel="noreferrer"
             className="relative"
           >
-            <span className="inline-flex justify-center items-center text-white text-heading-2 w-full h-full bg-black-primary bg-opacity-20 absolute left-0 top-0 opacity-0 group-hover:opacity-100 transition">
+            {/* <span className="inline-flex justify-center items-center text-white text-heading-2 w-full h-full bg-black-primary bg-opacity-20 absolute left-0 top-0 opacity-0 group-hover:opacity-100 transition">
               <LuArrowUpRightFromCircle />
-            </span>
+            </span> */}
             <img
-              src={album.artWork}
+              src={album.artwork}
               alt={album.albumTitle}
               className="w-full h-full object-cover"
             />
@@ -311,7 +329,7 @@ const AlbumCard = ({ album }) => {
           <h2 className="text-heading-5-bold text-primary">
             {album.albumTitle}
           </h2>
-          <p className="text-sm text-grey-dark">Type: {album.albumType}</p>
+          {/* <p className="text-sm text-grey-dark">Type: {album.albumType}</p>
           <p className="text-sm text-grey-dark">UPC: {album.UPC}</p>
           <p className="text-sm text-success">
             Platforms: {album?.selectedPlatforms?.length}
@@ -320,10 +338,16 @@ const AlbumCard = ({ album }) => {
           <p className="text-sm text-success">Order ID: {album?.orderId}</p>
           <p className="text-sm text-success">
             Payment ID: {album?.payment_id}
-          </p>
+          </p> */}
+
+          {Object.entries(rest).map(([key, value]) => (
+            <p>
+              {camelCaseToNormalText(key)}: {value}
+            </p>
+          ))}
 
           <p className="text-sm text-success">
-            Platforms: {album?.selectedPlatforms?.length}
+            Platforms: {album?.selectedPlatforms?.join(", ")}
           </p>
 
           <div className="text-lg font-bold text-secondary">
@@ -382,6 +406,7 @@ const AlbumCard = ({ album }) => {
                   onClick={() => {
                     setPopupSong(song);
                     setItem(song);
+                    setPopupIdx(index);
                   }}
                   className="mt-2 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark"
                 >
@@ -396,7 +421,8 @@ const AlbumCard = ({ album }) => {
       {/* Popup Modal */}
       {popupSong && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto"
+          id="album-details-modal"
           onClick={closeModal}
         >
           <div
@@ -462,10 +488,23 @@ const AlbumCard = ({ album }) => {
                 : "No artists available"}
             </ul>
 
-            <audio controls className="my-4 w-full">
-              <source src={popupSong.songUrl || ""} type="audio/mp3" />
-              Your browser does not support the audio tag.
-            </audio>
+            <div className="flex gap-2 items-center">
+              <audio controls className="my-4 w-full">
+                <source src={popupSong.songUrl || ""} type="audio/mp3" />
+                Your browser does not support the audio tag.
+              </audio>
+
+              <Button
+                disabled={checking}
+                onClick={() => checkAudioFile(popupIdx, album?.orderId)}
+              >
+                {checking
+                  ? "Checking..."
+                  : // : tableData.checked
+                    // ? "Already Checked"
+                    "Check Audio File"}
+              </Button>
+            </div>
 
             <Dropdown
               options={options}

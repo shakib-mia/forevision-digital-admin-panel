@@ -65,13 +65,13 @@ const UploadAndActivity = () => {
     axios
       .get("https://api.forevisiondigital.in/calculate-lifetime-revenue")
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         data.length > 0 && setUpdateLoading(false);
       });
     axios
       .get("https://api.forevisiondigital.in/calculate-account")
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         // data.length > 0 && setUpdateLoading(false);
       });
   };
@@ -90,7 +90,7 @@ const UploadAndActivity = () => {
   const handleDateSubmit = (e) => {
     e.preventDefault();
 
-    console.log(date);
+    // console.log(date);
     const monthNames = [
       "January",
       "February",

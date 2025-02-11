@@ -26,7 +26,7 @@ const SongUpdateRequest = () => {
 
   // useEffect(() => {
   //   axios.get(backendUrl + "songs/all", config).then(({ data }) => {
-  //     console.log(data);
+  //  // console.log(data);
   //     if (data.length) {
   //       if (data.find((item) => item?.ISRC === requests[checkedIndex]?.ISRC)) {
   //         setSelectedSong(
@@ -37,7 +37,7 @@ const SongUpdateRequest = () => {
   //   });
 
   //   axios.get(backendUrl + "recent-uploads/admin", config).then(({ data }) => {
-  //     console.log(data);
+  //  // console.log(data);
   //     if (data.length) {
   //       if (data.find((item) => item?.ISRC === requests[checkedIndex]?.ISRC)) {
   //         setSelectedSong(

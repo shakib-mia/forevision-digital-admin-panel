@@ -18,14 +18,14 @@ const RequestPaymentDetails = () => {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [modal, setModal] = useState(false);
   const [transactionID, setTransactionID] = useState("");
-  //   console.log(item);
+  //// console.log(item);
   const date = new Date();
   const location = useLocation();
   const [selectedReason, setSelectedReason] = useState("");
   const id =
     location.pathname.split("/")[location.pathname.split("/").length - 1];
 
-  //   console.log(id);
+  //// console.log(id);
   useEffect(() => {
     axios
       .get(backendUrl + "disburse-payment/" + id)
@@ -120,7 +120,7 @@ const RequestPaymentDetails = () => {
     return text.replace(/([a-z])([A-Z])/g, "$1 $2");
   }
 
-  //   console.log(item);
+  //// console.log(item);
 
   return (
     <div

@@ -50,7 +50,7 @@ const Login = () => {
           password: e.target["admin-password"].value,
         })
         .then(({ data }) => {
-          console.log(data);
+          // console.log(data);
           if (data.token) {
             navigate("/");
             sessionStorage.setItem("token", data.token);

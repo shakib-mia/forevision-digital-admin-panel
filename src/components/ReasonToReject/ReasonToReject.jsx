@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 const ReasonToReject = ({ updated, setRefetch }) => {
   const [newIsrc, setNewIsrc] = useState("");
   const [reason, setreason] = useState(updated.reason || "");
-  //   console.log(updated);
+  //// console.log(updated);
 
   //   useEffect(() => {
   //     axios

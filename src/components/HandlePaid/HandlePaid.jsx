@@ -8,8 +8,8 @@ import Swal from "sweetalert2";
 const SentToStores = ({ updated, setRefetch }) => {
   const [newIsrc, setNewIsrc] = useState("");
   const [trId, setTrId] = useState(updated.transactionId || "");
-  //   console.log(updated?.reason);
-  //   console.log(updated);
+  //// console.log(updated?.reason);
+  //// console.log(updated);
 
   useEffect(() => {
     axios

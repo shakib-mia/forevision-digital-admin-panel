@@ -14,6 +14,7 @@ import InputSongDetails from "../../components/InputSongDetails/InputSongDetails
 import SentToStores from "../../components/SentToStores/SentToStores";
 import ReasonToHold from "../../components/ReasonToHold/ReasonToHold";
 import HandleTakedown from "../../components/HandleTakedown/HandleTakedown";
+import ExternalMetadataDetails from "../../components/ExternalMetadataDetails/ExternalMetadataDetails";
 
 const SongDetails = () => {
   const location = useLocation();
@@ -50,7 +51,7 @@ const SongDetails = () => {
   }, []);
 
   useEffect(() => {
-    console.log(selectedOption);
+    // console.log(selectedOption);
     if (selectedOption !== "Set Status") {
       tableData.status = selectedOption;
       const updated = { ...tableData };
@@ -142,7 +143,7 @@ const SongDetails = () => {
         // Handle default case if necessary
       }
 
-      console.log(selectedOption);
+      // console.log(selectedOption);
     }
   }, [selectedOption]);
 
@@ -156,7 +157,7 @@ const SongDetails = () => {
       .then(({ data }) => {
         if (data.success) {
           const formatDetails = (part, title) => {
-            // Flexible handling for different data structures
+            // Handle different parts and structure the artist names
             const artistNames = part?.artists
               ? part?.artists
                   .map(
@@ -166,6 +167,106 @@ const SongDetails = () => {
                   .filter((name) => name)
               : [];
 
+            const getExternalMetadataDetails = (externalMetadata) => {
+              if (!externalMetadata) return "";
+
+              const getPlatformLink = (platform, id) => {
+                const platformLinks = {
+                  deezer: `https://www.deezer.com/track/${id}`,
+                  spotify: `https://open.spotify.com/track/${id}`,
+                  apple: `https://music.apple.com/us/album/${id}`,
+                  youtube: `https://www.youtube.com/watch?v=${id}`,
+                  soundcloud: `https://soundcloud.com/${id}`,
+                };
+                return platformLinks[platform.toLowerCase()] || "#";
+              };
+
+              const getArtistLink = (platform, artist) => {
+                const platformArtistLinks = {
+                  spotify: `https://open.spotify.com/artist/${artist.id}`,
+                  deezer: `https://www.deezer.com/artist/${artist.id}`,
+                  apple: `https://music.apple.com/us/artist/${artist.id}`,
+                  youtube: `https://www.youtube.com/channel/${artist.id}`,
+                  soundcloud: `https://soundcloud.com/${artist.id}`,
+                };
+                return platformArtistLinks[platform.toLowerCase()] || "#";
+              };
+
+              const getAlbumLink = (platform, albumId) => {
+                const platformAlbumLinks = {
+                  spotify: `https://open.spotify.com/album/${albumId}`,
+                  deezer: `https://www.deezer.com/album/${albumId}`,
+                  apple: `https://music.apple.com/us/album/${albumId}`,
+                  youtube: `https://www.youtube.com/playlist?list=${albumId}`,
+                  soundcloud: `https://soundcloud.com/albums/${albumId}`,
+                };
+                return platformAlbumLinks[platform.toLowerCase()] || "#";
+              };
+
+              return Object.entries(externalMetadata)
+                .map(([platform, metadata]) => {
+                  const platformName =
+                    platform.charAt(0).toUpperCase() + platform.slice(1);
+
+                  return `
+                      <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #e1e1e1; border-radius: 8px;">
+                        <div style="margin-bottom: 10px;">
+                          <span style="font-weight: 600; color: #333;">
+                            ${platformName} Track:
+                          </span>
+                          <a href="${getPlatformLink(
+                            platform,
+                            metadata?.track?.id || metadata?.vid
+                          )}" 
+                             target="_blank" 
+                             rel="noopener noreferrer" 
+                             style="color: #2563eb; text-decoration: underline;">
+                            ${metadata?.track?.name || platformName || "N/A"}
+                          </a>
+                        </div>
+              
+                        <div style="margin-bottom: 10px;">
+                          <span style="font-weight: 600; color: #333;">
+                            ${platformName} Artists:
+                          </span>
+                          ${
+                            metadata?.artists
+                              ?.map(
+                                (artist) => `
+                                <a href="${getArtistLink(platform, artist)}" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer" 
+                                   style="color: #2563eb; text-decoration: underline;">
+                                  ${artist.name.trim()}</a>`
+                              )
+                              .join(", ") || "N/A"
+                          }
+                        </div>
+              
+                        <div>
+                          <span style="font-weight: 600; color: #333;">
+                            ${platformName} Album:
+                          </span>
+                          ${
+                            metadata?.album?.id
+                              ? `<a href="${getAlbumLink(
+                                  platform,
+                                  metadata?.album?.id
+                                )}" 
+                             target="_blank" 
+                             rel="noopener noreferrer" 
+                             style="color: #2563eb; text-decoration: underline;">
+                            ${metadata?.album?.name}
+                          </a>`
+                              : "N/A"
+                          }
+                        </div>
+                      </div>
+                    `;
+                })
+                .join("");
+            };
+
             return `
               <div style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; background-color: #f9f9f9;">
                 <h4 style="color: #4CAF50; font-size: 20px; margin-bottom: 10px;">${title}</h4>
@@ -174,7 +275,7 @@ const SongDetails = () => {
                 }</p>
                 <p><b style="color: #333;">Type:</b> ${part?.type || "N/A"}</p>
                 <p><b style="color: #333;">Artists:</b> ${
-                  artistNames.join(", ") || "N/A"
+                  artistNames.map((artist) => `${artist}`).join(", ") || "N/A"
                 }</p>
                 <p><b style="color: #333;">Album:</b> ${
                   part?.album?.name || "N/A"
@@ -185,56 +286,65 @@ const SongDetails = () => {
                 <p><b style="color: #333;">Release Date:</b> ${
                   part?.release_date || "N/A"
                 }</p>
-                <p><b style="color: #333;">Score:</b> ${
-                  part?.score || "N/A"
-                }</p>
+                <p style='margin: 10px 0;'>
+                  <b style="color: #333;">Score:</b> 
+                  <span style="background-color: ${
+                    part?.score >= 0 && part?.score <= 40
+                      ? "green"
+                      : part?.score > 40 && part?.score <= 60
+                      ? "orange"
+                      : "red"
+                  }; color: ${
+              part?.score > 40 && part?.score <= 60 ? "#000" : "#fff"
+            }; padding: 5px; border-radius: 5px;">
+                    ${part?.score || "N/A"}
+                  </span>
+                </p>
+
                 <p><b style="color: #333;">Duration (ms):</b> ${
                   part?.duration_ms || "N/A"
                 }</p>
                 <p><b style="color: #333;">Play Offset (ms):</b> ${
                   part?.play_offset_ms || "N/A"
                 }</p>
+                <p><b style="color: #333;">Sample End Time (ms):</b> ${
+                  part?.sample_end_time_offset_ms || "N/A"
+                }</p>
+                <p><b style="color: #333;">Sample Begin Time (ms):</b> ${
+                  part?.sample_begin_time_offset_ms || "N/A"
+                }</p>
+                <p><b style="color: #333;">Genres:</b> ${
+                  part?.genres?.map((genre) => genre.name).join(", ") || "N/A"
+                }</p>
+                <p><b style="color: #333;">Language:</b> ${
+                  part?.language || "N/A"
+                }</p>
                 ${
                   part?.langs
-                    ? `
-                <p><b style="color: #333;">Languages:</b> ${part?.langs
-                  .map((lang) => `${lang.name} (${lang.code})`)
-                  .join(", ")}</p>`
+                    ? `<p><b style="color: #333;">Languages:</b> ${part?.langs
+                        .map((lang) => `${lang.name} (${lang.code})`)
+                        .join(", ")}</p>`
                     : ""
                 }
               </div>
-              ${Object.keys(part.external_metadata).map((item) =>
-                externalMetadataDetails(part, item)
-              )}
+              ${getExternalMetadataDetails(part?.external_metadata)}
             `;
           };
 
           const externalMetadataDetails = (part, platform) => {
             const platformMetadata =
               part?.external_metadata?.[platform.toLowerCase()]?.track;
+            const platformLink =
+              part?.external_metadata?.[platform.toLowerCase()]?.track?.link;
 
-            if (platformMetadata) {
-              // Define the platform's URL template
-              const platformLinks = {
-                deezer: `https://www.deezer.com/track/${platformMetadata.id}`,
-                spotify: `https://open.spotify.com/track/${platformMetadata.id}`,
-                apple: `https://music.apple.com/us/album/${platformMetadata.id}`,
-                youtube: `https://www.youtube.com/watch?v=${platformMetadata.id}`,
-                soundcloud: `https://soundcloud.com/${platformMetadata.id}`,
-              };
-
-              // Return the metadata with clickable link for the track ID
+            if (platformMetadata && platformLink) {
               return `
                 <div style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; background-color: #f9f9f9;">
                   <h4 style="color: #4CAF50; font-size: 20px; margin-bottom: 10px;">${platform} Metadata</h4>
                   <p><b style="color: #333;">Track Name:</b> ${
                     platformMetadata.name || "N/A"
                   }</p>
-                  <p><b style="color: #333;">Track ID:</b> <a href="${
-                    platformLinks[platform.toLowerCase()] || "#"
-                  }" target="_blank" style="color: blue; text-decoration: underline;">${
-                platformMetadata.id || "N/A"
-              }</a></p>
+                  <p><b style="color: #333;">Track Link:</b> <a href="${platformLink}" target="_blank" style="color: blue; text-decoration: underline;">Listen on ${platform}</a></p>
                 </div>
               `;
             } else {
@@ -242,16 +352,69 @@ const SongDetails = () => {
             }
           };
 
+          // const externalMetadataDetails = (part, platform) => {
+          //   const platformMetadata =
+          //     part?.external_metadata?.[platform.toLowerCase()]?.track;
+
+          //   if (platformMetadata) {
+          //     // Define the platform's URL template
+          //     const platformLinks = {
+          //       deezer: `https://www.deezer.com/track/${platformMetadata.id}`,
+          //       spotify: `https://open.spotify.com/track/${platformMetadata.id}`,
+          //       apple: `https://music.apple.com/us/album/${platformMetadata.id}`,
+          //       youtube: `https://www.youtube.com/watch?v=${platformMetadata.id}`,
+          //       soundcloud: `https://soundcloud.com/${platformMetadata.id}`,
+          //     };
+
+          //     // Return the metadata with clickable link for the track ID
+          //     return `
+          //       <div style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; background-color: #f9f9f9;">
+          //         <h4 style="color: #4CAF50; font-size: 20px; margin-bottom: 10px;">${platform} Metadata</h4>
+          //         <p><b style="color: #333;">Track Name:</b> ${
+          //           platformMetadata.name || "N/A"
+          //         }</p>
+          //         <p><b style="color: #333;">Track ID:</b> <a href="${
+          //           platformLinks[platform.toLowerCase()] || "#"
+          //         }" target="_blank" style="color: blue; text-decoration: underline;">${
+          //       platformMetadata.id || "N/A"
+          //     }</a></p>
+          //       </div>
+          //     `;
+          //   } else {
+          //     return "";
+          //   }
+          // };
+
+          // console.log(data);
+          const durationText = data.data.duration
+            ? (() => {
+                const totalSeconds = Math.floor(data.data.duration);
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+
+                return `${hours > 0 ? `${hours} hrs ` : ""}${
+                  minutes > 0
+                    ? `${minutes < 10 ? 0 : ""}${minutes} minute${
+                        minutes === 1 ? "" : "s"
+                      } `
+                    : ""
+                }${seconds < 10 ? 0 : ""}${seconds} second${
+                  seconds === 1 ? "" : "s"
+                }`;
+              })()
+            : "N/A";
+
+          const totalDurationHtml = `<p><b style="color: #333;">Total Duration:</b> ${durationText}</p>`;
+
           const htmlContent = `
           <div style="font-family: Arial, sans-serif; color: #333;">
             <div style="padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; background-color: #f9f9f9;">
               <h4 style="color: #4CAF50; font-size: 20px; margin-bottom: 10px;">Order Details</h4>
               <p><b style="color: #333;">Order ID:</b> ${
-                data.orderId || "N/A"
+                data.data.orderId || "N/A"
               }</p>
-              <p><b style="color: #333;">Total Duration:</b> ${
-                data.duration ? data.duration.toFixed(2) + " seconds" : "N/A"
-              }</p>
+              ${totalDurationHtml}
             </div>
         
             ${
@@ -436,7 +599,7 @@ const SongDetails = () => {
                         <span>{item}</span>
                       </div>
                     ))
-                  ) : key === "artWork" ? (
+                  ) : key === "artwork" ? (
                     <img
                       src={value}
                       alt="Album Artwork"

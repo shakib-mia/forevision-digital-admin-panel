@@ -16,7 +16,7 @@ const GaanaProfileRelocate = () => {
       .then(({ data }) => setData(data));
   }, [refetch]);
 
-  //   console.log(data[detailsId]);
+  //// console.log(data[detailsId]);
 
   const isValidUrl = (value) => {
     try {
@@ -29,7 +29,7 @@ const GaanaProfileRelocate = () => {
 
   const handleApprove = () => {
     data[detailsId].approved = true;
-    console.log(data[detailsId]);
+    // console.log(data[detailsId]);
     // Add your API call here if needed
     const { _id, ...rest } = {
       id: "gaana-fresh-profile",

@@ -24,7 +24,7 @@ const PaymentDetails = () => {
   const id =
     location.pathname.split("/")[location.pathname.split("/").length - 1];
 
-  //   console.log(id);
+  //// console.log(id);
   //   useEffect(() => {
   //     axios
   //       .get("https://api.forevisiondigital.in/disburse-payment/" + id)
@@ -78,7 +78,7 @@ const PaymentDetails = () => {
     return text.replace(/([a-z])([A-Z])/g, "$1 $2");
   }
 
-  //   console.log(item);
+  //// console.log(item);
 
   return (
     <div

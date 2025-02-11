@@ -31,7 +31,7 @@ const SearchSongModal = ({ setSong, song }) => {
       .then((data) => setViewCut(data.data.cut_percentage));
   }, [customCut]);
 
-  //   console.log(viewCut);
+  //// console.log(viewCut);
 
   return (
     <Modal handleClose={() => setSong({})}>

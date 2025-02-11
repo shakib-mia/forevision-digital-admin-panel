@@ -9,7 +9,7 @@ const GeneratedCoupons = () => {
   const [coupons, setCoupons] = useState([]);
   const { store, couponInsertedId } = useContext(AppContext);
   const [updated, setUpdated] = useState(false);
-  //   console.log(couponInsertedId);
+  //// console.log(couponInsertedId);
   const config = {
     headers: { token: store.token },
   };

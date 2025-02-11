@@ -28,7 +28,7 @@ const HandleTakedown = ({ updated, album, setRefetch }) => {
   //   updated.hold = true;
   //   updated.reason = reason;
   //   updated.status = "Taken Down";
-  //   console.log(_id);
+  //// console.log(_id);
   //   axios.put(backendUrl + "songs/" + _id, updated, config).then(({ data }) => {
   //     if (data.acknowledged) {
   //       axios
@@ -69,12 +69,12 @@ const HandleTakedown = ({ updated, album, setRefetch }) => {
         reason,
       };
 
-      console.log({ album, newBody });
+      // console.log({ album, newBody });
 
       axios
         .put(backendUrl + "recent-uploads/" + album._id, album, config)
         .then(({ data }) => {
-          console.log(data);
+          // console.log(data);
           if (data.acknowledged) {
             axios
               .post(backendUrl + "send-song-status", newBody)
@@ -94,7 +94,7 @@ const HandleTakedown = ({ updated, album, setRefetch }) => {
       updated.hold = true;
       updated.reason = reason;
       updated.status = "Taken Down";
-      console.log(_id);
+      // console.log(_id);
       axios
         .put(backendUrl + "songs/" + _id, updated, config)
         .then(({ data }) => {

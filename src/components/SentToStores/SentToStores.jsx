@@ -25,7 +25,7 @@ const SentToStores = ({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(album);
+    // console.log(album);
 
     if (album) {
       // console.log();
@@ -41,12 +41,12 @@ const SentToStores = ({
       // };
 
       album.UPC = upc;
-      console.log(album);
+      // console.log(album);
 
       axios
         .put(backendUrl + "recent-uploads/" + album._id, album, config)
         .then(({ data }) => {
-          console.log(data);
+          // console.log(data);
           setRefetch((ref) => !ref);
           if (data.acknowledged) {
             axios

@@ -10,6 +10,7 @@ import RequestPaymentDetails from "../RequestPaymentDetails/RequestPaymentDetail
 import { Link } from "react-router-dom";
 
 const RequestPaymentItem = ({ item }) => {
+  console.log(item);
   const date = new Date();
   const { showModal, setShowModal } = useContext(AppContext);
   // const

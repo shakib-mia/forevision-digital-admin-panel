@@ -16,7 +16,7 @@ const Songs = () => {
       headers: { token: store.token },
     };
     axios.get(backendUrl + "upload-song", config).then(({ data }) => {
-      console.log(data.find((item) => !item.songs));
+      // console.log(data.find((item) => !item.songs));
       setSongs(data);
     });
   }, [refetch]);

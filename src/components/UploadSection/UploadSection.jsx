@@ -79,7 +79,7 @@ const UploadSection = ({ setProgress, setProgressVisible }) => {
         //     // Calculate the upload percentage
         //     const progressPercentage = Math.round((progressEvent.loaded * 100) / progressEvent.total);
         //     // Update your progress bar here using the calculated percentage
-        //     console.log(`Batch ${batchNumber} - Upload Progress: ${progressPercentage}%`);
+        //  // console.log(`Batch ${batchNumber} - Upload Progress: ${progressPercentage}%`);
         // }
       };
 

@@ -205,6 +205,7 @@ const EditSongAction = ({
               Object.keys(selectedSong2).map((key, index) => {
                 const requestValue = selectedSong2?.[key];
                 const selectedValue = oldSong[key];
+                console.log(key);
 
                 if (requestValue === undefined) {
                   return (

@@ -16,7 +16,7 @@ const SearchSongByISRC = () => {
     axios
       .get(backendUrl + "songs/by-isrc/" + e.target.isrc.value)
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         if (data._id) {
           setSong(data);
         } else {

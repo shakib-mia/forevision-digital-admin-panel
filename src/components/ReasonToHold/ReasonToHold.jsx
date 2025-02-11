@@ -21,7 +21,7 @@ const ReasonToHold = ({ updated, album, setRefetch }) => {
 
     const { _id } = updated;
     // delete updated._id;
-    console.log(_id);
+    // console.log(_id);
     const newupdated = { ...updated };
     // updated.ISRC = newIsrc;
 
