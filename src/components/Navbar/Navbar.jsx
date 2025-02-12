@@ -39,7 +39,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="bg-black text-white shadow-lg py-2 fixed top-0 left-0 w-screen z-50">
+    <nav className="bg-black text-white shadow-lg py-2 fixed top-0 left-0 w-screen z-[9999999999999]">
       <div className="container">
         <div className="flex justify-between">
           <Link to={"/"}>

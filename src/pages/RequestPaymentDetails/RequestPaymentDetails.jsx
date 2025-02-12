@@ -71,6 +71,7 @@ const RequestPaymentDetails = () => {
       .then(({ data }) => {
         if (data.deleteCursor.acknowledged) {
           navigate("/");
+          setModal(false);
         }
       });
   };

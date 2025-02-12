@@ -44,7 +44,7 @@ const UploadAndActivity = () => {
       },
     };
     axios
-      .get(backendUrl + "platforms", config)
+      .get(backendUrl + "platforms/admin", config)
       .then(({ data }) => setStore({ ...store, platforms: data }))
       .catch((err) => {
         toast.error(err.response.data.message);

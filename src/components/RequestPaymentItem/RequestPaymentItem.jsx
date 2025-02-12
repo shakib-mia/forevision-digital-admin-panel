@@ -52,7 +52,7 @@ const RequestPaymentItem = ({ item }) => {
       <p>
         {item.partner_name || <>{item.first_name + " " + item.last_name}</>}
       </p>
-      <p>&#8377; {item.totalAmount}</p>
+      <p>&#8377; {item.taxableValue || item.totalAmount}</p>
       <div className="flex gap-3 justify-center">
         <Link
           to={`/request-payment-details/${item._id}`}

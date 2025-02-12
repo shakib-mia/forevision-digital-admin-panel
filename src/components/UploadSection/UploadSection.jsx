@@ -14,6 +14,7 @@ import PropTypes from "prop-types";
 const UploadSection = ({ setProgress, setProgressVisible }) => {
   const { store } = useContext(AppContext);
   const options = store.platforms;
+  console.log(options);
   // console.log(store.platforms);
   // console.log(
   //   [

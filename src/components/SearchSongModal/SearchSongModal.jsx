@@ -82,8 +82,8 @@ const SearchSongModal = ({ setSong, song }) => {
           item !== "songs" &&
           item !== "selectedPlatforms" &&
           item !== "availablePlatforms" ? (
-            <li key={item} className="grid grid-cols-2 text-nowrap capitalize">
-              <aside className="p-3 font-semibold text-gray-800">
+            <li key={item} className="grid grid-cols-2 text-nowrap">
+              <aside className="p-3 font-semibold text-gray-800 capitalize">
                 {camelCaseToNormalText(item)}
               </aside>
               <aside className="p-3 text-wrap">
