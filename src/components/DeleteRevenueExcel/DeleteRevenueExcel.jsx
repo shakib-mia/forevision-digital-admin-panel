@@ -9,15 +9,117 @@ import { toast } from "react-toastify";
 
 const DeleteRevenueExcel = () => {
   const { store } = useContext(AppContext);
-  const [platforms, setPlatforms] = useState([]);
+  // const [platforms, setPlatforms] = useState([]);
   const [selectedPlatform, setSelectedPlatform] = useState("");
   const [date, setDate] = useState("");
+
+  const platforms = [
+    {
+      cat_name: "Apple Music",
+    },
+    {
+      cat_name: "Resso",
+    },
+    {
+      cat_name: "Spotify",
+    },
+    {
+      cat_name: "Meta",
+    },
+    {
+      cat_name: "TikTok",
+    },
+    {
+      cat_name: "SnapChat",
+    },
+    {
+      cat_name: "Amazon Music",
+    },
+    {
+      cat_name: "AWA",
+    },
+    {
+      cat_name: "IHeartRadio",
+    },
+    {
+      cat_name: "jaxsta",
+    },
+    {
+      cat_name: "kkbox",
+    },
+    {
+      cat_name: "mixcloud",
+    },
+    {
+      cat_name: "napster",
+    },
+    {
+      cat_name: "netease",
+    },
+    {
+      cat_name: "pandora",
+    },
+    {
+      cat_name: "shazam",
+    },
+    {
+      cat_name: "soundcloud",
+    },
+    {
+      cat_name: "tidal",
+    },
+    {
+      cat_name: "Triller",
+    },
+    {
+      cat_name: "JioSaavn",
+    },
+    {
+      cat_name: "Gaana",
+    },
+    {
+      cat_name: "Hungama",
+    },
+    {
+      cat_name: "Wynk Music",
+    },
+    {
+      cat_name: "YouTube",
+    },
+    {
+      cat_name: "YouTube New",
+    },
+    {
+      cat_name: "BSNL",
+    },
+    {
+      cat_name: "Airtel",
+    },
+    {
+      cat_name: "Vi",
+    },
+    {
+      cat_name: "JioTunes",
+    },
+    {
+      cat_name: "Musixmatch",
+    },
+    {
+      cat_name: "LyricFind",
+    },
+    {
+      cat_name: "SIP",
+    },
+    {
+      cat_name: "UK",
+    },
+  ];
   // console.log(store);
-  useEffect(() => {
-    axios
-      .get(backendUrl + "platforms/all")
-      .then(({ data }) => setPlatforms(data));
-  }, [store.token]);
+  // useEffect(() => {
+  //   axios
+  //     .get(backendUrl + "platforms/all")
+  //     .then(({ data }) => setPlatforms(data));
+  // }, [store.token]);
 
   const handleDeleteRevenue = (e) => {
     e.preventDefault();

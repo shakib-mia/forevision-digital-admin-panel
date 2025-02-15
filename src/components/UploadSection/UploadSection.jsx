@@ -14,7 +14,7 @@ import PropTypes from "prop-types";
 const UploadSection = ({ setProgress, setProgressVisible }) => {
   const { store } = useContext(AppContext);
   const options = store.platforms;
-  console.log(options);
+  // console.log();
   // console.log(store.platforms);
   // console.log(
   //   [
@@ -22,7 +22,7 @@ const UploadSection = ({ setProgress, setProgressVisible }) => {
   //     { cat_name: "Amazon Music" },
   //     { cat_name: "Resso" },
   //     { cat_name: "SIP" },
-  //   ].sort((a, b) => a.cat_name.localeCompare(b.cat_name))
+  //   ].sort((a, b) => a.cat_name?.localeCompare(b.cat_name))
   // );
   const [selectedValue, setSelectedValue] = useState("");
   const [uploadedJSON, setUploadedJSON] = useState([]);
@@ -201,6 +201,17 @@ const UploadSection = ({ setProgress, setProgressVisible }) => {
       readExcel(file);
     }
   };
+  console.log(
+    [...options.map((item) => item)]
+      .sort((a, b) => a.cat_name?.localeCompare(b.cat_name))
+      .map((item) =>
+        item?.cat_name === "YouTube Content ID"
+          ? "YouTube"
+          : item?.cat_name === "YouTube Music"
+          ? "YouTube New"
+          : item?.cat_name
+      )
+  );
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 pr-7">
       {/* <input type="date" name="date" className="w-full block border border-interactive-light-focus py-3 px-4 rounded-[0.25rem] text-interactive-light-focus text-paragraph-2 focus:outline-none cursor-pointer" /> */}
@@ -209,15 +220,8 @@ const UploadSection = ({ setProgress, setProgressVisible }) => {
         placeholder="Select Platform Name"
         options={
           options
-            ? [
-                ...options.flatMap((item) => item.platforms),
-                { cat_name: "Amazon Music" },
-                { cat_name: "Resso" },
-                { cat_name: "SIP" },
-                { cat_name: "Vodafone" },
-                { cat_name: "Idea" },
-              ]
-                .sort((a, b) => a.cat_name.localeCompare(b.cat_name))
+            ? [...options.map((item) => item)]
+                .sort((a, b) => a.cat_name?.localeCompare(b.cat_name))
                 .map((item) =>
                   item?.cat_name === "YouTube Content ID"
                     ? "YouTube"
